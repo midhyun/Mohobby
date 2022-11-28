@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "accounts",
+    "hobby",
     "imagekit",
     "debug_toolbar",
     "django_extensions",
