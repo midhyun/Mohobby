@@ -21,6 +21,7 @@ django-multiselectfield==0.1.12
 django-shortcuts==1.6
 django-social-share==2.3.0
 django-storages==1.13.1
+django-widget-tweaks==1.4.12
 djangorestframework==3.14.0
 drf-serializer-cache==0.3.4
 EditorConfig==0.12.3
@@ -62,3 +63,4 @@ urllib3==1.26.12
 wcwidth==0.2.5
 whitenoise==6.2.0
 zipp==3.10.0
+
