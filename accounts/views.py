@@ -59,3 +59,9 @@ def follow(request, pk):
         accounts.save()
     # 상세 페이지로 redirect
     return redirect("accounts:detail", pk)
+
+@login_required
+def delete(request):
+    request.user.delete()
+    auth_logout(request)
+    return redirect("articles:index")
