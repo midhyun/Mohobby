@@ -9,6 +9,7 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = [
+            "username",
             "profile_pic",
             "birth",
             "address",
