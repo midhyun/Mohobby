@@ -14,7 +14,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()  
             auth_login(request, user)  # 로그인
-            return redirect("articles:login")
+            return redirect("accounts:index")
     else:
         form = CustomUserCreationForm()
     context = {

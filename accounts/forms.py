@@ -10,7 +10,6 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = [
             "username",
-            "profile_pic",
             "birth",
             "address",
             "address_detail",
@@ -26,7 +25,6 @@ class CustomUserChangeForm(UserChangeForm):
         model = get_user_model()
         fields = [
             "username",
-            "profile_pic",
             "birth",
             "address",
             "address_detail",
