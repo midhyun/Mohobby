@@ -9,7 +9,7 @@ class Categories(models.Model):
     category = models.CharField(max_length=20)
 
 class Hobby(models.Model):
-    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Hobby')
     title = models.CharField(max_length=80)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     tags = models.CharField(max_length=80)
@@ -37,7 +37,7 @@ class Hobby(models.Model):
 
 class Accepted(models.Model):
     joindate = models.DateTimeField(auto_now=True)
-    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE, related_name='accepted')
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     joined = models.BooleanField(default=False) # 승인여부
 
