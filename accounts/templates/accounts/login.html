@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block css %}
@@ -9,11 +10,13 @@
 {% block content %}
   <div class="login_form">
     <h1 class="login_banner">Mohobby</h1>
-    <form action="" method="POST">
+    <form action="{% url 'accounts:login' %}" method="POST">
       {% csrf_token %}
-      {% bootstrap_form form %}
+      <div class="login_box">
+        {% render_field form.username class="user_input" placeholder="아이디"%}
+        {% render_field form.password class="user_input" placeholder="비밀번호"%}
+      </div>
       <button class="login_button" type="submit">로그인</button>
-      <a href=""></a>
     </form>
     <a class="login_text" href="{% url 'accounts:signup'%}">회원가입</a>
   </div>

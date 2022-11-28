@@ -1,7 +1,12 @@
+.error_msg {
+    color : #E84545;
+}
 .login_form {
     display : flex;
     flex-direction: column;
     align-items: center;
+    min-height: 800px;
+    justify-content: center;
 }
 
 .login_banner {
@@ -18,6 +23,7 @@
     color: #ffffff;
     border: 0px;
     outline: 0px;
+    margin: 20px; 
 }
 
 .login_text {
@@ -29,4 +35,67 @@
 .login_text:hover {
     color : #E84545;
     text-decoration: none;
+}
+
+.login_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 20px;
+}
+
+.form_list {
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form_field {
+    width: 520px
+}
+
+.user_input {
+    margin: 10px;
+    height: 46px;
+    width: 100%;
+    border: 1px solid #DADCE0;
+    border-radius: 7px;
+    font-size: 14px;
+    padding: 0 10px;
+    outline: none;
+    background: none;
+    z-index: 1;
+}
+
+.sm_user_input {
+    margin: 10px;
+    height: 36px;
+    width: 40%;
+    border: 1px solid #DADCE0;
+    border-radius: 7px;
+    font-size: 14px;
+    padding: 0 10px;
+    outline: none;
+    background: none;
+    z-index: 1;
+}
+
+.address_box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.address_btn {
+    color: #ffffff;
+    margin: 10px;
+    font-size: 16px;
+    width: 200px;
+    height: 36px;
+    border-radius: 7px;
+    border: 0px;
+    padding: 0 10px;
+    outline: none;
+    background: #E84545;
 }
