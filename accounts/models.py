@@ -25,6 +25,7 @@ class User(AbstractUser):
     address = models.CharField(max_length=50)  # 주소
     address_detail = models.CharField(max_length=40, null=True)  # 상세주소
     birth = models.DateTimeField(default=timezone.now)  # 나이
+    follwings = models.ManyToManyField('self',symmetrical=False, related_name='followers')
     
     
     @property
