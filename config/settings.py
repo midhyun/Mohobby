@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "accounts",
     "hobby",
     "community",
+    "chat",
     "imagekit",
     "debug_toolbar",
     "django_extensions",
