@@ -46,3 +46,16 @@ def detail(request, pk):
         "user": user,
     }
     return render(request, "accounts/detail.html", context)
+
+def follow(request, pk):
+    accounts = get_user_model().objects.get(pk=pk)
+    if request.user == accounts:
+        return redirect("accounts:detail", pk)
+    if request.user in accounts.followers.all():
+        accounts.followers.remove(request.user)
+        accounts.save()
+    else:
+        accounts.followers.add(request.user)
+        accounts.save()
+    # 상세 페이지로 redirect
+    return redirect("accounts:detail", pk)
