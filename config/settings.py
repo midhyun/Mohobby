@@ -38,6 +38,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "accounts",
     "imagekit",
     "debug_toolbar",
     "django_extensions",
@@ -138,8 +139,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # User Model
-
-AUTH_USER_MODEL = "accounts.User"
+# 모델 추가 후 다시 수정해야함.
+# AUTH_USER_MODEL = "accounts.User"
 
 if DEBUG:
     # Database
