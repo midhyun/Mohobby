@@ -5,6 +5,10 @@
 {% endblock css %}
 {% block content %}
 <div class="wrapper">
+    <div class="progress">
+        <div class="progress-bar bg-danger" role="progressbar" aria-label="Danger example" style="width: 10%"
+            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <div class="header">
         <ul>
             <li class="form_1_progressbar">
@@ -86,20 +90,28 @@
     <div class="btns_wrap">
         <div class="common_btns form_1_btns">
             <button type="button" class="btn_next">Next
-                <span class="icon"><ion-icon name="arrow-forward-outline"></ion-icon></span>
+                <span class="icon">
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </span>
             </button>
         </div>
         <div class="common_btns form_2_btns" style="display:none;">
             <button type="button" class="btn_next">Back
-                <span class="icon"><ion-icon name="arrow-back-outline"></ion-icon></span>
+                <span class="icon">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </span>
             </button>
             <button type="button" class="btn_back">Next
-                <span class="icon"><ion-icon name="arrow-forward-outline"></ion-icon></span>
+                <span class="icon">
+                    <ion-icon name="arrow-forward-outline"></ion-icon>
+                </span>
             </button>
         </div>
         <div class="common_btns form_1_btns" style="display:none;">
             <button type="button" class="btn_next">Back
-                <span class="icon"><ion-icon name="arrow-back-outline"></ion-icon></span>
+                <span class="icon">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                </span>
             </button>
             <button type="button" class="btn_back">Done
                 <span class="icon"></span>
@@ -109,6 +121,6 @@
 </div>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'hobby/form.js' %}" ></script>
+<script src="{% static 'hobby/form.js' %}"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 {% endblock js %}

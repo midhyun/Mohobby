@@ -1,3 +1,6 @@
+.navbar {
+    display:none;
+}
 .wrapper{
     width: 750px;
     max-width: 100%;
@@ -128,5 +131,5 @@
 
 .warpper .btns_warp .common_btns button.btn_next:hover,
 .warpper .btns_warp .common_btns button.btn_back:hover{
-    
+
 }
