@@ -1,114 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load django_bootstrap5 %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'hobby/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
 {% block content %}
 <div class="wrapper">
-    <div class="header">
-        <ul>
-            <li class="form_1_progressbar">
-                <div>
-                    <p>1</p>
-                </div>
-            </li>
-            <li class="form_2_progressbar">
-                <div>
-                    <p>2</p>
-                </div>
-            </li>
-            <li class="form_3_progressbar">
-                <div>
-                    <p>3</p>
-                </div>
-            </li>
-        </ul>
+    <div class="progress">
+        <div id="progress_bar" class="progress-bar bg-danger" role="progressbar" aria-label="Danger example"
+            style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-    <div class="form_wrap">
-        <div class="form_1 data_info">
-            <h2>Signup Info</h2>
-            <form action="">
-                <div class="form_container">
-                    <div class="input_wrap">
-                        <label for="email_address">Email Address</label>
-                        <input type="text" name="Email Address" id="email_address">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="password">Password</label>
-                        <input type="text" name="Password" id="password">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="confirm_password">Email Address</label>
-                        <input type="text" name="Confirm password" id="confirm_password">
-                    </div>
-                </div>
-            </form>
+    <div class="d-flex justify-content-between">
+        <button type="button" class="slide_prev_button slide_button">
+            <ion-icon name="chevron-back-circle" size="large"></ion-icon>
+        </button>
+        <button type="button" class="btn_help slide_button">
+            <ion-icon name="help-circle-outline" size="large"></ion-icon>
+        </button>
+    </div>
+    <div class="slide slide_wrap">
+        <div class="slide_item">1
         </div>
-        <div class="form_2 data_info" style="display:none;">
-            <h2>Personal Info</h2>
-            <form action="">
-                <div class="form_container">
-                    <div class="input_wrap">
-                        <label for="user_name">User Name</label>
-                        <input type="text" name="User Name" id="user_name">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="first_name">Fisrt Name</label>
-                        <input type="text" name="First Name" id="first_name">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" name="Last Name" id="last_name">
-                    </div>
-                </div>
-            </form>
+        <div class="slide_item">2
         </div>
-        <div class="form_3 data_info" style="display:none;">
-            <h2>Professional Info</h2>
-            <form action="">
-                <div class="form_container">
-                    <div class="input_wrap">
-                        <label for="current_company">Current Company</label>
-                        <input type="text" name="Current Company" id="current_company">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="totla_experience">Total Experience</label>
-                        <input type="text" name="Total Experience" id="totla_experience">
-                    </div>
-                    <div class="input_wrap">
-                        <label for="designation">Designation</label>
-                        <input type="text" name="Designation" id="designation">
-                    </div>
-                </div>
-            </form>
+        <div class="slide_item">3
         </div>
     </div>
-    <div class="btns_wrap">
-        <div class="common_btns form_1_btns">
-            <button type="button" class="btn_next">Next
-                <span class="icon"><ion-icon name="arrow-forward-outline"></ion-icon></span>
-            </button>
-        </div>
-        <div class="common_btns form_2_btns" style="display:none;">
-            <button type="button" class="btn_next">Back
-                <span class="icon"><ion-icon name="arrow-back-outline"></ion-icon></span>
-            </button>
-            <button type="button" class="btn_back">Next
-                <span class="icon"><ion-icon name="arrow-forward-outline"></ion-icon></span>
-            </button>
-        </div>
-        <div class="common_btns form_1_btns" style="display:none;">
-            <button type="button" class="btn_next">Back
-                <span class="icon"><ion-icon name="arrow-back-outline"></ion-icon></span>
-            </button>
-            <button type="button" class="btn_back">Done
-                <span class="icon"></span>
-            </button>
-        </div>
+    <div class="container">
+        <button class="mt-3 next_btn slide_next_button slide_button">다음</button>
     </div>
 </div>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'hobby/form.js' %}" ></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script src="{% static 'js/form.js' %}"></script>
 {% endblock js %}
