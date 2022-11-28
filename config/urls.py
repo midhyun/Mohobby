@@ -22,6 +22,7 @@ from . import views
 urlpatterns = [
     path("", views.main, name="main"),
     path("admin/", admin.site.urls),
+    path("accounts/", include('accounts.urls')),
 ]
 
 if settings.DEBUG:
