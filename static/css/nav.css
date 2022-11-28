@@ -15,5 +15,8 @@
 
 .nav_person {
     color: white;
-    height: 5rem;
+}
+
+.nav_dropdown {
+    color: rgb(232, 69, 69);
 }
