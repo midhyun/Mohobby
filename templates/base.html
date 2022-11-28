@@ -1,0 +1,33 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    {% bootstrap_css %}
+    {% block css %}{% endblock css %}
+  </head>
+
+  <body>
+    <!-- navbar -->
+    {% include "navbar.html" %}
+
+    <!-- body -->
+    <div class="container" style="min-height: 100vh; margin-top: 5%">
+      {% block content %}{% endblock content %}
+    </div>
+
+    <!-- footer -->
+    {% include "footer.html" %}
+
+    <!-- 자바스크립트 -->
+    {% bootstrap_javascript %}
+    {% block js %}{% endblock js %}
+  </body>
+
+</html>
