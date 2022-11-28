@@ -10,6 +10,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = [
             "username",
+            "password1",
+            "password2",
             "birth",
             "address",
             "address_detail",
