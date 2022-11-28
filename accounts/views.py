@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_safe
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 # Create your views here.
 def signup(request):
     if request.method == "POST":
@@ -13,7 +14,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()  
             auth_login(request, user)  # 로그인
-            return redirect("accounts:login")
+            return redirect("articles:login")
     else:
         form = CustomUserCreationForm()
     context = {
@@ -23,25 +24,25 @@ def signup(request):
 
 @require_safe
 def login(request):
-    if request.user.is_anonymous:
-        if request.method == "POST":
-            login_form = AuthenticationForm(request, data=request.POST)
-            if login_form.is_valid():
-                auth_login(request, login_form.get_user())
-
-                return redirect(request.GET.get("next") or "articles:main")
-
-        else:
-            login_form = AuthenticationForm()
-
-        context = {
-            "login_form": login_form,
-        }
-        return render(request, "accounts/login.html", context)
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            return redirect("accounts:detail")
     else:
-        return HttpResponseRedirect("/")
+        form = AuthenticationForm()
+    context = {"form": form}
+    return render(request, "accounts/login.html", context)
     
 @login_required
 def logout(request):
     auth_logout(request)
     return redirect("accounts:login")
+
+
+def detail(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    context = {
+        "user": user,
+    }
+    return render(request, "accounts/detail.html", context)
