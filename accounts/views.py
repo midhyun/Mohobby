@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_safe
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def signup(request):
     if request.method == "POST":
@@ -39,3 +40,8 @@ def login(request):
         return render(request, "accounts/login.html", context)
     else:
         return HttpResponseRedirect("/")
+    
+@login_required
+def logout(request):
+    auth_logout(request)
+    return redirect("accounts:login")
