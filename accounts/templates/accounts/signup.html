@@ -1,20 +1,59 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% load static %}
-
-{% block css %}
-  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
-{% endblock %}
 
 {% block content %}
-  <div class="login_form">
-    <h1 class="login_banner">회원가입</h1>
-    <form action="" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {% bootstrap_form form %}
-      <button class="login_button" type="submit">가입</button>
-    </form>
-  </div>
-{% endblock %}
+<h1>회원가입</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="mb-3"><label class="form-label" for="id_username">사용자 이름</label>
+    <input type="text" name="username" maxlength="150" autofocus="" class="form-control" placeholder="사용자 이름" required="" id="id_username">
+    <div class="form-text">150자 이하 문자, 숫자 그리고 @/./+/-/_만 가능합니다.</div>
+    </div>
+    <div class="mb-3"><label class="form-label" for="id_password1">비밀번호</label>
+    <input type="password" name="password1" autocomplete="new-password" class="form-control" placeholder="비밀번호" required="" id="id_password1">
+    <div class="form-text"></div>
+    </div>
+    <div class="mb-3"><label class="form-label" for="id_password2">비밀번호 확인</label>
+    <input type="password" name="password2" autocomplete="new-password" class="form-control" placeholder="비밀번호 확인" required="" id="id_password2">
+    <div class="form-text">확인을 위해 이전과 동일한 비밀번호를 입력하세요. </div>
+    </div>
+    <div class="mb-3"><label class="form-label" for="id_birth">Birth</label>
+    <input type="Date" name="birth" value="2022-11-28" class="form-control" placeholder="Birth" required="" id="id_birth"></div>
+    <div class="mb-3"><label class="form-label" for="id_address">주소</label>
+    <input type="text" id="address_kakao" name="address" class="form-control"></div>
+    <div class="mb-3"><label class="form-label" for="id_address_detail">상세주소</label>
+    <input type="text" name="address_detail" maxlength="40" class="form-control" placeholder="Address detail" required="" id="id_address_detail"></div>
+    <div class="mb-3"><label class="form-label" for="id_gender">Gender</label><select name="gender" class="form-select" required="" id="id_gender">
+        <option value="" selected="">---------</option>
+      
+        <option value="M">남자</option>
+      
+        <option value="F">여자</option>
+      
+      </select></div>
+    {% bootstrap_button button_type="submit" content="가입완료" %}
+  </form>
 
-{% block js %}{% endblock js %}
+{% endblock content %}
+
+{% block js %}
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script>
+    window.onload = function () {
+      document
+        .getElementById("address_kakao")
+        .addEventListener("click", function () { //주소입력칸을 클릭하면
+          //카카오 지도 발생
+          new daum
+            .Postcode({
+              oncomplete: function (data) { //선택시 입력값 세팅
+                document
+                  .getElementById("address_kakao")
+                  .value = data.address; // 주소 넣기
+              }
+            })
+            .open();
+        });
+    }
+  </script>
+  {% endblock js %}
