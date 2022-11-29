@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm,CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -7,12 +7,13 @@ from django.views.decorators.http import require_safe
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+
 # Create your views here.
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()  
+            user = form.save()
             auth_login(request, user)  # 로그인
             return redirect("accounts:index")
     else:
@@ -21,6 +22,7 @@ def signup(request):
         "form": form,
     }
     return render(request, "accounts/signup.html", context)
+
 
 @require_safe
 def login(request):
@@ -33,7 +35,8 @@ def login(request):
         form = AuthenticationForm()
     context = {"form": form}
     return render(request, "accounts/login.html", context)
-    
+
+
 @login_required
 def logout(request):
     auth_logout(request)
@@ -46,6 +49,7 @@ def detail(request, pk):
         "user": user,
     }
     return render(request, "accounts/detail.html", context)
+
 
 def follow(request, pk):
     accounts = get_user_model().objects.get(pk=pk)
@@ -60,15 +64,18 @@ def follow(request, pk):
     # 상세 페이지로 redirect
     return redirect("accounts:detail", pk)
 
+
 @login_required
 def delete(request):
     request.user.delete()
     auth_logout(request)
     return redirect("accounts:index")
 
+
 def index(request):
     pass
     return render(request, "accounts/index.html")
+
 
 @login_required
 def update(request, pk):
