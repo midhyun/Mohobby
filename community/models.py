@@ -24,3 +24,8 @@ class Comment(models.Model):
     parent_comment = models.ForeignKey(
         "self", on_delete=models.CASCADE, related_name="recomment", null=True
     )
+
+
+class Photo(models.Model):
+    post = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
