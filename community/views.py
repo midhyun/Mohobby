@@ -14,7 +14,7 @@ def create(request):
         post_form = CommunityForm(request.POST)
         if post_form.is_valid():
             post = post_form.save(commit=False)
-            post.user = request.user
+            # post.user = request.user
             post.save()
             return redirect("community:index")
     else:
