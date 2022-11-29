@@ -1,4 +1,5 @@
 from django.db import models
+from django_summernote.fields import SummernoteTextField
 from multiselectfield import MultiSelectField
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill, Thumbnail
@@ -36,14 +37,12 @@ class Product(models.Model):
         processors=[Thumbnail(200, 200)],
         format="JPEG",
     )
-    content = models.TextField()
+    content = SummernoteTextField()
     contentStripTag = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_updated = models.BooleanField(default=False)
-    like_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="like_product"
-    )
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_product")
     hits = models.PositiveBigIntegerField(default=0, verbose_name="조회수")
 
     @property

@@ -1,11 +1,8 @@
 from django import forms
 from .models import Product, Product_Comment
-from django_summernote.fields import SummernoteTextField
 
 
 class ProductForm(forms.ModelForm):
-    content = SummernoteTextField()
-
     class Meta:
         model = Product
         fields = [
