@@ -3,6 +3,7 @@ from .models import Community, Comment, Photo
 from .forms import CommunityForm, CommentForm, ReCommentForm
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
+from datetime import date, datetime, timedelta
 
 # Create your views here.
 def index(request):
@@ -30,6 +31,31 @@ def create(request):
         "post_form": post_form,
     }
     return render(request, "community/create.html", context)
+
+
+def detail(request, community_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+
+    expire_date, now = datetime.now(), datetime.now()
+    expire_date += timedelta(days=1)
+    expire_date = expire_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    expire_date -= now
+    max_age = expire_date.total_seconds()
+    cookie_value = request.COOKIES.get("hitboard", "_")
+
+    context = {
+        "post": post,
+    }
+    response = render(request, "communuty/detail.html", context)
+    if f"_{community_pk}_" not in cookie_value:
+        cookie_value += f"{community_pk}_"
+        response.set_cookie(
+            "hitboard", value=cookie_value, max_age=max_age, httponly=True
+        )
+        post.hits += 1
+        post.save()
+
+    return response
 
 
 def update(request, community_pk):

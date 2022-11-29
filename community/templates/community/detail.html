@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content%}
+
+  detail
+  {{post.user.username}}
+  {{post.title}}
+  {{post.content}}
+  {{post.created_at}}
+  {{post.hits}}
+
+{% endblock content%}
