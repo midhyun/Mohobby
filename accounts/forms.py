@@ -16,6 +16,11 @@ class CustomUserCreationForm(UserCreationForm):
             "address",
             "address_detail",
             "gender",
+            "sports",
+            "travel",
+            "art",
+            "food",
+            "develop",
         ]
         widgets = {
             "birth": DateInput(),
