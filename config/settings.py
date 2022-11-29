@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "chat",
     "imagekit",
     "debug_toolbar",
+    'widget_tweaks',
     "django_extensions",
     "django_bootstrap5",
     "django_cleanup.apps.CleanupConfig",
