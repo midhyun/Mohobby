@@ -1,18 +1,23 @@
-.main_color{
+.main_color {
   color: #E84545
 }
-.tag{
-background-color: #f1f3f5;
-border-radius: 30px;
+
+.tag {
+  background-color: #f1f3f5;
+  border-radius: 30px;
 }
-.post_page{
-  background-color: #f8f9fa;
+
+.post_page {
+  background-color: #f8f9faa6;
+  ;
 }
-.post{
+
+.post {
   background-color: white;
   border-radius: 20px;
 }
-.post_img{
+
+.post_img {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }

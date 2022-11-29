@@ -3,6 +3,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.body {
+    background-color: #f8f9faa6;
+}
+
 .nav_main {
     background-color: rgb(232, 69, 69);
     text-align: center;
