@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <h3 class="main_color fw-bold">새 피드 작성하기
+  </h3>
+  <small class='text-muted'>자유롭게 여러분의 일상을 공유해 주세요 !</small>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+      <p>제목</p>
+      <input type="text" name='title' placeholder='제목'>
+    </div>
+    <div>
+      <p>내용</p>
+      <textarea type="text" name='content' placeholder='내용' style='width:500px;'></textarea>
+    </div>
+    <div class="text-end"><input type="submit" value="작성"></div>
+  </form>
+
+{% endblock content %}
