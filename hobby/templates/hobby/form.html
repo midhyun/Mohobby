@@ -59,9 +59,7 @@
                 <input class="d-none" type="radio" name="category" id="develop" value="develop">
             </div>
             <!-- 태그 인풋 -->
-            <div name="tags">
-
-            </div>
+            <input class="d-none" type="text" name="tag" id="tag">
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <label id="sports_label" for="sports" class="accordion-button collapsed categories social-btn active"
                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
@@ -75,27 +73,27 @@
                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body row row-cols-3 g-3">
-                        <button class="tag-btn col mx-2">축구</button>
-                        <button class="tag-btn col mx-2">농구</button>
-                        <button class="tag-btn col mx-2">야구</button>
-                        <button class="tag-btn col mx-2">클라이밍</button>
-                        <button class="tag-btn col mx-2">등산</button>
-                        <button class="tag-btn col mx-2">테니스</button>
-                        <button class="tag-btn col mx-2">트래킹</button>
-                        <button class="tag-btn col mx-2">볼링</button>
-                        <button class="tag-btn col mx-2">러닝</button>
-                        <button class="tag-btn col mx-2">스키</button>
-                        <button class="tag-btn col mx-2">보드</button>
-                        <button class="tag-btn col mx-2">헬스</button>
-                        <button class="tag-btn col mx-2">산책</button>
-                        <button class="tag-btn col mx-2">플로깅</button>
-                        <button class="tag-btn col mx-2">자전거</button>
-                        <button class="tag-btn col mx-2">서핑</button>
-                        <button class="tag-btn col mx-2">배드민턴</button>
-                        <button class="tag-btn col mx-2">탁구</button>
-                        <button class="tag-btn col mx-2">골프</button>
-                        <button class="tag-btn col mx-2">스포츠경기</button>
-                        <button class="tag-btn col mx-2">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="축구">축구</button>
+                        <button class="tag-btn col mx-2 " value="농구">농구</button>
+                        <button class="tag-btn col mx-2 " value="야구">야구</button>
+                        <button class="tag-btn col mx-2 " value="클라이밍">클라이밍</button>
+                        <button class="tag-btn col mx-2 " value="등산">등산</button>
+                        <button class="tag-btn col mx-2 " value="테니스">테니스</button>
+                        <button class="tag-btn col mx-2 " value="트래킹">트래킹</button>
+                        <button class="tag-btn col mx-2 " value="볼링">볼링</button>
+                        <button class="tag-btn col mx-2 " value="러닝">러닝</button>
+                        <button class="tag-btn col mx-2 " value="스키">스키</button>
+                        <button class="tag-btn col mx-2 " value="보드">보드</button>
+                        <button class="tag-btn col mx-2 " value="헬스">헬스</button>
+                        <button class="tag-btn col mx-2 " value="산책">산책</button>
+                        <button class="tag-btn col mx-2 " value="플로깅">플로깅</button>
+                        <button class="tag-btn col mx-2 " value="자전거">자전거</button>
+                        <button class="tag-btn col mx-2 " value="서핑">서핑</button>
+                        <button class="tag-btn col mx-2 " value="배드민턴">배드민턴</button>
+                        <button class="tag-btn col mx-2 " value="탁구">탁구</button>
+                        <button class="tag-btn col mx-2 " value="골프">골프</button>
+                        <button class="tag-btn col mx-2 " value="스포츠경기">스포츠경기</button>
+                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
                     </div>
                 </div>
                 <label id="travel_label" for="travel" class="accordion-button collapsed categories social-btn"
@@ -110,14 +108,14 @@
                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body row row-cols-3 g-3">
-                        <button class="tag-btn col mx-2">복합문화공간</button>
-                        <button class="tag-btn col mx-2">테마파크</button>
-                        <button class="tag-btn col mx-2">피크닉</button>
-                        <button class="tag-btn col mx-2">드라이브</button>
-                        <button class="tag-btn col mx-2">캠핑</button>
-                        <button class="tag-btn col mx-2">국내여행</button>
-                        <button class="tag-btn col mx-2">해외여행</button>
-                        <button class="tag-btn col mx-2">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="복합문화공간">복합문화공간</button>
+                        <button class="tag-btn col mx-2 " value="테마파크">테마파크</button>
+                        <button class="tag-btn col mx-2 " value="피크닉">피크닉</button>
+                        <button class="tag-btn col mx-2 " value="드라이브">드라이브</button>
+                        <button class="tag-btn col mx-2 " value="캠핑">캠핑</button>
+                        <button class="tag-btn col mx-2 " value="국내여행">국내여행</button>
+                        <button class="tag-btn col mx-2 " value="해외여행">해외여행</button>
+                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
                     </div>
                 </div>
                 <label id="art_label" for="art" class="accordion-button collapsed categories social-btn"
@@ -132,17 +130,17 @@
                 <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body row row-cols-3 g-3">
-                        <button class="tag-btn col mx-2">전시</button>
-                        <button class="tag-btn col mx-2">영화</button>
-                        <button class="tag-btn col mx-2">뮤지컬</button>
-                        <button class="tag-btn col mx-2">공연</button>
-                        <button class="tag-btn col mx-2">디자인</button>
-                        <button class="tag-btn col mx-2">박물관</button>
-                        <button class="tag-btn col mx-2">연극</button>
-                        <button class="tag-btn col mx-2">콘서트</button>
-                        <button class="tag-btn col mx-2">연주회</button>
-                        <button class="tag-btn col mx-2">페스티벌</button>
-                        <button class="tag-btn col mx-2">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="전시">전시</button>
+                        <button class="tag-btn col mx-2 " value="영화">영화</button>
+                        <button class="tag-btn col mx-2 " value="뮤지컬">뮤지컬</button>
+                        <button class="tag-btn col mx-2 " value="공연">공연</button>
+                        <button class="tag-btn col mx-2 " value="디자인">디자인</button>
+                        <button class="tag-btn col mx-2 " value="박물관">박물관</button>
+                        <button class="tag-btn col mx-2 " value="연극">연극</button>
+                        <button class="tag-btn col mx-2 " value="콘서트">콘서트</button>
+                        <button class="tag-btn col mx-2 " value="연주회">연주회</button>
+                        <button class="tag-btn col mx-2 " value="페스티벌">페스티벌</button>
+                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
                     </div>
                 </div>
                 <label id="food_label" for="food" class="accordion-button collapsed categories social-btn"
@@ -157,21 +155,21 @@
                 <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body row row-cols-3 g-3">
-                        <button class="tag-btn col mx-2">맛집투어</button>
-                        <button class="tag-btn col mx-2">카페</button>
-                        <button class="tag-btn col mx-2">와인</button>
-                        <button class="tag-btn col mx-2">커피</button>
-                        <button class="tag-btn col mx-2">디저트</button>
-                        <button class="tag-btn col mx-2">맥주</button>
-                        <button class="tag-btn col mx-2">티룸</button>
-                        <button class="tag-btn col mx-2">비건</button>
-                        <button class="tag-btn col mx-2">파인다이닝</button>
-                        <button class="tag-btn col mx-2">요리</button>
-                        <button class="tag-btn col mx-2">페어링</button>
-                        <button class="tag-btn col mx-2">칵테일</button>
-                        <button class="tag-btn col mx-2">위스키</button>
-                        <button class="tag-btn col mx-2">전통주</button>
-                        <button class="tag-btn col mx-2">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="맛집투어">맛집투어</button>
+                        <button class="tag-btn col mx-2 " value="카페">카페</button>
+                        <button class="tag-btn col mx-2 " value="와인">와인</button>
+                        <button class="tag-btn col mx-2 " value="커피">커피</button>
+                        <button class="tag-btn col mx-2 " value="디저트">디저트</button>
+                        <button class="tag-btn col mx-2 " value="맥주">맥주</button>
+                        <button class="tag-btn col mx-2 " value="티룸">티룸</button>
+                        <button class="tag-btn col mx-2 " value="비건">비건</button>
+                        <button class="tag-btn col mx-2 " value="파인다이닝">파인다이닝</button>
+                        <button class="tag-btn col mx-2 " value="요리">요리</button>
+                        <button class="tag-btn col mx-2 " value="페어링">페어링</button>
+                        <button class="tag-btn col mx-2 " value="칵테일">칵테일</button>
+                        <button class="tag-btn col mx-2 " value="위스키">위스키</button>
+                        <button class="tag-btn col mx-2 " value="전통주">전통주</button>
+                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
                     </div>
                 </div>
                 <label id="develop_label" for="develop" class="accordion-button collapsed categories social-btn"
@@ -186,16 +184,16 @@
                 <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
                     data-bs-parent="#accordionFlushExample">
                     <div class="accordion-body row row-cols-3 g-3">
-                        <button class="tag-btn col mx-2">습관만들기</button>
-                        <button class="tag-btn col mx-2">챌린지</button>
-                        <button class="tag-btn col mx-2">독서</button>
-                        <button class="tag-btn col mx-2">스터디</button>
-                        <button class="tag-btn col mx-2">외국어</button>
-                        <button class="tag-btn col mx-2">재테크</button>
-                        <button class="tag-btn col mx-2">브랜딩</button>
-                        <button class="tag-btn col mx-2">커리어</button>
-                        <button class="tag-btn col mx-2">사이드프로젝트</button>
-                        <button class="tag-btn col mx-2">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="습관만들기">습관만들기</button>
+                        <button class="tag-btn col mx-2 " value="챌린지">챌린지</button>
+                        <button class="tag-btn col mx-2 " value="독서">독서</button>
+                        <button class="tag-btn col mx-2 " value="스터디">스터디</button>
+                        <button class="tag-btn col mx-2 " value="외국어">외국어</button>
+                        <button class="tag-btn col mx-2 " value="재테크">재테크</button>
+                        <button class="tag-btn col mx-2 " value="브랜딩">브랜딩</button>
+                        <button class="tag-btn col mx-2 " value="커리어">커리어</button>
+                        <button class="tag-btn col mx-2 " value="사이드프로젝트">사이드프로젝트</button>
+                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
                     </div>
                 </div>
             </div>

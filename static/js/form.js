@@ -41,7 +41,7 @@ prevBtn.addEventListener("click", () => {
 window.addEventListener("resize", () => {
   slideWidth = slide.clientWidth;
 });
-
+// 소셜링, 클럽 소셜링 선택
 radio_1.addEventListener("click", () => {
   radio_1.classList.add('active')
   radio_2.classList.remove('active')
@@ -50,9 +50,11 @@ radio_2.addEventListener("click", () => {
   radio_2.classList.add('active')
   radio_1.classList.remove('active')
 });
+// 태그 이벤트 _ 다른 카테고리 선택시 현재 선택된 태그 해제
 const tags = document.querySelectorAll('div.accordion-body > .tag-btn');
-var n_tag = tags[0];
-console.log(tags);
+let tag_input = document.querySelector('#tag')
+console.log(tag_input)
+var n_tag = null;
 [].forEach.call(tags, function(tag){
 	tag.addEventListener("click", () => {
     for (let j=0; j<(tags.length); j++){
@@ -60,8 +62,10 @@ console.log(tags);
     }
   tag.classList.add('tag-btn-active')
   n_tag = tag;
+  tag_input.value = tag.value
   }); 
 }); 
+// 카테고리 이벤트 _ 카테고리 선택
 const categories = document.querySelectorAll('.categories');
 [].forEach.call(categories, function(category){ 
 	category.addEventListener("click", () => {
@@ -69,7 +73,7 @@ const categories = document.querySelectorAll('.categories');
       categories[j].classList.remove('active')
     }
   category.classList.add('active')
-  console.log(n_tag)
   n_tag.classList.remove('tag-btn-active')
-  }); 
+  tag_input.value = ''
+  });
 });
