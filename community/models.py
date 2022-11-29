@@ -21,6 +21,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     posting = models.ForeignKey(Community, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # 대댓글
     parent_comment = models.ForeignKey(
         "self", on_delete=models.CASCADE, related_name="recomment", null=True
     )
