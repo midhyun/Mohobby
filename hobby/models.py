@@ -21,7 +21,7 @@ class Hobby(models.Model):
     entry_fee = models.CharField(max_length=20)
     content = models.TextField()
     hits = models.PositiveBigIntegerField(default=0)
-    recruit_type = models.BooleanField(default=False)
+    recruit_type = models.BooleanField(default=False) # 자유가입(False), 승인제(True)
     limit = models.IntegerField(default=3, validators=[MinValueValidator(3), MaxValueValidator(15)])
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Accepted')
     image = models.ImageField(
