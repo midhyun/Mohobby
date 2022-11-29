@@ -26,6 +26,8 @@ urlpatterns = [
     path("hobby/", include("hobby.urls")),
     path("community/", include("community.urls")),
     path("chat/", include("chat.urls")),
+    path("products/", include("products.urls")),
+    path("summernote/", include("django_summernote.urls")),
 ]
 
 if settings.DEBUG:

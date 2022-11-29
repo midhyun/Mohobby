@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os, dj_database_url
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     "hobby",
     "community",
     "chat",
+    "products",
     "imagekit",
     "debug_toolbar",
     'widget_tweaks',
     "django_extensions",
     "django_bootstrap5",
+    "django_summernote",
     "django_cleanup.apps.CleanupConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -192,6 +194,19 @@ else:
 # https://docs.djangoproject.com/en/4.1/ref/contrib/messages/
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+
+SUMMERNOTE_THEME = "bs5"
+
+SUMMERNOTE_CONFIG = {
+    "iframe": True,
+    "summernote": {
+        "width": "100%",
+        "height": "480",
+        "lang": "ko-KR",
+    },
+}
 
 # 콘솔창에서 SQL 쿼리 보기
 # LOGGING = {

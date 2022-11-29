@@ -21,6 +21,7 @@ django-multiselectfield==0.1.12
 django-shortcuts==1.6
 django-social-share==2.3.0
 django-storages==1.13.1
+django-summernote==0.8.20.0
 django-widget-tweaks==1.4.12
 djangorestframework==3.14.0
 drf-serializer-cache==0.3.4
