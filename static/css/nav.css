@@ -17,6 +17,19 @@
     color: white;
 }
 
-.nav_dropdown {
-    color: rgb(232, 69, 69);
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.dropdown-item:active {
+    background-color: rgb(232, 69, 69) !important;
+    color: white !important;
+
+}
+
+.dropdown-item:hover {
+    background-color: rgb(232, 69, 69) !important;
+    color: white !important;
+
 }
