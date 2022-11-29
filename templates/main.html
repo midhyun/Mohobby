@@ -4,24 +4,21 @@
 {% load static %}
 {% block css %}{% endblock css %}
 
-{% block content %}
-  <div>
-    <!-- 메인 페이지 배너 hover(예정) -->
-    <!-- Swiper -->
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="{% static 'images/운동.jfif' %}"></div>
-        <div class="swiper-slide"><img src="{% static 'images/캐러셀_2.png' %}"></div>
-        <div class="swiper-slide">Slide 3</div>
-        <div class="swiper-slide">Slide 4</div>
-        <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
-      </div>
-      <div class="swiper-pagination"></div>
+{% block content %}   
+<div>
+  <!-- 메인 페이지 배너 hover(예정) -->
+  <!-- Swiper -->
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide"><img class="img-fluid" src="{% static 'images/캐러셀_1.jpg' %}"></div>
+      <div class="swiper-slide"><img src="{% static 'images/캐러셀_2.png' %}"></div>
+      <div class="swiper-slide">Slide 3</div>
+      <div class="swiper-slide">Slide 4</div>
+      <div class="swiper-slide">Slide 5</div>
+      <div class="swiper-slide">Slide 6</div>
     </div>
+    <div class="swiper-pagination"></div>
+  </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script>

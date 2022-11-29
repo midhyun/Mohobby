@@ -5,6 +5,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -12,9 +13,9 @@
     <h1 class="login_banner">회원가입</h1>
     <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="page_wrap">
-        <div class="page">
-          <!-- 첫번째 페이지 -->
+      <div class="page_wrap slide">
+        <!-- 첫번째 페이지 -->
+        <div class="page slide_item">
           <div class="form_list">
             <!-- input : 아이디, -->
             <div class="form_field">
@@ -31,7 +32,6 @@
             <div class="form_field">
               {% render_field form.password2 class="user_input" placeholder="비밀번호 재확인"%}
             </div>
-
             <!-- input : 성별 -->
             <div class="form_field">
               {% render_field form.gender class="user_input" placeholder="성별"%}
@@ -59,310 +59,365 @@
             <div class="form_field">
               {% render_field form.profile_pic class="user_input" placeholder="프로필 이미지"%}
             </div>
-                  <div class='d-flex'>
-      <div class="mb-3"><label class="form-label">Sports</label><div class="" id="id_sports">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_0" value="축구">
-            <label class="form-check-label" for="id_sports_0">축구</label>
-        </div>    
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_1" value="농구">
-            <label class="form-check-label" for="id_sports_1">농구</label>
+          </div>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_2" value="야구">
-            <label class="form-check-label" for="id_sports_2">야구</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_3" value="클라이밍">
-            <label class="form-check-label" for="id_sports_3">클라이밍</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_4" value="등산">
-            <label class="form-check-label" for="id_sports_4">등산</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_5" value="테니스">
-            <label class="form-check-label" for="id_sports_5">테니스</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_6" value="트래킹">
-            <label class="form-check-label" for="id_sports_6">트래킹</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_7" value="볼링">
-            <label class="form-check-label" for="id_sports_7">볼링</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_8" value="러닝">
-            <label class="form-check-label" for="id_sports_8">러닝</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_9" value="스키">
-            <label class="form-check-label" for="id_sports_9">스키</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_10" value="보드">
-            <label class="form-check-label" for="id_sports_10">보드</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_11" value="헬스">
-            <label class="form-check-label" for="id_sports_11">헬스</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_12" value="산책">
-            <label class="form-check-label" for="id_sports_12">산책</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_13" value="플로깅">
-            <label class="form-check-label" for="id_sports_13">플로깅</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_14" value="자전거">
-            <label class="form-check-label" for="id_sports_14">자전거</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_15" value="서핑">
-            <label class="form-check-label" for="id_sports_15">서핑</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_16" value="배드민턴">
-            <label class="form-check-label" for="id_sports_16">배드민턴</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_17" value="탁구">
-            <label class="form-check-label" for="id_sports_17">탁구</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_18" value="골프">
-            <label class="form-check-label" for="id_sports_18">골프</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="sports" id="id_sports_19" value="스포츠경기">
-            <label class="form-check-label" for="id_sports_19">스포츠경기</label>
-        </div>
-        </div></div>
-
-        <div class="mb-3"><label class="form-label">Travel</label><div class="" id="id_travel">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="travel" id="id_travel_0" value="복합문화공간">
-            <label class="form-check-label" for="id_travel_0">복합문화공간</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="travel" id="id_travel_1" value="테마파크">
-            <label class="form-check-label" for="id_travel_1">테마파크</label>
-        </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="travel" id="id_travel_2" value="피크닉">
-                <label class="form-check-label" for="id_travel_2">피크닉</label>
+        <!-- 두번째 페이지 -->
+        <div class="page slide_item">
+          <div class="category_form">
+            <div class="category_list">
+              <label class="form-label">Sports</label>
+              <div id="id_sports">
+                <span class="mimi">
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_0" value="축구">
+                  <label class="btn btn-outline-secondary" for="id_sports_0">축구</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_1" value="농구">
+                  <label class="btn btn-outline-secondary" for="id_sports_1">농구</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_2" value="야구">
+                  <label class="btn btn-outline-secondary" for="id_sports_2">야구</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_3" value="클라이밍">
+                  <label class="btn btn-outline-secondary" for="id_sports_3">클라이밍</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_4" value="등산">
+                  <label class="btn btn-outline-secondary" for="id_sports_4">등산</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_5" value="테니스">
+                  <label class="btn btn-outline-secondary" for="id_sports_5">테니스</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_6" value="트래킹">
+                  <label class="btn btn-outline-secondary" for="id_sports_6">트래킹</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_7" value="볼링">
+                  <label class="btn btn-outline-secondary" for="id_sports_7">볼링</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_8" value="러닝">
+                  <label class="btn btn-outline-secondary" for="id_sports_8">러닝</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_9" value="스키">
+                  <label class="btn btn-outline-secondary" for="id_sports_9">스키</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_10" value="보드">
+                  <label class="btn btn-outline-secondary" for="id_sports_10">보드</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_11" value="헬스">
+                  <label class="btn btn-outline-secondary" for="id_sports_11">헬스</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_12" value="산책">
+                  <label class="btn btn-outline-secondary" for="id_sports_12">산책</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_13" value="플로깅">
+                  <label class="btn btn-outline-secondary" for="id_sports_13">플로깅</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_14" value="자전거">
+                  <label class="btn btn-outline-secondary" for="id_sports_14">자전거</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_15" value="서핑">
+                  <label class="btn btn-outline-secondary" for="id_sports_15">서핑</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_16" value="배드민턴">
+                  <label class="btn btn-outline-secondary" for="id_sports_16">배드민턴</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_17" value="탁구">
+                  <label class="btn btn-outline-secondary" for="id_sports_17">탁구</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_18" value="골프">
+                  <label class="btn btn-outline-secondary" for="id_sports_18">골프</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="sports" id="id_sports_19" value="스포츠경기">
+                  <label class="btn btn-outline-secondary" for="id_sports_19">스포츠경기</label>
+                </span>
+              </div>
+              <label class="form-label">Travel</label>
+              <div class="" id="id_travel">
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_0" value="복합문화공간">
+                  <label class="btn btn-outline-secondary" for="id_travel_0">복합문화공간</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_1" value="테마파크">
+                  <label class="btn btn-outline-secondary" for="id_travel_1">테마파크</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_2" value="피크닉">
+                  <label class="btn btn-outline-secondary" for="id_travel_2">피크닉</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_3" value="드라이브">
+                  <label class="btn btn-outline-secondary" for="id_travel_3">드라이브</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_4" value="캠핑">
+                  <label class="btn btn-outline-secondary" for="id_travel_4">캠핑</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_5" value="국내여행">
+                  <label class="btn btn-outline-secondary" for="id_travel_5">국내여행</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="travel" id="id_travel_6" value="해외여행">
+                  <label class="btn btn-outline-secondary" for="id_travel_6">해외여행</label>
+                </span>
+              </div>
+              <label class="form-label">Art</label>
+              <div id="id_art">
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_0" value="전시">
+                  <label class="btn btn-outline-secondary" for="id_art_0">전시</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_1" value="영화">
+                  <label class="btn btn-outline-secondary" for="id_art_1">영화</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_2" value="뮤지컬">
+                  <label class="btn btn-outline-secondary" for="id_art_2">뮤지컬</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_3" value="공연">
+                  <label class="btn btn-outline-secondary" for="id_art_3">공연</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_4" value="디자인">
+                  <label class="btn btn-outline-secondary" for="id_art_4">디자인</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_5" value="박물관">
+                  <label class="btn btn-outline-secondary" for="id_art_5">박물관</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_6" value="연극">
+                  <label class="btn btn-outline-secondary" for="id_art_6">연극</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_7" value="콘서트">
+                  <label class="btn btn-outline-secondary" for="id_art_7">콘서트</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_8" value="연주회">
+                  <label class="btn btn-outline-secondary" for="id_art_8">연주회</label>
+                <span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="art" id="id_art_9" value="페스티벌">
+                  <label class="btn btn-outline-secondary" for="id_art_9">페스티벌</label>
+                <span>
+              </div>
+              <label class="form-label">Food</label>
+              <div id="id_food">
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_0" value="맛집투어">
+                  <label class="btn btn-outline-secondary" for="id_food_0">맛집투어</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_1" value="카페">
+                  <label class="btn btn-outline-secondary" for="id_food_1">카페</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_2" value="와인">
+                  <label class="btn btn-outline-secondary" for="id_food_2">와인</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_3" value="커피">
+                  <label class="btn btn-outline-secondary" for="id_food_3">커피</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_4" value="디저트">
+                  <label class="btn btn-outline-secondary" for="id_food_4">디저트</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_5" value="맥주">
+                  <label class="btn btn-outline-secondary" for="id_food_5">맥주</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_6" value="티룸">
+                  <label class="btn btn-outline-secondary" for="id_food_6">티룸</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_7" value="비건">
+                  <label class="btn btn-outline-secondary" for="id_food_7">비건</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_8" value="파인다이닝">
+                  <label class="btn btn-outline-secondary" for="id_food_8">파인다이닝</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_9" value="요리">
+                  <label class="btn btn-outline-secondary" for="id_food_9">요리</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_10" value="페어링">
+                  <label class="btn btn-outline-secondary" for="id_food_10">페어링</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_11" value="칵테일">
+                  <label class="btn btn-outline-secondary" for="id_food_11">칵테일</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_12" value="위스키">
+                  <label class="btn btn-outline-secondary" for="id_food_12">위스키</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="food" id="id_food_13" value="전통주">
+                  <label class="btn btn-outline-secondary" for="id_food_13">전통주</label>
+                </span>
+              </div>
+              <label class="form-label">Develop</label>
+              <div id="id_develop">
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_0" value="습관만들기">
+                  <label class="btn btn-outline-secondary" for="id_develop_0">습관만들기</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_1" value="챌린지">
+                  <label class="btn btn-outline-secondary" for="id_develop_1">챌린지</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_2" value="독서">
+                  <label class="btn btn-outline-secondary" for="id_develop_2">독서</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_3" value="스터디">
+                  <label class="btn btn-outline-secondary" for="id_develop_3">스터디</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_4" value="외국어">
+                  <label class="btn btn-outline-secondary" for="id_develop_4">외국어</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_5" value="재테크">
+                  <label class="btn btn-outline-secondary" for="id_develop_5">재테크</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_6" value="브랜딩">
+                  <label class="btn btn-outline-secondary" for="id_develop_6">브랜딩</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_7" value="커리어">
+                  <label class="btn btn-outline-secondary" for="id_develop_7">커리어</label>
+                </span>
+                <span>
+                  <input class="btn-check" type="checkbox" name="develop" id="id_develop_8" value="사이드프로젝트">
+                  <label class="btn btn-outline-secondary" for="id_develop_8">사이드프로젝트</label>
+                </span>
+              </div>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="travel" id="id_travel_3" value="드라이브">
-                <label class="form-check-label" for="id_travel_3">드라이브</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="travel" id="id_travel_4" value="캠핑">
-                <label class="form-check-label" for="id_travel_4">캠핑</label>
-            </div>        
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="travel" id="id_travel_5" value="국내여행">
-                <label class="form-check-label" for="id_travel_5">국내여행</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="travel" id="id_travel_6" value="해외여행">
-                <label class="form-check-label" for="id_travel_6">해외여행</label>
-            </div>
-        </div></div>
-
-            <div class="mb-3"><label class="form-label">Art</label><div class="" id="id_art">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_0" value="전시">
-                <label class="form-check-label" for="id_art_0">전시</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_1" value="영화">
-                <label class="form-check-label" for="id_art_1">영화</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_2" value="뮤지컬">
-                <label class="form-check-label" for="id_art_2">뮤지컬</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_3" value="공연">
-                <label class="form-check-label" for="id_art_3">공연</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_4" value="디자인">
-                <label class="form-check-label" for="id_art_4">디자인</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_5" value="박물관">
-                <label class="form-check-label" for="id_art_5">박물관</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_6" value="연극">
-                <label class="form-check-label" for="id_art_6">연극</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_7" value="콘서트">
-                <label class="form-check-label" for="id_art_7">콘서트</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_8" value="연주회">
-                <label class="form-check-label" for="id_art_8">연주회</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="art" id="id_art_9" value="페스티벌">
-                <label class="form-check-label" for="id_art_9">페스티벌</label>
-            </div>
-        </div></div> 
-            <div class="mb-3"><label class="form-label">Food</label><div class="" id="id_food">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_0" value="맛집투어">
-                <label class="form-check-label" for="id_food_0">맛집투어</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_1" value="카페">
-                <label class="form-check-label" for="id_food_1">카페</label>
-            </div>            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_2" value="와인">
-                <label class="form-check-label" for="id_food_2">와인</label>
-            </div>        
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_3" value="커피">
-                <label class="form-check-label" for="id_food_3">커피</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_4" value="디저트">
-                <label class="form-check-label" for="id_food_4">디저트</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_5" value="맥주">
-                <label class="form-check-label" for="id_food_5">맥주</label>
-            </div>            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_6" value="티룸">
-                <label class="form-check-label" for="id_food_6">티룸</label>
-            </div>            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_7" value="비건">
-                <label class="form-check-label" for="id_food_7">비건</label>
-            </div>            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_8" value="파인다이닝">
-                <label class="form-check-label" for="id_food_8">파인다이닝</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_9" value="요리">
-                <label class="form-check-label" for="id_food_9">요리</label>
-            </div>            
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_10" value="페어링">
-                <label class="form-check-label" for="id_food_10">페어링</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_11" value="칵테일">
-                <label class="form-check-label" for="id_food_11">칵테일</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_12" value="위스키">
-                <label class="form-check-label" for="id_food_12">위스키</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="food" id="id_food_13" value="전통주">
-                <label class="form-check-label" for="id_food_13">전통주</label>
-            </div>
-            </div></div>
-
-    <div class="mb-3"><label class="form-label">Develop</label><div class="" id="id_develop">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_0" value="습관만들기">
-            <label class="form-check-label" for="id_develop_0">습관만들기</label>
+          </div>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_1" value="챌린지">
-            <label class="form-check-label" for="id_develop_1">챌린지</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_2" value="독서">
-            <label class="form-check-label" for="id_develop_2">독서</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_3" value="스터디">
-            <label class="form-check-label" for="id_develop_3">스터디</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_4" value="외국어">
-            <label class="form-check-label" for="id_develop_4">외국어</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_5" value="재테크">
-            <label class="form-check-label" for="id_develop_5">재테크</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_6" value="브랜딩">
-            <label class="form-check-label" for="id_develop_6">브랜딩</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_7" value="커리어">
-            <label class="form-check-label" for="id_develop_7">커리어</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="develop" id="id_develop_8" value="사이드프로젝트">
-            <label class="form-check-label" for="id_develop_8">사이드프로젝트</label>
-        </div>
-    </div></div> 
-</div>
-            <button class="login_button" type="submit">다음</button>
+        <div class="page slide_item">
+          <div class="text-center">
+            <button class="login_button" type="submit">가입</button>
           </div>
         </div>
       </div>
     </form>
-  {% endblock %}
+    <span>
+      <button class="page_btn slide_prev_button">이전</button>
+      <button class="page_btn slide_next_button">다음</button>
+    </span>
+  </div>
+{% endblock %}
 
-  {% block js %}
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-      // 주소 검색 기능
-      function execDaumPostcode() {
-        new daum
-          .Postcode({
-            oncomplete: function (data) {
-              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+{% block js %}
+  <script>
+    const slide = document.querySelector(".slide");
+    let slideWidth = slide.clientWidth;
+    const prevBtn = document.querySelector(".slide_prev_button");
+    const nextBtn = document.querySelector(".slide_next_button");
+    const slideItems = document.querySelectorAll(".slide_item");
+    const maxSlide = slideItems.length;
+    
+    let currSlide = 1;
 
-              // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-              // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-              var roadAddr = data.roadAddress; // 도로명 주소 변수
-              var extraRoadAddr = ''; // 참고 항목 변수
-
-              // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-              // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-              if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                extraRoadAddr += data.bname;
-              }
-              // 건물명이 있고, 공동주택일 경우 추가한다.
-              if (data.buildingName !== '' && data.apartment === 'Y') {
-                extraRoadAddr += (
-                  extraRoadAddr !== ''
-                  ? ', ' + data.buildingName
-                  : data.buildingName);
-              }
-              // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-              if (extraRoadAddr !== '') {
-                extraRoadAddr = ' (' + extraRoadAddr + ')';
-              }
-
-              // 우편번호와 주소 정보를 해당 필드에 넣는다.
-              document
-                .getElementById("postcode")
-                .value = data.zonecode;
-              document
-                .getElementById("roadAddress")
-                .value = roadAddr;
-            }
-          })
-          .open();
+    nextBtn.addEventListener("click", () => {
+      currSlide++;
+      if (currSlide <= maxSlide) {
+        const offset = slideWidth * (currSlide - 1);
+        slideItems.forEach((i) => {
+          i.setAttribute("style", `left: ${-offset}px`);
+        });
+        // 슬라이드 이동 시 현재 활성화된 pagination 변경
+      } else {
+        currSlide--;
       }
-    </script>
-  {% endblock js %}
+    });
+    // 버튼 엘리먼트에 클릭 이벤트 추가하기
+    prevBtn.addEventListener("click", () => {
+      // 이전 버튼 누를 경우 현재 슬라이드를 변경
+      currSlide--;
+      // 1번째 슬라이드 이하로 넘어가지 않게 하기 위해서
+      if (currSlide > 0) {
+        // 슬라이드를 이동시키기 위한 offset 계산
+        const offset = slideWidth * (currSlide - 1);
+        // 각 슬라이드 아이템의 left에 offset 적용
+        slideItems.forEach((i) => {
+          i.setAttribute("style", `left: ${-offset}px`);
+        });
+      } else {
+        currSlide++;
+      }
+    });
+  </script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script>
+    // 주소 검색 기능
+    function execDaumPostcode() {
+      new daum
+        .Postcode({
+          oncomplete: function (data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            var extraRoadAddr = ''; // 참고 항목 변수
+
+            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+              extraRoadAddr += data.bname;
+            }
+            // 건물명이 있고, 공동주택일 경우 추가한다.
+            if (data.buildingName !== '' && data.apartment === 'Y') {
+              extraRoadAddr += (
+                extraRoadAddr !== ''
+                ? ', ' + data.buildingName
+                : data.buildingName);
+            }
+            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+            if (extraRoadAddr !== '') {
+              extraRoadAddr = ' (' + extraRoadAddr + ')';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document
+              .getElementById("postcode")
+              .value = data.zonecode;
+            document
+              .getElementById("roadAddress")
+              .value = roadAddr;
+          }
+        })
+        .open();
+    }
+  </script>
+{% endblock js %}
