@@ -48,9 +48,11 @@ def search(request):
     return render(request, "products/search.html", context)
 
 
-@login_required
 @require_http_methods(["GET", "POST"])
 def product_create(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
+
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
@@ -97,10 +99,12 @@ def product_detail(request, product_pk):
     return response
 
 
-@login_required
 @require_http_methods(["GET", "POST"])
 def product_update(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
+
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
 
     if product.user != request.user:
         return redirect("products:product_detail", product_pk)
