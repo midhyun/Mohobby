@@ -58,8 +58,23 @@
                 <input class="d-none" type="radio" name="category" id="food" value="food">
                 <input class="d-none" type="radio" name="category" id="develop" value="develop">
             </div>
-            <!-- 태그 인풋 -->
-            <input class="d-none" type="text" name="tag" id="tag">
+            <!-- 태그 인풋 오프캔버스 -->
+
+            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">소셜링 태그 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <hr>
+                <div class="offcanvas-body small">
+                    <h5>원하는 소셜링 태그를 직접 등록해 보세요</h5>
+                    <p class="text-muted">한글과 영어로 최대 10글자까지 등록할 수 있어요.</p>
+                    <input class="form-control mb-3" type="text" name="tag" id="tag" placeholder="태그 입력">
+                    <div class="text-center"><button type="button" class="input_btn" data-bs-dismiss="offcanvas"
+                            aria-label="Close" onclick="changeinner(this)">등록하기</button></div>
+                </div>
+            </div>
+            <!-- 아코디언 카테고리 선택지 -->
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <label id="sports_label" for="sports" class="accordion-button collapsed categories social-btn active"
                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
@@ -93,7 +108,8 @@
                         <button class="tag-btn col mx-2 " value="탁구">탁구</button>
                         <button class="tag-btn col mx-2 " value="골프">골프</button>
                         <button class="tag-btn col mx-2 " value="스포츠경기">스포츠경기</button>
-                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">직접입력</button>
                     </div>
                 </div>
                 <label id="travel_label" for="travel" class="accordion-button collapsed categories social-btn"
@@ -115,7 +131,8 @@
                         <button class="tag-btn col mx-2 " value="캠핑">캠핑</button>
                         <button class="tag-btn col mx-2 " value="국내여행">국내여행</button>
                         <button class="tag-btn col mx-2 " value="해외여행">해외여행</button>
-                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">직접입력</button>
                     </div>
                 </div>
                 <label id="art_label" for="art" class="accordion-button collapsed categories social-btn"
@@ -140,7 +157,8 @@
                         <button class="tag-btn col mx-2 " value="콘서트">콘서트</button>
                         <button class="tag-btn col mx-2 " value="연주회">연주회</button>
                         <button class="tag-btn col mx-2 " value="페스티벌">페스티벌</button>
-                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">직접입력</button>
                     </div>
                 </div>
                 <label id="food_label" for="food" class="accordion-button collapsed categories social-btn"
@@ -169,7 +187,8 @@
                         <button class="tag-btn col mx-2 " value="칵테일">칵테일</button>
                         <button class="tag-btn col mx-2 " value="위스키">위스키</button>
                         <button class="tag-btn col mx-2 " value="전통주">전통주</button>
-                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">직접입력</button>
                     </div>
                 </div>
                 <label id="develop_label" for="develop" class="accordion-button collapsed categories social-btn"
@@ -193,7 +212,8 @@
                         <button class="tag-btn col mx-2 " value="브랜딩">브랜딩</button>
                         <button class="tag-btn col mx-2 " value="커리어">커리어</button>
                         <button class="tag-btn col mx-2 " value="사이드프로젝트">사이드프로젝트</button>
-                        <button class="tag-btn col mx-2 " value="직접입력">직접입력</button>
+                        <button class="tag-btn col mx-2 " value="" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">직접입력</button>
                     </div>
                 </div>
             </div>

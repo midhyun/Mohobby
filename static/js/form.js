@@ -77,3 +77,7 @@ const categories = document.querySelectorAll('.categories');
   tag_input.value = ''
   });
 });
+
+function changeinner(event) {
+  n_tag.innerText = event.parentNode.parentNode.querySelector('#tag').value
+}

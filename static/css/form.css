@@ -64,7 +64,19 @@ border: 0px;
 outline: 0px;
 margin:auto;
 }
-
+.input_btn{
+background-color: #E84545;
+font-weight: 400;
+font-size: 12px;
+line-height: 15px;
+width: 90%;
+height: 40px;
+border-radius: 30px;
+color: #ffffff;
+border: 0px;
+outline: 0px;
+margin: auto;
+}
 .tap_icon{
   font-size:32px;
   margin:5px;
@@ -131,4 +143,24 @@ label{
 .tag-btn-active{
   border-color:#e8454569;
   background-color: #e8454569;
+}
+
+/* 오프캔버스 */
+.offcanvas-bottom{
+  width: 700px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  margin:auto
+}
+.offcanvas-size-xl {
+  --bs-offcanvas-width: min(95vw, 600px) !important;
+}
+.offcanvas-size-xxl {
+  --bs-offcanvas-width: min(95vw, 90vw) !important;
+}
+.offcanvas-size-md { /* add Responsivenes to default offcanvas */
+  --bs-offcanvas-width: min(95vw, 400px) !important;
+}
+.offcanvas-size-sm {
+  --bs-offcanvas-width: min(95vw, 250px) !important;
 }
