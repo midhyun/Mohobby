@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "products",
     "imagekit",
     "debug_toolbar",
+    'widget_tweaks',
     "django_extensions",
     "django_bootstrap5",
     "django_summernote",

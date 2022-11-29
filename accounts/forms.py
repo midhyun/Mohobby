@@ -10,11 +10,17 @@ class CustomUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = [
             "username",
-            "profile_pic",
+            "password1",
+            "password2",
             "birth",
             "address",
             "address_detail",
             "gender",
+            "sports",
+            "travel",
+            "art",
+            "food",
+            "develop",
         ]
         widgets = {
             "birth": DateInput(),
@@ -26,7 +32,6 @@ class CustomUserChangeForm(UserChangeForm):
         model = get_user_model()
         fields = [
             "username",
-            "profile_pic",
             "birth",
             "address",
             "address_detail",

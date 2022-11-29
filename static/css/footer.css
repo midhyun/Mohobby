@@ -1,0 +1,30 @@
+.footer_main {
+    background-color: rgb(232, 69, 69);
+    height: 150px;
+}
+
+.footer_content {
+    color: white;
+}
+
+.top-btn {
+    position: fixed;
+    bottom: 50px;
+    right: 23px;
+}
+
+.top-btn div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 4px 4px 25px 0px #0714271f;
+}
+
+.footer_up {
+    color: rgb(232, 69, 69);
+    font-weight: bolder !important;
+}

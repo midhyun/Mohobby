@@ -1,46 +1,71 @@
 {% load static %}
 
 <div>
-
-  <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-danger">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+  <!-- nav -->
+  <nav class=" nav_main navbar navbar-expand-lg fixed-top navbar-dark">
+    <div class="container nav_text">
+      <a class=" nav_home navbar-brand" href="{% url 'main' %}">Mohobby</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              Dropdown
+              취미
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item text-danger" href="#">운동/액티브</a></li>
+              <li><a class="dropdown-item text-danger" href="#">문화/예술</a></li>
+              <li><a class="dropdown-item text-danger" href="#">푸드/드링크</a></li>
+              <li><a class="dropdown-item text-danger" href="#">여행/나들이</a></li>
+              <li><a class="dropdown-item text-danger" href="#">성장/자기계발</a></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <a class="nav-link active" aria-current="page" href="#">피드</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">만물상</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-lg-5">
+          <li class='mt-2 mx-2'>
+            <a href="">
+              <i class="nav_person bi bi-person-fill"></i>
+            </a>
+          </li>
+          <li class='mt-2 mx-2'>
+            <a href="">
+              <i class="nav_person bi bi-chat-right-fill"></i>
+            </a>
+          </li>
+          <li class='mt-2 mx-2'>
+            <a href="">
+              <i class="nav_person bi bi-search"></i>
+            </a>
+          </li>
+          <li class='mt-2 mx-2'>
+            <a href="{% url 'hobby:create' %}">
+              <i class="nav_person bi bi-plus-square"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'accounts:logout' %}">로그아웃</a>
+          </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-lg-5">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'accounts:login' %}">로그인</a>
+          </li>
+        </ul>
+        {% endif %}
       </div>
     </div>
   </nav>
-
+  <!-- nav -->
 </div>
