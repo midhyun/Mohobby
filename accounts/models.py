@@ -17,7 +17,7 @@ class User(AbstractUser):
         choices=GENDER_CHOICES,
     )
     address = models.CharField(max_length=50)  # 주소
-    address_detail = models.CharField(max_length=40, null=True)  # 상세주소
+    address_detail = models.CharField(max_length=40, blank=True)  # 상세주소
     birth = models.DateTimeField(default=timezone.now)  # 나이
     follwings = models.ManyToManyField('self',symmetrical=False, related_name='followers')
     STORTS_CHOICES = (
@@ -46,6 +46,7 @@ class User(AbstractUser):
     sports = MultiSelectField(  # 관심 운동 선택
         max_length=100,
         choices=STORTS_CHOICES,
+        blank=True,
     )
     
     Travel_CHOICES = (
@@ -61,6 +62,7 @@ class User(AbstractUser):
     travel = MultiSelectField(  # 관심 여행 나들이 선택
         max_length=100,
         choices=Travel_CHOICES,
+        blank=True,
     )  
     
     ART_CHOICES = (
@@ -79,6 +81,7 @@ class User(AbstractUser):
     art = MultiSelectField(  # 관심 문화*예술 선택
         max_length=100,
         choices=ART_CHOICES,
+        blank=True,
     ) 
     
     FOOD_CHOICES = (
@@ -101,6 +104,7 @@ class User(AbstractUser):
     food = MultiSelectField(  # 관심 음식 선택
         max_length=100,
         choices=FOOD_CHOICES,
+        blank=True,
     )    
 
     DEVELOP_CHOICES = (
@@ -118,6 +122,7 @@ class User(AbstractUser):
     develop = MultiSelectField(  # 관심 음식 선택
         max_length=100,
         choices=DEVELOP_CHOICES,
+        blank=True
     )  
 
     
