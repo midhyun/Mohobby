@@ -84,7 +84,7 @@ function changeinner(event) {
 
 // Date/ Time picker
 
-// Addr btn active
+// 온라인, 오프라인 버튼 active
 const offlinebtn = document.querySelector('#offline-btn');
 const onlinebtn = document.querySelector('#online-btn');
 const addrcheck = document.querySelector('#address_type');
@@ -156,4 +156,22 @@ limit_plus.addEventListener('click', () => {
   } else {
     alert('최대 인원은 15명 입니다.')
   }
+});
+
+// 참가비 설정하기
+const entry_fee = document.querySelector('#entryfee-btn');
+const free_fee = document.querySelector('#entryfree-btn');
+const fee_box = document.querySelector('#entry_box');
+const fee_input = document.querySelector('#entry_fee')
+
+entry_fee.addEventListener('click', () => {
+  entry_fee.classList.toggle('addr-btn-active');
+  free_fee.classList.remove('addr-btn-active');
+  fee_box.classList.toggle('d-none');
+});
+free_fee.addEventListener('click', () => {
+  free_fee.classList.toggle('addr-btn-active');
+  entry_fee.classList.remove('addr-btn-active');
+  fee_box.classList.add('d-none');
+  fee_input.value = ''
 });

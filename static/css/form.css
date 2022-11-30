@@ -98,6 +98,7 @@ margin: auto;
   border-color: #E84545;
   background-color:#E84545;
   color: white;
+  transition: 0.15s;
 }
 
 .social-btn div{
@@ -127,6 +128,7 @@ label{
   border-color: #E84545;
   background-color:#E84545;
   color: white;
+  transition: 0.15s;
 }
 .tag-btn{
   font-size:12px;
@@ -143,11 +145,13 @@ label{
 .tag-btn:hover{
   border-color:#e8454569;
   background-color: #e8454569;
+  transition: 0.15s;
 }
 
 .tag-btn-active{
   border-color:#e8454569;
   background-color: #e8454569;
+  transition: 0.15s;
 }
 
 /* 오프캔버스 */
@@ -235,12 +239,14 @@ margin: auto;
   background-color:#E84545;
   color: white;
   border-color: #E84545;
+  transition: 0.15s;
 }
 .addr-btn-active{
   background-color:#E84545;
   color: white;
   border-color: #E84545;
   box-shadow: 2px 2px 2px 2px #e8454559;
+  transition: 0.15s;
 }
 .addr-control{
   cursor: pointer;
@@ -316,4 +322,29 @@ ul{
   background-color:#e7e7e7;
   border-radius: 10px;
   padding:20px;
+}
+/* 참가비 */
+.control-input{
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  margin: 20px 0px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #E84545;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.control-input:focus{
+  outline:#E84545;
+  box-shadow: 2px 2px 2px 3px #e8454559;
+  border: 1px solid #E84545;
 }
