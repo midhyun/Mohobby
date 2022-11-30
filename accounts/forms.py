@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from .models import User
 class DateInput(forms.DateInput):
     input_type = "Date"
-    widget = forms.DateInput(format = '%Y%m%d')
+   
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

@@ -93,3 +93,15 @@ def update(request, community_pk):
         return render(request, "community/update.html", context)
     else:
         return HttpResponseForbidden()
+
+
+def delete(request, community_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+
+    if post.user == request.user:
+        if request.method == "POST":
+            post.delete()
+            return redirect("community:index")
+
+    else:
+        return HttpResponseForbidden()
