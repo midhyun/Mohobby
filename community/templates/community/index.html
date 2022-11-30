@@ -18,8 +18,8 @@
           </ul>
           <p class="controller">
             <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
-            <span class="ctr prev">&lang;</span>
-            <span class="ctr next">&rang;</span>
+            <span class="prev">&lang;</span>
+            <span class="next">&rang;</span>
           </p>
         </div>
         <div class='mx-5'>
@@ -41,7 +41,6 @@
     const slideImg = document.querySelectorAll('.slides li'); //모든 슬라이드들
     let currentIdx = 0; //현재 슬라이드 index
     const slideCount = slideImg.length; // 슬라이드 개수
-
     const prev = document.querySelector('.prev'); //이전 버튼
     const next = document.querySelector('.next'); //다음 버튼
     const slideWidth = 800; //한개의 슬라이드 넓이
@@ -56,19 +55,16 @@
       slides.style.left = -num * 900 + 'px';
       currentIdx = num;
     }
-    const btns = document.querySelectorAll('.ctr')
-    btns.forEACH(btns, function (btn) {
-      btn.addEventListener('click', function (e) {
-        if (e.parentElement.classList.contains('prev')) {
-          if (currentIdx !== 0) 
-            moveSlide(currentIdx - 1);
-          }
-        if (e.parentElement.classList.contains('next')) {
-          if (currentIdx !== slideCount - 1) {
-            moveSlide(currentIdx + 1);
-          }
-        }
-      })
+
+    prev.addEventListener('click', function () {
+      if (currentIdx !== 0) 
+        moveSlide(currentIdx - 1);
+      }
+    );
+    next.addEventListener('click', function () {
+      if (currentIdx !== slideCount - 1) {
+        moveSlide(currentIdx + 1);
+      }
     });
   </script>
 
