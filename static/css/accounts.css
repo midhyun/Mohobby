@@ -29,14 +29,13 @@
 
 .slide_item {
     display: flex;
-    align-items: center;
     justify-content: center;
     position: relative;
     left: 0px;
     width: 100%;
     height: 650px;
     flex-shrink: 0;
-    transition: left 0.15s;
+    transition: left 0.6s;
 }
 
 
@@ -119,6 +118,37 @@
     align-items: center;
 }
 
+.select {
+    width: 520px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.select input[type=radio]{
+    display: none;
+}
+.select input[type=radio]+label{
+    border-radius: 7px;
+    height: 56px;
+    width: 250px;
+    border: 1px solid #DADCE0;
+    line-height: 55px;
+    font-weight:bold;
+    font-size: 14px;
+    padding: 0 10px;
+    outline: none;
+    background: none;
+    text-align: center;
+}
+.select input[type=radio]+label{
+    color: rgb(88, 86, 86);
+}
+.select input[type=radio]:checked+label{
+    background-color: rgb(88, 86, 86);
+    color: #fff;
+}
+
 .form_field {
     width: 520px
 }
@@ -167,10 +197,27 @@
     background: #E84545;
 }
 
+.category_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
 .category_form {
-    max-width: 600px;
-    height: 700px;
+    max-width: 520px;
+    height: 650px;
     padding-left: 10px;
+}
+
+
+.signup_btn {
+    background-color: #E84545;
+    width: 400px;
+    height: 55px;
+    border-radius: 30px;
+    color: #ffffff;
+    border: 0px;
+    outline: 0px;
+    margin: 20px; 
 }
 
 .social_button {

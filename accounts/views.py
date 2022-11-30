@@ -14,7 +14,7 @@ def signup(request):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user)  # 로그인
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
             return redirect("main")
     else:
         form = CustomUserCreationForm()
