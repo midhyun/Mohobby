@@ -26,6 +26,8 @@ urlpatterns = [
     path("hobby/", include("hobby.urls")),
     path("community/", include("community.urls")),
     path("chat/", include("chat.urls")),
+            # 소셜
+    path("accounts/", include("allauth.urls")),
 ]
 
 if settings.DEBUG:
