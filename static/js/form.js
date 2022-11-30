@@ -84,23 +84,26 @@ function changeinner(event) {
 
 // Date/ Time picker
 
-// Addr btn active
+// 온라인, 오프라인 버튼 active
 const offlinebtn = document.querySelector('#offline-btn');
 const onlinebtn = document.querySelector('#online-btn');
 const addrcheck = document.querySelector('#address_type');
 const addrbox = document.querySelector('#offline-box');
+const limit_addr = document.querySelector('#limit_addr');
 
 offlinebtn.addEventListener('click', () => {
   offlinebtn.classList.toggle('addr-btn-active');
   onlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.toggle('d-none');
   addrcheck.checked = false
+  limit_addr.innerText = '오프라인'
 });
 onlinebtn.addEventListener('click', () => {
   onlinebtn.classList.toggle('addr-btn-active');
   offlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.add('d-none');
   addrcheck.checked = true
+  limit_addr.innerText = '온라인'
 });
 
 // 키워드로 검색하기
@@ -112,7 +115,6 @@ var places = new kakao.maps.services.Places();
 
 var callback = function(result, status) {
     if (status === kakao.maps.services.Status.OK) {
-      console.log(result)
       arr = []
       for (var i = 0; i < (result.length); i++) {
         arr += `<li class="m-3 addrelem" data-bs-dismiss="offcanvas" aria-label="Close"><p class="addr_title">${result[i].place_name}</p><p class="addr_addr">${result[i].address_name}</p></li><hr>`
@@ -130,3 +132,46 @@ var callback = function(result, status) {
 keysearch.addEventListener('keyup', () => {
   places.keywordSearch(`${keysearch.value}`, callback);
 })
+
+// 제한인원 설정하기
+let limit = 3
+const limit_minus = document.querySelector('#remove-circle');
+const limit_plus = document.querySelector('#add-circle');
+const limit_n = document.querySelector('#limit_n')
+const limit_input = document.querySelector('#limit')
+limit_minus.addEventListener('click', () => {
+  if (limit > 3) {
+    limit--
+    limit_n.innerText = limit
+    limit_input.value = limit
+  } else {
+    alert('최소 인원은 3명 입니다.')
+  }
+});
+limit_plus.addEventListener('click', () => {
+  if (limit < 15) {
+    limit++
+    limit_n.innerText = limit
+    limit_input.value = limit
+  } else {
+    alert('최대 인원은 15명 입니다.')
+  }
+});
+
+// 참가비 설정하기
+const entry_fee = document.querySelector('#entryfee-btn');
+const free_fee = document.querySelector('#entryfree-btn');
+const fee_box = document.querySelector('#entry_box');
+const fee_input = document.querySelector('#entry_fee')
+
+entry_fee.addEventListener('click', () => {
+  entry_fee.classList.toggle('addr-btn-active');
+  free_fee.classList.remove('addr-btn-active');
+  fee_box.classList.toggle('d-none');
+});
+free_fee.addEventListener('click', () => {
+  free_fee.classList.toggle('addr-btn-active');
+  entry_fee.classList.remove('addr-btn-active');
+  fee_box.classList.add('d-none');
+  fee_input.value = ''
+});
