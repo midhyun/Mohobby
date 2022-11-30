@@ -5,6 +5,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_safe, require_http_methods
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
@@ -24,10 +25,14 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
-
+def id_check(request):
+    accounts = [i.username for i in get_user_model().objects.all()]
+    data = {
+        'accounts' : accounts
+    }
+    return JsonResponse(data)
 
 @require_http_methods(["GET", "POST"])
-
 def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
