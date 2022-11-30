@@ -11,7 +11,7 @@ progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`);
 const radio_1 = document.querySelector("#social_label");
 const radio_2 = document.querySelector("#club_label");
 
-
+// 다음 버튼 이벤트
 nextBtn.addEventListener("click", () => {
   currSlide++;
   if (currSlide <= maxSlide) {
@@ -24,7 +24,7 @@ nextBtn.addEventListener("click", () => {
     currSlide--;
   }
 });
-
+// 이전 버튼 이벤트
 prevBtn.addEventListener("click", () => {
   currSlide--;
   if (currSlide > 0) {
@@ -34,10 +34,10 @@ prevBtn.addEventListener("click", () => {
       i.setAttribute("style", `left: ${-offset}px`);
     });
   } else {
-    window.history.back()
+    window.history.back() // 1페이지에서 이전을 눌렀을 경우 뒤로가기
   }
 });
-
+// 창 크기 리사이징
 window.addEventListener("resize", () => {
   slideWidth = slide.clientWidth;
 });
@@ -72,12 +72,61 @@ const categories = document.querySelectorAll('.categories');
     for (let j=0; j<(categories.length); j++){
       categories[j].classList.remove('active')
     }
-  category.classList.add('active')
-  n_tag.classList.remove('tag-btn-active')
-  tag_input.value = ''
+    category.classList.add('active')
+    n_tag.classList.remove('tag-btn-active')
+    tag_input.value = ''
   });
 });
 
 function changeinner(event) {
   n_tag.innerText = event.parentNode.parentNode.querySelector('#tag').value
 }
+
+// Date/ Time picker
+
+// Addr btn active
+const offlinebtn = document.querySelector('#offline-btn');
+const onlinebtn = document.querySelector('#online-btn');
+const addrcheck = document.querySelector('#address_type');
+const addrbox = document.querySelector('#offline-box');
+
+offlinebtn.addEventListener('click', () => {
+  offlinebtn.classList.toggle('addr-btn-active');
+  onlinebtn.classList.remove('addr-btn-active');
+  addrbox.classList.toggle('d-none');
+  addrcheck.checked = false
+});
+onlinebtn.addEventListener('click', () => {
+  onlinebtn.classList.toggle('addr-btn-active');
+  offlinebtn.classList.remove('addr-btn-active');
+  addrbox.classList.add('d-none');
+  addrcheck.checked = true
+});
+
+// 키워드로 검색하기
+const keysearch = document.querySelector('#keysearch')
+const addrdiv = document.querySelector('#addrlist')
+const offbuttonaddr = document.querySelector('#offbuttonaddr')
+const address = document.querySelector('#address')
+var places = new kakao.maps.services.Places();
+
+var callback = function(result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      console.log(result)
+      arr = []
+      for (var i = 0; i < (result.length); i++) {
+        arr += `<li class="m-3 addrelem" data-bs-dismiss="offcanvas" aria-label="Close"><p class="addr_title">${result[i].place_name}</p><p class="addr_addr">${result[i].address_name}</p></li><hr>`
+      };
+      addrdiv.innerHTML = arr
+      const addrelems = document.querySelectorAll('.addrelem');
+      [].forEach.call(addrelems, function(elem) {
+        elem.addEventListener('click', () => {
+          offbuttonaddr.innerText = elem.firstChild.innerText
+          address.value = elem.firstChild.innerText
+        })
+      })
+    }
+};
+keysearch.addEventListener('keyup', () => {
+  places.keywordSearch(`${keysearch.value}`, callback);
+})

@@ -123,6 +123,11 @@ label{
   background-color:#E84545;
   color: white;
 }
+.accordion-button:hover {
+  border-color: #E84545;
+  background-color:#E84545;
+  color: white;
+}
 .tag-btn{
   font-size:12px;
   height:35px;
@@ -171,6 +176,119 @@ label{
 .input-control:focus {outline: none;}
 textarea:focus {
   border-color: rgba(0, 0, 0, 0.507);
-  box-shadow: none;
+  box-shadow: 2px solid black;
   outline: 0 none;
+}
+
+/* image 인풋라벨 */
+.image-control{
+  width: 100%;
+  height: 200px;
+  background-color: #e7e7e7;
+  border-radius: 10px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  color:#BBBBBB;
+}
+
+/* textarea 커스텀 */
+.area-control{
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.area-control:focus{
+  box-shadow: 2px 2px 2px 3px #e8454559;
+  border: 1px solid #E84545;
+}
+
+/* 장소버튼 */
+.addr-btn{
+background-color: var(--parent);
+font-weight: 400;
+font-size: 16px;
+line-height: 15px;
+width: 90%;
+height: 48px;
+border: solid 1px;
+border-color:#BBBBBB;
+border-radius: 10px;
+color: #BBBBBB;
+margin: auto;
+}
+
+.addr-btn:hover{
+  background-color:#E84545;
+  color: white;
+  border-color: #E84545;
+}
+.addr-btn-active{
+  background-color:#E84545;
+  color: white;
+  border-color: #E84545;
+  box-shadow: 2px 2px 2px 2px #e8454559;
+}
+.addr-control{
+  cursor: pointer;
+  display: block;
+  margin-top: 30px;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 2;
+  color: #212529;
+  background-color: var(--parent);
+  background-clip: padding-box;
+  border: none;
+  border-bottom: 2px solid #BBBBBB;
+}
+
+/* 장소 검색 인풋 */
+.search-control{
+  background-color: #e7e7e7;
+  border-radius: 30px;
+  color: #5f5f5f;
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.search-control:focus{
+  outline: none;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.377)
+}
+#offcanvasBottom2{
+ height: 800px; 
+}
+ul{
+  cursor: pointer;
+}
+.addr_title{
+  font-size:20px;
+  font-weight:bold;
+  color:#000000;
+}
+.addr_addr{
+  font-size:14px;
+  color:#BBBBBB;
 }
