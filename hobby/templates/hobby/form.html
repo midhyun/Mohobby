@@ -14,9 +14,6 @@
         <button type="button" class="slide_prev_button slide_button">
             <ion-icon class="tap_icon" name="chevron-back-outline"></ion-icon>
         </button>
-        <button type=" button" class="slide_button">
-            <ion-icon class="tap_icon" name="help-circle-outline"></ion-icon>
-        </button>
     </div>
     <div class="slide">
         <!-- 1페이지/ 소셜링, 클럽 소셜링 -->
@@ -26,6 +23,7 @@
                 '소셜링'은 원데이로 만나 취향 활동을 함께하는 모임이에요
                 장기간 함께 활동하는 모임을 원하실 경우 '클럽'으로 열어주세요!
             </p>
+            <!-- radio input / 소셜or클럽 -->
             <input class="d-none" type="radio" name="temp" id="social" value="social" checked>
             <input class="d-none" type="radio" name="temp" id="club" value="club">
 
@@ -44,7 +42,7 @@
                 </div>
             </label>
         </div>
-        <!-- 2페이지/ 카테고리, 태그 -->
+        <!-- 2페이지/ 소셜링 주제: 카테고리, 태그 -->
         <div class="slide_item">
             <h2 class="mt-3 fw-bold">소셜링 주제를 선택해볼까요?</h2>
             <p class="text-muted mb-5">
@@ -59,7 +57,6 @@
                 <input class="d-none" type="radio" name="category" id="develop" value="develop">
             </div>
             <!-- 태그 인풋 오프캔버스 -->
-
             <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasBottomLabel">소셜링 태그 등록</h5>
@@ -76,7 +73,7 @@
             </div>
             <!-- 아코디언 카테고리 선택지 -->
             <div class="accordion accordion-flush" id="accordionFlushExample">
-                <label id="sports_label" for="sports" class="accordion-button collapsed categories social-btn active"
+                <label id="sports_label" for="sports" class="accordion-button collapsed categories social-btn"
                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
                     aria-controls="flush-collapseOne">
                     <ion-icon name="bicycle" size="large"></ion-icon>
@@ -230,22 +227,77 @@
         <!-- 4페이지/ 사진, 상세내용 -->
         <div class="slide_item">
             <h2 class="mt-3 fw-bold">소셜링을 소개해볼까요?</h2>
-            <label class="image-control" for="image">
-                <ion-icon name="image-outline"></ion-icon><br>사진 추가
+            <label class="image-control mt-3" for="image">
+                <ion-icon name="image-outline" style="font-size:32px"></ion-icon><br>사진 추가
             </label>
-            <input id="image" name="image" type="file">
-            <textarea class="form-control" rows="10" name="content" id="content"
+            <input class="d-none" id="image" name="image" type="file">
+            <textarea class="area-control mt-3" rows="10" name="content" id="content"
                 placeholder="내용을 입력해 주세요.(선택)"></textarea>
             <p class="text-muted mb-5">
                 소셜링 상세 내용을 자세히 작성할수록 멤버들의 신청률도 높아져요!
             </p>
         </div>
-        <div class="slide_item">5
+        <!-- 5페이지/ 시간, 날짜 picker 찾아보고 다시 수정 -->
+        <div class="slide_item">
+            <h2 class="mt-3 fw-bold">언제 만날까요?</h2>
+
+            <input class="d-none" id="image" name="image" type="file">
+            <textarea class="area-control mt-3" rows="10" name="content" id="content"
+                placeholder="내용을 입력해 주세요.(선택)"></textarea>
+            <p class="text-muted mb-5">
+                소셜링 상세 내용을 자세히 작성할수록 멤버들의 신청률도 높아져요!
+            </p>
         </div>
-        <div class="slide_item">6
+        <!-- 6페이지/ 모임장소 -->
+        <div class="slide_item">
+            <!-- input addr *(in js) checkbox.checked = true or false -->
+            <input class="d-none" type="checkbox" id="address_type" name="address_type"> 
+            <input class="d-none" type="text" id="address" name="address">
+            <h2 class="mt-3 fw-bold">어디서 만날까요?</h2>
+            <div class="row row-cols-2 mt-3">
+                <div class="col text-center"><button id="offline-btn" class="addr-btn">오프라인</button></div>
+                <div class="col text-center"><button id="online-btn" class="addr-btn">온라인</button></div>
+            </div>
+            <!-- 오프캔버스 버튼 -->
+            <button type="button" id="offline-box" class="addr-control d-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom2" aria-controls="offcanvasBottom">
+                <ion-icon name="location"></ion-icon> <span id="offbuttonaddr" class="text-muted">장소를 입력해 주세요.</span>
+            </button>
+            <!-- 오프라인 주소 입력 오프캔버스 -->
+            <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom2">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasBottomLabel">장소 선택</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <hr>
+                <div class="offcanvas-body small">
+                    <input class="search-control mb-3" type="text" name="keysearch" id="keysearch" placeholder="어디에서 만나나요?">
+                    <!-- 검색결과 표출할 div -->
+                    <ul id="addrlist">
+                    </ul>
+                    <div class="text-center mt-5">
+                        <p><ion-icon name="map" size="large"></ion-icon></p>
+                        <h5>장소 또는 지역을 검색해보세요</h5>
+                        <p class="text-muted">예시)마포구, 합정동, 강남역, 한가람미술관 등</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="slide_item">7
+        <!-- 7페이지/ 어떤 멤버 -->
+        <div class="slide_item">
+            <!-- input addr *(in js) checkbox.checked = true or false -->
+            <input class="d-none" type="checkbox" id="address_type" name="address_type"> 
+            <input class="d-none" type="text" id="address" name="address">
+            <h2 class="mt-3 fw-bold">어떤 멤버를 모집할까요?</h2>
+            <div class="row row-cols-2 mt-3">
+                <div class="col text-center"><button id="offline-btn" class="addr-btn">오프라인</button></div>
+                <div class="col text-center"><button id="online-btn" class="addr-btn">온라인</button></div>
+            </div>
+            <!-- 오프라인 주소 입력 오프캔버스 버튼 -->
+            <button type="button" id="offline-box" class="addr-control d-none">
+                <ion-icon name="location"></ion-icon> <span class="text-muted">장소를 입력해 주세요.</span>
+            </button>
         </div>
+        <!-- 8페이지/ 인원제한 -->
         <div class="slide_item">8
         </div>
     </div>
@@ -255,6 +307,7 @@
 </div>
 {% endblock content %}
 {% block js %}
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script src="{% static 'js/form.js' %}"></script>
 {% endblock js %}
