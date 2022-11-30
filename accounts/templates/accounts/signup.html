@@ -11,7 +11,7 @@
 {% block content %}
   <div class="wrapper">
     <h1 class="login_banner text-center">회원가입</h1>
-    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
       <div class="slide">
         <!-- 첫번째 페이지 -->
@@ -19,7 +19,7 @@
           <div class="form_list">
             <!-- input : 아이디, -->
             <div class="form_field">
-              {% render_field form.username class="user_input" placeholder="아이디" %}
+              {% render_field form.username id="member_id" class="user_input" placeholder="아이디" %}
               {% if form.username.errors %}
                 <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
               {% endif %}
@@ -37,16 +37,17 @@
         <!-- 두번째 페이지 -->
         <div class="slide_item">
           <div class="form_list">
+            <!-- input : 생년월일 -->
+            <div class="form_field">
+              <label class="birth_label">생년월일</label>
+              <input type="date" class="user_input" name="birth" value="2000-01-01">
+            </div>
             <!-- input : 성별 -->
             <div class="select">
               <input type="radio" id="select" name="gender" value="M">
               <label for="select">남자</label>
               <input type="radio" id="select2" name="gender" value="F">
               <label for="select2">여자</label>
-            </div>
-            <!-- input : 생년월일 -->
-            <div class="form_field">
-              <input type="date" class="user_input" name="birth" value="2000-01-01">
             </div>
             <!-- input : 우편번호, 검색 기능 -->
             <div class="form_field">
@@ -392,6 +393,7 @@
       }
     });
   </script>
+  
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
     // 주소 검색 기능
