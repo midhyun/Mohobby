@@ -292,3 +292,28 @@ ul{
   font-size:14px;
   color:#BBBBBB;
 }
+/* 인원제한 */
+.min-icon{
+  font-size: 48px;
+  color:#BBBBBB;
+  cursor: pointer;
+}
+.min-icon:active{
+  text-shadow: 2px 2px 2px 2px black;
+  transition: 0.4s;
+}
+.plus-icon{
+  font-size: 48px;
+  color:#E84545;
+  cursor: pointer;
+}
+.plus-icon:active{
+  text-shadow: 2px 2px 2px 2px #e8454559;
+  transition: 0.4s;
+}
+
+.info-box{
+  background-color:#e7e7e7;
+  border-radius: 10px;
+  padding:20px;
+}
