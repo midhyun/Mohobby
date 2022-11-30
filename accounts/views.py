@@ -3,7 +3,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_safe, require_http_methods
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -15,7 +15,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)  # 로그인
-            return redirect("accounts:index")
+            return redirect("main")
     else:
         form = CustomUserCreationForm()
     context = {
@@ -25,12 +25,14 @@ def signup(request):
 
 
 
+@require_http_methods(["GET", "POST"])
+
 def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("accounts:index")
+            return redirect("main")
     else:
         form = AuthenticationForm()
     context = {"form": form}

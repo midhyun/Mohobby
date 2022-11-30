@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block css %}{% endblock css %}
+
+{% block content %}
+  <div class="d-flex justify-content-center align-items-center" style="margin-top: 7rem">
+    {% if request.resolver_match.url_name == "product_create" %}
+      <h1 class="my-2">게시글 작성</h1>
+    {% elif request.resolver_match.url_name == "product_update" %}
+      <h1 class="my-2">게시글 수정</h1>
+    {% endif %}
+  </div>
+  <div class="p-4">
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <button class="btn btn-outline-primary form-control mb-3" type="submit">OK</button>
+      <button class="btn btn-outline-secondary form-control mb-3" type="button" onclick="window.history.back()">BACK</button>
+    </form>
+  </div>
+{% endblock content %}
+
+{% block js %}{% endblock js %}

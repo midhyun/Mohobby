@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content%}
+
+  <form action="" method="POST" class="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form post_form %}
+    <label class="form-label" for="id_image">사진</label>
+    <input type="file" name="imgs" multiple="multiple" accept="image/*" class="form-control" id="id_image">
+    {% if photo_list %}
+      {% for photo in photo_list %}
+        <a href="{{ photo.image.url }}">{{ photo.image }}</a>
+      {% endfor %}
+      <input type="checkbox" name="image-clear" id="image-clear_id" class="form-check-input">
+      <label for="image-clear_id" class="form-check-label">취소</label>
+
+    {% endif %}
+    <div class="text-end"><input class="btn btn-primary" type="submit" value="수정"></div>
+  </form>
+
+{% endblock content%}
