@@ -48,15 +48,15 @@
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px; 
+    margin: 20px;
 }
 
 .error_msg {
-    color : #E84545;
+    color: #E84545;
 }
 
 .login_form {
-    display : flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 1050px;
@@ -70,14 +70,14 @@
     margin: auto;
     padding: 50px;
     border-radius: 5px;
-    margin-top: 50px;   
-    
+    margin-top: 50px;
+
 }
 
 .login_banner {
     margin-bottom: 20px;
-    font-size : 48px;
-    color : #E84545;
+    font-size: 48px;
+    color: #E84545;
     font-weight: bold;
 }
 
@@ -89,17 +89,18 @@
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px; 
+    margin: 20px;
 }
 
 .login_text {
+    font-weight: bolder;
     font-size: 16px;
-    color : #E84545;
+    color: #E84545;
     text-decoration: none;
 }
 
 .login_text:hover {
-    color : #E84545;
+    color: #E84545;
     text-decoration: none;
 }
 
@@ -112,7 +113,7 @@
 }
 
 .form_list {
-    display : flex;
+    display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -170,4 +171,44 @@
     max-width: 600px;
     height: 700px;
     padding-left: 10px;
+}
+
+.social_button {
+    width: 600px;
+    height: 55px;
+    color: #ffffff;
+    border: 0px;
+    outline: 0px;
+    margin-bottom: 20px;
+
+}
+
+.logintext {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: -999;
+    background-color: #1EC800;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    color: white;
+}
+
+.kakao-logintext {
+    color: black;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: -999;
+    background-color: #fbe300;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
 }
