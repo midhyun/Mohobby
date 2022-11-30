@@ -191,11 +191,11 @@
 }
 
 .form_field {
-    width: 520px
+    width: 520px;
+    margin-bottom: 20px;
 }
 
 .user_input {
-    margin-bottom: 20px;
     height: 56px;
     width: 100%;
     border: 1px solid #DADCE0;
@@ -208,7 +208,6 @@
 }
 
 .sm_user_input {
-    margin-bottom: 20px;
     height: 36px;
     width: 40%;
     border: 1px solid #DADCE0;
@@ -227,7 +226,6 @@
 
 .address_btn {
     color: #ffffff;
-    margin-bottom: 20px;
     font-size: 16px;
     width: 200px;
     height: 36px;
