@@ -33,11 +33,11 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = [
-            "username",
-            "birth",
-            "address",
-            "address_detail",
-            "gender",
+            "sports",
+            "travel",
+            "art",
+            "food",
+            "develop",
         ]
         widgets = {
             "birth": DateInput(),

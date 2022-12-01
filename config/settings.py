@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # ... 소셜로그인을 할 제공자 리스트를 아래에 포함
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.kakao",
+    "allauth.socialaccount.providers.google",
     "accounts",
     "hobby",
     "community",
