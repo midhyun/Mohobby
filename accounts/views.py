@@ -78,7 +78,7 @@ def follow(request, pk):
 def delete(request):
     request.user.delete()
     auth_logout(request)
-    return redirect("accounts:index")
+    return redirect("main")
 
 
 @login_required
