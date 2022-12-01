@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock css %}
+{% block content %}
+<!-- 이미지 배너 -->
+<div class="container image-banner" style="background-image: url('{{ hobby.image.url }}');height:600px; ">
+<span class="badge bg-secondary">잔여 {{ hobby.limit }}자리</span><span class="badge bg-secondary">{{ hobby.tags }}</span>
+</div>
+<!-- 본문 -->
+<div>
+    {{ hobby.host }} {{ hobby.host.username }}
+    {{hobby.title}}
+    {{ hobby.recruit_type }} {{hobby.address }} {{ hobby.meeting_day.isoformat }}
+    {{ hobby.contnet }}
+</div>
+<!-- 안내사항 -->
+제한인원: {{ hobby.limit }}
+회비: {{ hobby.entry_fee }}
+활동일: {{ hobby.meeting_day }}
+장소: {{ hobby.address }}
+<!-- 지도넣기 -->
+<div></div>
+<!-- 비슷한 소셜링 -->
+{{ hobby.tags }}
+
+{% endblock content %}
+{% block js %}
+{% endblock js %}
