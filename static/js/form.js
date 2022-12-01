@@ -58,12 +58,12 @@ window.addEventListener("resize", () => {
 });
 // 소셜링, 클럽 소셜링 선택
 radio_1.addEventListener("click", () => {
-  radio_1.classList.add('active')
-  radio_2.classList.remove('active')
+  radio_1.classList.add('radio-active')
+  radio_2.classList.remove('radio-active')
 });
 radio_2.addEventListener("click", () => {
-  radio_2.classList.add('active')
-  radio_1.classList.remove('active')
+  radio_2.classList.add('radio-active')
+  radio_1.classList.remove('radio-active')
 });
 // 태그 이벤트 _ 다른 카테고리 선택시 현재 선택된 태그 해제
 const tags = document.querySelectorAll('div.accordion-body > .tag-btn');
@@ -85,7 +85,7 @@ const categories = document.querySelectorAll('.categories');
 [].forEach.call(categories, function(category){ 
 	category.addEventListener("click", () => {
     for (let j=0; j<(categories.length); j++){
-      categories[j].classList.remove('active')
+      categories[j].classList.remove('radio-active')
     }
     category.classList.add('active')
     n_tag.classList.remove('tag-btn-active')

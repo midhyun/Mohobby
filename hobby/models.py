@@ -19,7 +19,7 @@ class Hobby(models.Model):
     address = models.CharField(max_length=100, default='온라인') # 온라인 or 오프라인 주소
     X = models.CharField(max_length=30, null=True, blank=True)
     Y = models.CharField(max_length=30, null=True, blank=True)
-    entry_fee = models.CharField(max_length=20)
+    entry_fee = models.CharField(max_length=20, null=True, blank=True)
     content = models.TextField()
     hits = models.PositiveBigIntegerField(default=0)
     recruit_type = models.BooleanField(default=False) # 자유가입(False), 승인제(True)

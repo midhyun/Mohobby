@@ -1,15 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/datepicker.css" rel="stylesheet" />
+  <script src="js/datepicker.js"></script>
   <title>Document</title>
 </head>
 <body>
 <input type="file" accept="image/*" onchange="setThumbnail(event);">
 <div id="image_container"></div>
-
+<div id="demo"></div>
+<div id="demo-timegrid"></div>
 <script>
   function setThumbnail(event) {
     var reader = new FileReader();
@@ -22,6 +26,22 @@
 
     reader.readAsDataURL(event.target.files[0]);
   }
+</script>
+<script>
+mobiscroll.setOptions({
+    theme: 'ios',
+    themeVariant: 'light'
+});
+
+mobiscroll.datepicker('#demo', {
+    controls: ['calendar', 'time'],
+    display: 'inline'
+});
+
+mobiscroll.datepicker('#demo-timegrid', {
+    controls: ['calendar', 'timegrid'],
+    display: 'inline'
+});
 </script>
 </body>
 </html>
