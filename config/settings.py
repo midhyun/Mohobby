@@ -40,15 +40,14 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # Allauth를 위한 Apps 
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount', 
-    # ... 소셜로그인을 할 제공자 리스트를 아래에 포함 
-    'allauth.socialaccount.providers.naver',
-    'allauth.socialaccount.providers.kakao',
-    
+    # Allauth를 위한 Apps
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    # ... 소셜로그인을 할 제공자 리스트를 아래에 포함
+    "allauth.socialaccount.providers.naver",
+    "allauth.socialaccount.providers.kakao",
     "accounts",
     "hobby",
     "community",
@@ -70,11 +69,11 @@ INSTALLED_APPS = [
 ]
 
 # 소셜
-AUTHENTICATION_BACKENDS=[
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
-SITE_ID=1
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -213,7 +212,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-SUMMERNOTE_THEME = "bs5"
+SUMMERNOTE_THEME = "bs4"
 
 SUMMERNOTE_CONFIG = {
     "iframe": True,
@@ -243,6 +242,6 @@ SUMMERNOTE_CONFIG = {
 # }
 
 # 소셜
-LOGIN_REDIRECT_URL = '/' # 로그인 후 리디렉션할 페이지
+LOGIN_REDIRECT_URL = "/"  # 로그인 후 리디렉션할 페이지
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # 로그아웃 후 리디렉션 할 페이지
-ACCOUNT_LOGOUT_ON_GET = True # 로그아웃 버튼 클릭 시 자동 로그아웃
+ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃

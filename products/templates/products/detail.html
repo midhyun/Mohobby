@@ -1,7 +1,55 @@
 {% extends 'base.html' %}
 
-{% block css %}{% endblock css %}
+{% block css %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+{% endblock css %}
 
-{% block content %}{% endblock content %}
+{% block content %}
+  <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
+    <h1 class="my-2">상세 페이지</h1>
+  </div>
+  <div class="p-4">
+    <div class="row justify-content-center g-5 mb-3">
+      <div class="col-12 col-sm-10 col-md-4 col-lg-3">
+        <img class="img-fluid" src="https://dummyimage.com/800/000/fff" alt="dummyimage">
+      </div>
+      <div class="col-12 col-sm-10 col-md-6 col-lg-4 position-relative">
+        <h4 class="mb-4">제목제목</h4>
+        <h3 class="mb-4 fw-bold">99,999원</h3>
+        <h6 class="mb-4">상품 상태 미개봉</h6>
+        <h6 class="mb-4">배송 방법 직거래, 택배거래</h6>
+        <h6 class="mb-4">거래 지역 전국</h6>
+        <p>
+          <button class="btn btn-outline-primary me-2">
+            <i class="bi bi-heart me-2"></i>찜<span class="ms-2">3</span></button>
+          <button class="btn btn-outline-primary">채팅하기</button>
+        </p>
+        <div class="position-absolute top-0 end-0">
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">수정</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">삭제</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-sm-10 col-md-10 col-lg-7">
+        <hr>
+        {{ product.content|safe }}
+        <hr>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+      <div class="col-12 col-sm-10 col-md-10 col-lg-7"></div>
+    </div>
+  </div>
+{% endblock content %}
 
 {% block js %}{% endblock js %}
