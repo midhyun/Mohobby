@@ -32,6 +32,7 @@ def id_check(request):
     }
     return JsonResponse(data)
 
+
 @require_http_methods(["GET", "POST"])
 def login(request):
     if request.method == "POST":
@@ -80,19 +81,12 @@ def delete(request):
     return redirect("accounts:index")
 
 
-def index(request):
-    pass
-    return render(request, "accounts/index.html")
-
-
 @login_required
 def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
-        user_form = CustomUserChangeForm(
-            request.POST, request.FILES, instance=request.user
-        )
+        user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
         # 유저폼 유효성 확인
         if user_form.is_valid():
             user_form.save()
