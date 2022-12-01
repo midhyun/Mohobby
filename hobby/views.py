@@ -28,7 +28,7 @@ def test(request):
     return render(request, "hobby/test.html")
 
 def index(request, category_name):
-    # category_posts = Hobby.objects.filter(category=category_name)
+    category_posts = Hobby.objects.filter(category=category_name)
     context = {
         "category_name": category_name,
     }
