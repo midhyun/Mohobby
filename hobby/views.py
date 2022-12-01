@@ -9,11 +9,12 @@ from django.conf import settings
 
 
 def create(request):
+    print(request.method)
     if request.method == "POST":
         form = HobbyForm(request.POST, request.FILES)
-        accepted = AcceptedForm(request.POST)
+        accepted = AcceptedForm()
         print(request.POST)
-        if form.is_valid() and accepted.is_valid():
+        if form.is_valid():
             temp = form.save(commit=False)
             temp.host = request.user
             temp.save()

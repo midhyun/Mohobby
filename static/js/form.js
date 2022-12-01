@@ -102,8 +102,7 @@ function setThumbnail(event) {
   var label = document.querySelector('.image-control')
   reader.onload = function(event) {
     var img = document.createElement("img");
-    label.style.backgroundImage = `url(${event.target.result})`
-    document.querySelector("div#image_container").appendChild(img);
+    label.style.backgroundImage = `url(${event.target.result})`;
   };
 
   reader.readAsDataURL(event.target.files[0]);

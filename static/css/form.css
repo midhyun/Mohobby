@@ -216,7 +216,7 @@ textarea:focus {
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  color:#BBBBBB;
+  color: #5f5f5f;
 }
 
 /* textarea 커스텀 */

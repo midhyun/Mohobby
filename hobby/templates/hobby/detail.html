@@ -25,17 +25,17 @@
         <p class="circle-title">{{hobby.title}}</p>
       </div>
       <p class="text-center mt-3" style="font-size:20px;">
-        <ion-icon name="location-outline"></ion-icon>
+        ⏰
         {% if hobby.recruit_type %}
           오프라인 {{ hobby.address }}
         {% else %}
           온라인
         {% endif %}
-        <ion-icon name="calendar-outline"></ion-icon> {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
+        📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
       </p>
     </div>
     
-    {{ hobby.contnet }}
+    {{ hobby.content }}
     <!-- 안내사항 -->
     <ul>
       <li>제한인원: {{ hobby.limit }}</li>
