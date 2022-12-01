@@ -1,5 +1,6 @@
 from django import forms
 from .models import Product, Product_Comment
+from django_summernote.widgets import SummernoteWidget
 
 
 class ProductForm(forms.ModelForm):
@@ -22,6 +23,9 @@ class ProductForm(forms.ModelForm):
             "location": "거래 위치",
             "image": "이미지",
             "content": "",
+        }
+        widgets = {
+            "content": SummernoteWidget(),
         }
 
 

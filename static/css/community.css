@@ -1,3 +1,11 @@
+.page{
+  margin-top: 100px;
+}
+
+.main_title {
+  color: #E84545;
+}
+
 #slideShow{
   width: 1000px;
   height: 500px;
@@ -69,4 +77,47 @@
 .feed{
   background-color: #f1f3f5;
   border-radius: 30px;
+}
+.create_button {
+  background-color: #E84545;
+  width: 600px;
+  height: 55px;
+  border-radius: 30px;
+  color: #ffffff;
+  border: 0px;
+  outline: 0px;
+  margin: 20px;
+}
+
+
+/* create 이미지 캐러셀 */
+.kind_wrap {
+  border:2px solid black; 
+  width:100%; 
+  max-width:800px; 
+  margin:0 auto; 
+  position: relative;
+}
+.kind_wrap > .kind_slider {
+  overflow: hidden;
+}
+.kind_wrap > .kind_slider .slider { 
+  position: relative; 
+  transition: 0.5s;
+}
+.kind_wrap > .kind_slider .slider li {
+  float:left;
+}
+.kind_wrap > .kind_slider img {
+  vertical-align: top;
+}
+.kind_wrap .arrow > a.prev {
+  position: absolute; 
+  left:-50px; 
+  top:100px;
+}
+.kind_wrap .arrow > a.next {
+  position: absolute; 
+  right:-50px; 
+  top:100px;
 }

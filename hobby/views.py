@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import HobbyForm, AcceptedForm
-from .models import Hobby, Accepted
+from .models import Hobby, Accepted, Tag
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
@@ -31,6 +31,7 @@ def create(request):
     }
     return render(request, "hobby/form.html", context)
 
+
 def test(request):
     return render(request, "hobby/test.html")
 
@@ -42,14 +43,21 @@ def detail(request, hobby_pk):
     return render(request, "hobby/detail.html", context)
 
 def index(request, category_name):
-    # category_posts = Hobby.objects.filter(category=category_name)
+    category_posts = Hobby.objects.filter(category=category_name)
+    category_posts_hit = category_posts.order_by("-hits")[:3]
+    category_posts_new = category_posts.order_by("-created_at")[:3]
+    tags = Tag.objects.filter(category=category_name)
     context = {
         "category_name": category_name,
+        "category_posts": category_posts,
+        "category_posts_hit": category_posts_hit,
+        "category_posts_new": category_posts_new,
+        "tags": tags,
     }
     return render(request, "hobby/index.html", context)
 
 
-def tag(request, category_name, tag_name):
+def tag(request, tag_name):
     return render(request)
 
 def call(request, hobby_pk):

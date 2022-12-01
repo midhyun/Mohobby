@@ -78,12 +78,13 @@ def follow(request, pk):
 def delete(request):
     request.user.delete()
     auth_logout(request)
-    return redirect("accounts:index")
+    return redirect("main")
 
 
 @login_required
 def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
+    
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
         user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
@@ -93,5 +94,8 @@ def update(request, pk):
             return redirect("accounts:detail", user_info.pk)
     else:
         user_form = CustomUserChangeForm(instance=request.user)
-    context = {"user_form": user_form}
+    context = {
+        "user_form": user_form,
+        "user_info": user_info,
+    }
     return render(request, "accounts/update.html", context)
