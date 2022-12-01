@@ -10,331 +10,344 @@
 
 {% block content %}
   <div class="wrapper">
-    <h1 class="login_banner">회원가입</h1>
-      <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="slide">
-          <!-- 첫번째 페이지 -->
-          <div class="slide_item">
-            <div class="form_list">
-              <!-- input : 아이디, -->
-              <div class="form_field">
-                {% render_field form.username class="user_input" placeholder="아이디" %}
-                {% if form.username.errors %}
-                  <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
-                {% endif %}
+    <h1 class="login_banner text-center">회원가입</h1>
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
+      {% csrf_token %}
+      <div class="slide">
+        <!-- 첫번째 페이지 -->
+        <div class="slide_item">
+          <div class="form_list">
+            <!-- input : 아이디, -->
+            <div class="form_field">
+              {% render_field form.username id="id" class="user_input" placeholder="아이디" %}
+              <div class="error_next_box"></div>
+              {% if form.username.errors %}
+                <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
+              {% endif %}
+            </div>
+            <!-- input : 비밀번호 -->
+            <div class="form_field">
+              {% render_field form.password1 id="pswd1" class="user_input" placeholder="비밀번호"%}
+              <div class="error_next_box"></div>
+            </div>
+            <!-- input : 비밀번호 재확인 -->
+            <div class="form_field">
+              {% render_field form.password2 id="pswd2" class="user_input" placeholder="비밀번호 재확인"%}
+              <div class="error_next_box"></div>
+            </div>
+          </div>
+        </div>
+        <!-- 두번째 페이지 -->
+        <div class="slide_item">
+          <div class="form_list">
+            <!-- input : 생년월일 -->
+            <div class="form_field">
+              <label class="birth_label">생년월일</label>
+              <input type="date" class="user_input" name="birth" value="2000-01-01">
+            </div>
+            <!-- input : 성별 -->
+            <div class="select">
+              <input type="radio" id="select" name="gender" value="M">
+              <label for="select">남자</label>
+              <input type="radio" id="select2" name="gender" value="F">
+              <label for="select2">여자</label>
+            </div>
+            <!-- input : 우편번호, 검색 기능 -->
+            <div class="form_field">
+              <div class="address_box">
+                <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
+                <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
               </div>
-              <!-- input : 비밀번호 -->
-              <div class="form_field">
-                {% render_field form.password1 class="user_input" placeholder="비밀번호"%}
+            </div>
+            <!-- input : 도로명 주소 -->
+            <div class="form_field">
+              <input type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input">
+            </div>
+            <!-- input : 상세 주소 -->
+            <div class="form_field">
+              {% render_field form.address_detail class="user_input" placeholder="상세주소"%}
+            </div>
+            <!-- 프로필 이미지 구현 후 작동 -->
+            <div class="form_field">
+              {% render_field form.profile_pic class="user_input" placeholder="프로필 이미지"%}
+            </div>
+          </div>
+        </div>
+        <!-- 세번째 페이지 -->
+        <div class="slide_item">
+          <div class="category_form">
+            <div class="category_list">
+              <label class="form-label">Sports</label>
+              <div id="id_sports">
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_0" value="축구">
+                  <label for="id_sports_0">축구</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_1" value="농구">
+                  <label for="id_sports_1">농구</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_2" value="야구">
+                  <label for="id_sports_2">야구</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_3" value="클라이밍">
+                  <label for="id_sports_3">클라이밍</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_4" value="등산">
+                  <label for="id_sports_4">등산</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_5" value="테니스">
+                  <label for="id_sports_5">테니스</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_6" value="트래킹">
+                  <label for="id_sports_6">트래킹</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_7" value="볼링">
+                  <label for="id_sports_7">볼링</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_8" value="러닝">
+                  <label for="id_sports_8">러닝</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_9" value="스키">
+                  <label for="id_sports_9">스키</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_10" value="보드">
+                  <label for="id_sports_10">보드</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_11" value="헬스">
+                  <label for="id_sports_11">헬스</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_12" value="산책">
+                  <label for="id_sports_12">산책</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_13" value="플로깅">
+                  <label for="id_sports_13">플로깅</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_14" value="자전거">
+                  <label for="id_sports_14">자전거</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_15" value="서핑">
+                  <label for="id_sports_15">서핑</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_16" value="배드민턴">
+                  <label for="id_sports_16">배드민턴</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_17" value="탁구">
+                  <label for="id_sports_17">탁구</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_18" value="골프">
+                  <label for="id_sports_18">골프</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="sports" id="id_sports_19" value="스포츠경기">
+                  <label for="id_sports_19">스포츠경기</label>
+                </span>
               </div>
-              <!-- input : 비밀번호 재확인 -->
-              <div class="form_field">
-                {% render_field form.password2 class="user_input" placeholder="비밀번호 재확인"%}
+              <label class="form-label">Art</label>
+              <div id="id_art">
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_0" value="전시">
+                  <label for="id_art_0">전시</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_1" value="영화">
+                  <label for="id_art_1">영화</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_2" value="뮤지컬">
+                  <label for="id_art_2">뮤지컬</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_3" value="공연">
+                  <label for="id_art_3">공연</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_4" value="디자인">
+                  <label for="id_art_4">디자인</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_5" value="박물관">
+                  <label for="id_art_5">박물관</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_6" value="연극">
+                  <label for="id_art_6">연극</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_7" value="콘서트">
+                  <label for="id_art_7">콘서트</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_8" value="연주회">
+                  <label for="id_art_8">연주회</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="art" id="id_art_9" value="페스티벌">
+                  <label for="id_art_9">페스티벌</label>
+                </span>
+              </div>
+              <label class="form-label">Food</label>
+              <div id="id_food">
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_0" value="맛집투어">
+                  <label for="id_food_0">맛집투어</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_1" value="카페">
+                  <label for="id_food_1">카페</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_2" value="와인">
+                  <label for="id_food_2">와인</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_3" value="커피">
+                  <label for="id_food_3">커피</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_4" value="디저트">
+                  <label for="id_food_4">디저트</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_5" value="맥주">
+                  <label for="id_food_5">맥주</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_6" value="티룸">
+                  <label for="id_food_6">티룸</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_7" value="비건">
+                  <label for="id_food_7">비건</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_8" value="파인다이닝">
+                  <label for="id_food_8">파인다이닝</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_9" value="요리">
+                  <label for="id_food_9">요리</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_10" value="페어링">
+                  <label for="id_food_10">페어링</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_11" value="칵테일">
+                  <label for="id_food_11">칵테일</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_12" value="위스키">
+                  <label for="id_food_12">위스키</label>
+                </span>
+                <span class="category_select">
+                  <input type="checkbox" name="food" id="id_food_13" value="전통주">
+                  <label for="id_food_13">전통주</label>
+                </span>
               </div>
             </div>
           </div>
-          <!-- 두번째 페이지 -->
-          <div class="slide_item">
-            <div class="form_list">
-              <!-- input : 성별 -->
-              <div class="form_field">
-                {% render_field form.gender class="user_input" placeholder="성별"%}
-              </div>
-              <!-- input : 생년월일 -->
-              <div class="form_field">
-                {% render_field form.birth class="user_input" placeholder="생년월일"%}
-              </div>
-              <!-- input : 우편번호, 검색 기능 -->
-              <div class="form_field">
-                <div class="address_box">
-                  <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
-                  <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
-                </div>
-              </div>
-              <!-- input : 도로명 주소 -->
-              <div class="form_field">
-                <input type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input">
-              </div>
-              <!-- input : 상세 주소 -->
-              <div class="form_field">
-                {% render_field form.address_detail class="user_input" placeholder="상세주소"%}
-              </div>
-              <!-- 프로필 이미지 구현 후 작동 -->
-              <div class="form_field">
-                {% render_field form.profile_pic class="user_input" placeholder="프로필 이미지"%}
-              </div>
-            </div>
-          </div>
-          <!-- 세번째 페이지 -->
-          <div class="slide_item">
+        </div>
+        <!-- 네번째 페이지 -->
+        <div class="slide_item">
+          <div class="category_wrap">
             <div class="category_form">
               <div class="category_list">
-                <label class="form-label">Sports</label>
-                <div id="id_sports">
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_0" value="축구">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_0">축구</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_1" value="농구">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_1">농구</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_2" value="야구">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_2">야구</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_3" value="클라이밍">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_3">클라이밍</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_4" value="등산">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_4">등산</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_5" value="테니스">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_5">테니스</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_6" value="트래킹">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_6">트래킹</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_7" value="볼링">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_7">볼링</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_8" value="러닝">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_8">러닝</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_9" value="스키">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_9">스키</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_10" value="보드">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_10">보드</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_11" value="헬스">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_11">헬스</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_12" value="산책">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_12">산책</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_13" value="플로깅">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_13">플로깅</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_14" value="자전거">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_14">자전거</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_15" value="서핑">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_15">서핑</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_16" value="배드민턴">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_16">배드민턴</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_17" value="탁구">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_17">탁구</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_18" value="골프">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_18">골프</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="sports" id="id_sports_19" value="스포츠경기">
-                    <label class="my-1 btn btn-outline-secondary" for="id_sports_19">스포츠경기</label>
-                  </span>
-                </div>
                 <label class="form-label">Travel</label>
                 <div class="" id="id_travel">
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_0" value="복합문화공간">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_0">복합문화공간</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_0" value="복합문화공간">
+                    <label for="id_travel_0">복합문화공간</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_1" value="테마파크">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_1">테마파크</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_1" value="테마파크">
+                    <label for="id_travel_1">테마파크</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_2" value="피크닉">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_2">피크닉</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_2" value="피크닉">
+                    <label for="id_travel_2">피크닉</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_3" value="드라이브">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_3">드라이브</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_3" value="드라이브">
+                    <label for="id_travel_3">드라이브</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_4" value="캠핑">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_4">캠핑</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_4" value="캠핑">
+                    <label for="id_travel_4">캠핑</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_5" value="국내여행">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_5">국내여행</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_5" value="국내여행">
+                    <label for="id_travel_5">국내여행</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="travel" id="id_travel_6" value="해외여행">
-                    <label class="my-1 btn btn-outline-secondary" for="id_travel_6">해외여행</label>
-                  </span>
-                </div>
-                <label class="form-label">Art</label>
-                <div id="id_art">
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_0" value="전시">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_0">전시</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_1" value="영화">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_1">영화</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_2" value="뮤지컬">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_2">뮤지컬</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_3" value="공연">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_3">공연</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_4" value="디자인">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_4">디자인</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_5" value="박물관">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_5">박물관</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_6" value="연극">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_6">연극</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_7" value="콘서트">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_7">콘서트</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_8" value="연주회">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_8">연주회</label>
-                  <span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="art" id="id_art_9" value="페스티벌">
-                    <label class="my-1 btn btn-outline-secondary" for="id_art_9">페스티벌</label>
-                  <span>
-                </div>
-                <label class="form-label">Food</label>
-                <div id="id_food">
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_0" value="맛집투어">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_0">맛집투어</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_1" value="카페">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_1">카페</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_2" value="와인">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_2">와인</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_3" value="커피">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_3">커피</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_4" value="디저트">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_4">디저트</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_5" value="맥주">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_5">맥주</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_6" value="티룸">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_6">티룸</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_7" value="비건">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_7">비건</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_8" value="파인다이닝">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_8">파인다이닝</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_9" value="요리">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_9">요리</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_10" value="페어링">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_10">페어링</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_11" value="칵테일">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_11">칵테일</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_12" value="위스키">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_12">위스키</label>
-                  </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="food" id="id_food_13" value="전통주">
-                    <label class="my-1 btn btn-outline-secondary" for="id_food_13">전통주</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="travel" id="id_travel_6" value="해외여행">
+                    <label for="id_travel_6">해외여행</label>
                   </span>
                 </div>
                 <label class="form-label">Develop</label>
                 <div id="id_develop">
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_0" value="습관만들기">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_0">습관만들기</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_0" value="습관만들기">
+                    <label for="id_develop_0">습관만들기</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_1" value="챌린지">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_1">챌린지</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_1" value="챌린지">
+                    <label for="id_develop_1">챌린지</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_2" value="독서">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_2">독서</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_2" value="독서">
+                    <label for="id_develop_2">독서</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_3" value="스터디">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_3">스터디</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_3" value="스터디">
+                    <label for="id_develop_3">스터디</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_4" value="외국어">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_4">외국어</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_4" value="외국어">
+                    <label for="id_develop_4">외국어</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_5" value="재테크">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_5">재테크</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_5" value="재테크">
+                    <label for="id_develop_5">재테크</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_6" value="브랜딩">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_6">브랜딩</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_6" value="브랜딩">
+                    <label for="id_develop_6">브랜딩</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_7" value="커리어">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_7">커리어</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_7" value="커리어">
+                    <label for="id_develop_7">커리어</label>
                   </span>
-                  <span>
-                    <input class="btn-check" type="checkbox" name="develop" id="id_develop_8" value="사이드프로젝트">
-                    <label class="my-1 btn btn-outline-secondary" for="id_develop_8">사이드프로젝트</label>
+                  <span class="category_select">
+                    <input type="checkbox" name="develop" id="id_develop_8" value="사이드프로젝트">
+                    <label for="id_develop_8">사이드프로젝트</label>
                   </span>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- 네번째 페이지 -->
-          <div class="slide_item">
             <div class="text-center">
-              <button class="login_button" type="submit">가입</button>
+              <button class="signup_btn" type="submit">가입</button>
             </div>
           </div>
         </div>
+      </div>
     </form>
     <div class="text-center">
       <button class="page_btn slide_prev_button">이전</button>
@@ -344,45 +357,7 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    const slide = document.querySelector(".slide");
-    let slideWidth = slide.clientWidth;
-    const prevBtn = document.querySelector(".slide_prev_button");
-    const nextBtn = document.querySelector(".slide_next_button");
-    const slideItems = document.querySelectorAll(".slide_item");
-    const maxSlide = slideItems.length;
-    
-    let currSlide = 1;
-
-    nextBtn.addEventListener("click", () => {
-      currSlide++;
-      if (currSlide <= maxSlide) {
-        const offset = slideWidth * (currSlide - 1);
-        slideItems.forEach((i) => {
-          i.setAttribute("style", `left: ${-offset}px`);
-        });
-        // 슬라이드 이동 시 현재 활성화된 pagination 변경
-      } else {
-        currSlide--;
-      }
-    });
-    // 버튼 엘리먼트에 클릭 이벤트 추가하기
-    prevBtn.addEventListener("click", () => {
-      // 이전 버튼 누를 경우 현재 슬라이드를 변경
-      currSlide--;
-      // 1번째 슬라이드 이하로 넘어가지 않게 하기 위해서
-      if (currSlide > 0) {
-        // 슬라이드를 이동시키기 위한 offset 계산
-        const offset = slideWidth * (currSlide - 1);
-        // 각 슬라이드 아이템의 left에 offset 적용
-        slideItems.forEach((i) => {
-          i.setAttribute("style", `left: ${-offset}px`);
-        });
-      } else {
-        currSlide++;
-      }
-    });
-  </script>
+  <script src="{% static 'js/signup_form.js' %}"></script>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
     // 주소 검색 기능
@@ -424,6 +399,103 @@
           }
         })
         .open();
+    }
+  </script>
+  <script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+  <script>
+    var id = document.querySelector('#id');
+    var pw1 = document.querySelector('#pswd1');
+    var pw2 = document.querySelector('#pswd2');
+    var error = document.querySelectorAll('.error_next_box');
+    
+    id.addEventListener("focusout", checkId);
+    pw1.addEventListener("focusout", checkPw);
+    pw2.addEventListener("focusout", comparePw);
+    
+    // 아이디 중복 체크
+    function checkId() {
+        // input 빈 칸이면 실행
+        if(id.value === "") {
+            error[0].innerHTML = "필수 정보입니다.";
+            error[0].style.color = "red";
+            error[0].style.display = "block";
+            error[0].style.fontSize = "12px";
+        } else {
+            // input 입력된 후 실행
+            $.ajax({ 
+                // get으로 DB를 가져온다
+                type:"get",
+                // json 파일 가져올 url 설정
+                url:"{% url 'accounts:id_check' %}", 
+                // 받아오는 데이터 유형 설정
+                dataType:"json", 
+                // 성공
+                success: function(data){
+                    // DB에 저장된 유저들의 username을 배열에 저장
+                    var arr = [];
+                    for (let i in data.accounts){
+                    arr[i] = data.accounts[i]
+                    }
+                    // 배열 안에 input으로 입력한 값이 있다면 실행
+                    if (arr.includes(id.value)){
+                    error[0].innerHTML = "중복된 아이디입니다.";
+                    error[0].style.color = "red";
+                    error[0].style.display = "block";
+                    error[0].style.fontSize = "12px";
+                    } else {
+                        // 배열 안에 input으로 입력한 값이 없다면
+                        error[0].innerHTML = "사용 가능합니다.";
+                        error[0].style.color = "#08A600";;
+                        error[0].style.display = "block";
+                        error[0].style.fontSize = "12px";
+                    }
+                },
+                // 실패 (대부분 url 문제)
+                error:function(){
+                    console.log("error");
+                }
+            })
+        }  
+    }
+    
+    // 비밀번호 체크
+    function checkPw() {
+        var pwPattern = /[a-zA-Z0-9~!@#$%^&*()_+|<>?:{}]{8,16}/;
+        if(pw1.value === "") {
+            error[1].innerHTML = "필수 정보입니다.";
+            error[1].style.display = "block";
+            error[1].style.color = "red";
+            error[1].style.fontSize = "12px";
+        } else if(!pwPattern.test(pw1.value)) {
+            error[1].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+            error[1].style.display = "block";
+        } else {
+            error[1].style.display = "block";
+            error[1].innerHTML = "사용 가능합니다.";
+            error[1].style.color = "#08A600";
+        }
+    }
+    
+    // 비밀번호 재입력 체크
+    function comparePw() {
+        if(pw2.value === pw1.value && pw2.value != "") {
+            error[2].style.display = "none";
+        } else if(pw2.value !== pw1.value) {
+            error[2].innerHTML = "비밀번호가 일치하지 않습니다.";
+            error[2].style.display = "block";
+            error[2].style.color = "red";
+            error[2].style.fontSize = "12px";
+        } 
+    
+        if(pw2.value === "") {
+            error[2].innerHTML = "필수 정보입니다.";
+            error[2].style.display = "block";
+            error[2].style.color = "red";
+            error[2].style.fontSize = "12px";
+        }
     }
   </script>
 {% endblock js %}

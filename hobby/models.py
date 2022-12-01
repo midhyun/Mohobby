@@ -15,7 +15,8 @@ class Hobby(models.Model):
     tags = models.CharField(max_length=80)
     created_at = models.DateTimeField(auto_now_add=True)
     meeting_day = models.DateTimeField()
-    address = models.CharField(max_length=100)
+    address_type = models.BooleanField(default=False) # False=오프라인, True=온라인
+    address = models.CharField(max_length=100, default='온라인') # 온라인 or 오프라인 주소
     X = models.CharField(max_length=30, null=True, blank=True)
     Y = models.CharField(max_length=30, null=True, blank=True)
     entry_fee = models.CharField(max_length=20)

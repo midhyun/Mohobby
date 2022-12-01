@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-
+{% load static %}
 {% block content %}
+<div class="container" style="margin-top: 5%;">
   <h3 class="main_color fw-bold">새 피드 작성하기
   </h3>
   <small class='text-muted'>자유롭게 여러분의 일상을 공유해 주세요 !</small>
@@ -18,5 +19,6 @@
     <input type="file" name="images" multiple="multiple">
     <div class="text-end"><input type="submit" value="작성"></div>
   </form>
+</div>
 
 {% endblock content %}

@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -21,14 +21,32 @@
         <!-- input : 비밀번호 -->
         {% render_field form.password class="user_input" placeholder="비밀번호"%}
       </div>
-      <button class="login_button" type="submit">로그인</button>
-    </form>
-    <!-- 회원가입 URL -->
-    <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
-    <div class="text-center">
-      <a href="{% provider_login_url 'kakao' method='oauth2' %}"><img class="mb-2" width="200px" height="100%" src="{% static 'images/kakao.png' %}" alt="카카오 로그인 버튼"></a>
-    </div>
+    <button class="login_button" type="submit">로그인</button>
+  </form>
+  <div class="text-center">
+    <a href="{% provider_login_url 'kakao' %}">
+      <div class="social_button position-relative">
+        <span class="kakao-logintext position-absolute">
+          <i class="bi bi-chat-fill"></i> &nbsp;카카오톡 로그인
+        </span>
+      </div>
+    </a>
+    <a href="{% provider_login_url 'naver' %}">
+      <div class="social_button position-relative">
+        <span class="logintext position-absolute"><span class="fw-bold" style="font-size: 18px;">N</span> &nbsp;네이버
+          로그인</span>
+      </div>
+    </a>
+    <a href="{% provider_login_url 'google' %}">
+      <div class="social_button position-relative">
+        <span class="logintext position-absolute"><span class="fw-bold" style="font-size: 18px;">N</span> &nbsp;구글
+          로그인</span>
+      </div>
+    </a>
   </div>
+  <!-- 회원가입 URL -->
+  <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
+</div>
 {% endblock %}
 
 {% block js %}{% endblock js %}

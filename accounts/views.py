@@ -5,16 +5,18 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_safe, require_http_methods
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
 # Create your views here.
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user)  # 로그인
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
             return redirect("main")
     else:
         form = CustomUserCreationForm()
@@ -22,6 +24,13 @@ def signup(request):
         "form": form,
     }
     return render(request, "accounts/signup.html", context)
+
+def id_check(request):
+    accounts = [i.username for i in get_user_model().objects.all()]
+    data = {
+        'accounts' : accounts
+    }
+    return JsonResponse(data)
 
 
 @require_http_methods(["GET", "POST"])
