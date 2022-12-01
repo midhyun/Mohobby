@@ -5,10 +5,12 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_safe, require_http_methods
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 
 # Create your views here.
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
@@ -23,10 +25,15 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+def id_check(request):
+    accounts = [i.username for i in get_user_model().objects.all()]
+    data = {
+        'accounts' : accounts
+    }
+    return JsonResponse(data)
 
 
 @require_http_methods(["GET", "POST"])
-
 def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -71,12 +78,7 @@ def follow(request, pk):
 def delete(request):
     request.user.delete()
     auth_logout(request)
-    return redirect("accounts:index")
-
-
-def index(request):
-    pass
-    return render(request, "accounts/index.html")
+    return redirect("main")
 
 
 @login_required
@@ -84,9 +86,7 @@ def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
-        user_form = CustomUserChangeForm(
-            request.POST, request.FILES, instance=request.user
-        )
+        user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
         # 유저폼 유효성 확인
         if user_form.is_valid():
             user_form.save()

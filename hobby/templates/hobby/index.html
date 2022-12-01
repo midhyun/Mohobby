@@ -1,45 +1,14 @@
 {% extends 'base.html' %}
-
 {% load django_bootstrap5 %}
 {% load static %}
-{% block css %}{% endblock css %}
 
-{% block content %}   
-<div>
-  <!-- 메인 페이지 배너 hover(예정) -->
-  <!-- Swiper -->
-  <div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><img class="img-fluid" src="{% static 'images/캐러셀_1.jpg' %}"></div>
-      <div class="swiper-slide"><img src="{% static 'images/캐러셀_2.png' %}"></div>
-      <div class="swiper-slide">Slide 3</div>
-      <div class="swiper-slide">Slide 4</div>
-      <div class="swiper-slide">Slide 5</div>
-      <div class="swiper-slide">Slide 6</div>
-    </div>
-    <div class="swiper-pagination"></div>
-  </div>
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/hobby_index.css' %}">
+{% endblock %}
+{% block content %}
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-    <script>
-      var swiper = new Swiper(".mySwiper", {
-        spaceBetween: 30,
-        centeredSlides: true,
-        autoplay: {
-          delay: 6000,
-          disableOnInteraction: false
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          dynamicBullets: true
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        }
-      });
-    </script>
-
+<div style="margin-top: 5%;">
+  <p> {{ category_name }} 페이지</p>
   <div class='container justify-content-center post_page'>
     <div style='width:100%'>
       <!-- 인기 모임 글 -->
@@ -119,13 +88,6 @@
                 </div>
               </div>
             </div>
-            <a href="">
-              <div class="more_button position-relative">
-                <span class="moretext position-absolute">
-                  더보기 &nbsp;&nbsp; <i class="bi bi-chevron-right"></i>
-                </span>
-              </div>
-            </a>
           </div>
         </div>
       </div>
@@ -206,13 +168,6 @@
                 </div>
               </div>
             </div>
-            <a href="">
-              <div class="more_button position-relative">
-                <span class="moretext position-absolute">
-                  더보기 &nbsp;&nbsp; <i class="bi bi-chevron-right"></i>
-                </span>
-              </div>
-            </a>
           </div>
         </div>
       </div>
@@ -294,22 +249,12 @@
                 </div>
               </div>
             </div>
-            <a href="">
-              <div class="more_button position-relative">
-                <span class="moretext position-absolute">
-                  더보기 &nbsp;&nbsp; <i class="bi bi-chevron-right"></i>
-                </span>
-              </div>
-            </a>
           </div>
         </div>         
       </div>
     </div>
   </div>
 </div>
-
-
+</div>
 
 {% endblock content %}
-
-{% block js %}{% endblock js %}

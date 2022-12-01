@@ -1,0 +1,30 @@
+/* 카테고리 버튼 그룹 */
+.category_select {
+
+}
+.category_select input[type=checkbox]{
+    display: none;
+}
+.category_select input[type=checkbox]+label{
+    border-radius: 7px;
+    height: 40px;
+    line-height: 38px;
+    border: 1px solid #DADCE0;
+    font-weight:bold;
+    font-size: 14px;
+    padding: 0 10px;
+    outline: none;
+    background: none;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.category_select input[type=checkbox]+label{
+    color: 	#888888;
+    transition: 0.4s;
+}
+.category_select input[type=checkbox]:checked+label{
+    background-color: #e45454;
+    color: #fff;
+    transition: 0.4s;
+}
+/* 카테고리 버튼 그룹 */

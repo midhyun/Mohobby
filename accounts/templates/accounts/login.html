@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
-{% providers_media_js %}
 {% load django_bootstrap5 %}
 {% load widget_tweaks %}
 {% load static %}
@@ -10,18 +9,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="login_form">
-  <!-- 로고 -->
-  <h1 class="login_banner">Mohobby</h1>
-  <!-- form -->
-  <form action="{% url 'accounts:login' %}" method="POST">
-    {% csrf_token %}
-    <div class="login_box">
-      <!-- input : 아이디 -->
-      {% render_field form.username class="user_input" placeholder="아이디"%}
-      <!-- input : 비밀번호 -->
-      {% render_field form.password class="user_input" placeholder="비밀번호"%}
-    </div>
+  <div class="login_form">
+    <!-- 로고 -->
+    <h1 class="login_banner">Mohobby</h1>
+    <!-- form -->
+    <form action="{% url 'accounts:login' %}" method="POST">
+      {% csrf_token %}
+      <div class="login_box">
+        <!-- input : 아이디 -->
+        {% render_field form.username class="user_input" placeholder="아이디"%}
+      </div>
+        <!-- input : 비밀번호 -->
+        <div class="login_box">
+        {% render_field form.password class="user_input" placeholder="비밀번호"%}
+      </div>
     <button class="login_button" type="submit">로그인</button>
   </form>
   <div class="text-center">
@@ -35,6 +36,12 @@
     <a href="{% provider_login_url 'naver' %}">
       <div class="social_button position-relative">
         <span class="logintext position-absolute"><span class="fw-bold" style="font-size: 18px;">N</span> &nbsp;네이버
+          로그인</span>
+      </div>
+    </a>
+    <a href="{% provider_login_url 'google' %}">
+      <div class="social_button position-relative">
+        <span class="logintext position-absolute"><span class="fw-bold" style="font-size: 18px;">N</span> &nbsp;구글
           로그인</span>
       </div>
     </a>
