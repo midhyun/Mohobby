@@ -1,22 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/datepicker.css" rel="stylesheet" />
+  <script src="js/datepicker.js"></script>
   <title>Document</title>
 </head>
 <body>
 <input type="file" accept="image/*" onchange="setThumbnail(event);">
 <div id="image_container"></div>
-
+<div id="demo" style="width:300px; height:300px;"></div>
+<div id="demo-timegrid"></div>
 <script>
   function setThumbnail(event) {
     var reader = new FileReader();
-
+    var label = document.querySelector('#demo')
     reader.onload = function(event) {
       var img = document.createElement("img");
-      img.setAttribute("src", event.target.result);
+      label.style.backgroundImage = `url(${event.target.result})`
       document.querySelector("div#image_container").appendChild(img);
     };
 
