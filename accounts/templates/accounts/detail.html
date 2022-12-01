@@ -4,5 +4,6 @@
 {% block content %}
 <div style="margin-top: 5%;">
     <h1>{{ user.username }}님의 프로필</h1>
+    <img src="{{ user.image.url }}" style="width: 100px; height: 100px;" >
 </div>
 {% endblock content %}
