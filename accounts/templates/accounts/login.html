@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load socialaccount %}
-{% providers_media_js %}
 {% load django_bootstrap5 %}
 {% load widget_tweaks %}
 {% load static %}
@@ -27,8 +26,7 @@
     <!-- 회원가입 URL -->
     <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
     <div class="text-center">
-      <a href="{% provider_login_url 'kakao' %}"><img class="mb-2" width="200px" height="100%" src="{% static 'images/kakao.png' %}" alt="카카오 로그인 버튼"></a><br>
-      <a href="{% provider_login_url 'naver' %}"><img class="" width="200px" height="100%" src="{% static 'images/navers.png' %}" alt="네이버 로그인 버튼"></a>
+      <a href="{% provider_login_url 'kakao' method='oauth2' %}"><img class="mb-2" width="200px" height="100%" src="{% static 'images/kakao.png' %}" alt="카카오 로그인 버튼"></a>
     </div>
   </div>
 {% endblock %}
