@@ -14,7 +14,7 @@
     <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
       <div class="slide">
-        <!-- 첫번째 페이지 -->
+        <!-- 첫번째 페이지 (ID, PW)-->
         <div class="slide_item">
           <div class="form_list">
             <!-- input : 아이디, -->
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <!-- 두번째 페이지 -->
+        <!-- 두번째 페이지 (인적사항) -->
         <div class="slide_item">
           <div class="form_list">
             <!-- input : 생년월일 -->
@@ -69,9 +69,9 @@
             </div>
           </div>
         </div>
+        <!-- 세번째 페이지 (프로필 이미지) -->
         <div class="slide_item">
           <div class="form_list">
-            <!-- 프로필 이미지 구현 후 작동 -->
             <div class="form_field">
               <div class="profile">
                 <div>
@@ -87,7 +87,7 @@
             </div>
           </div>
         </div>
-        <!-- 세번째 페이지 -->
+        <!-- 네번째 페이지 (카테고리) -->
         <div class="slide_item">
           <div class="category_form">
             <div class="category_list">
@@ -279,7 +279,7 @@
             </div>
           </div>
         </div>
-        <!-- 네번째 페이지 -->
+        <!-- 다섯번째 페이지 (카테고리) -->
         <div class="slide_item">
           <div class="category_wrap">
             <div class="category_form">
@@ -356,6 +356,7 @@
                 </div>
               </div>
             </div>
+            <!-- 가입 제출 버튼 -->
             <div class="text-center">
               <button class="signup_btn" type="submit">가입</button>
             </div>
@@ -363,6 +364,7 @@
         </div>
       </div>
     </form>
+    <!-- 페이지 넘기기 버튼 -->
     <div class="text-center">
       <button class="page_btn slide_prev_button">이전</button>
       <button class="page_btn slide_next_button">다음</button>
