@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
+import os, dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount', 
+    
     # ... 소셜로그인을 할 제공자 리스트를 아래에 포함 
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
-    
+    'allauth.socialaccount.providers.google',
     "accounts",
     "hobby",
     "community",
@@ -210,19 +211,6 @@ else:
 # https://docs.djangoproject.com/en/4.1/ref/contrib/messages/
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
-
-X_FRAME_OPTIONS = "SAMEORIGIN"
-
-SUMMERNOTE_THEME = "bs5"
-
-SUMMERNOTE_CONFIG = {
-    "iframe": True,
-    "summernote": {
-        "width": "100%",
-        "height": "480",
-        "lang": "ko-KR",
-    },
-}
 
 # 콘솔창에서 SQL 쿼리 보기
 # LOGGING = {
