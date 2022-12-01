@@ -20,7 +20,7 @@ class Hobby(models.Model):
     X = models.CharField(max_length=30, null=True, blank=True)
     Y = models.CharField(max_length=30, null=True, blank=True)
     entry_fee = models.CharField(max_length=20, null=True, blank=True)
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
     hits = models.PositiveBigIntegerField(default=0)
     recruit_type = models.BooleanField(default=False) # 자유가입(False), 승인제(True)
     limit = models.IntegerField(default=3, validators=[MinValueValidator(3), MaxValueValidator(15)])
