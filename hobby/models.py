@@ -11,15 +11,16 @@ class Categories(models.Model):
 class Hobby(models.Model):
     host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Hobby')
     title = models.CharField(max_length=80)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20)
     tags = models.CharField(max_length=80)
     created_at = models.DateTimeField(auto_now_add=True)
     meeting_day = models.DateTimeField()
-    address = models.CharField(max_length=100)
+    address_type = models.BooleanField(default=False) # False=오프라인, True=온라인
+    address = models.CharField(max_length=100, default='온라인') # 온라인 or 오프라인 주소
     X = models.CharField(max_length=30, null=True, blank=True)
     Y = models.CharField(max_length=30, null=True, blank=True)
-    entry_fee = models.CharField(max_length=20)
-    content = models.TextField()
+    entry_fee = models.CharField(max_length=20, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
     hits = models.PositiveBigIntegerField(default=0)
     recruit_type = models.BooleanField(default=False) # 자유가입(False), 승인제(True)
     limit = models.IntegerField(default=3, validators=[MinValueValidator(3), MaxValueValidator(15)])

@@ -11,7 +11,7 @@
 {% block content %}
   <div class="wrapper">
     <h1 class="login_banner text-center">회원가입</h1>
-    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
       <div class="slide">
         <!-- 첫번째 페이지 -->
@@ -19,34 +19,38 @@
           <div class="form_list">
             <!-- input : 아이디, -->
             <div class="form_field">
-              {% render_field form.username class="user_input" placeholder="아이디" %}
+              {% render_field form.username id="id" class="user_input" placeholder="아이디" %}
+              <div class="error_next_box"></div>
               {% if form.username.errors %}
                 <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
               {% endif %}
             </div>
             <!-- input : 비밀번호 -->
             <div class="form_field">
-              {% render_field form.password1 class="user_input" placeholder="비밀번호"%}
+              {% render_field form.password1 id="pswd1" class="user_input" placeholder="비밀번호"%}
+              <div class="error_next_box"></div>
             </div>
             <!-- input : 비밀번호 재확인 -->
             <div class="form_field">
-              {% render_field form.password2 class="user_input" placeholder="비밀번호 재확인"%}
+              {% render_field form.password2 id="pswd2" class="user_input" placeholder="비밀번호 재확인"%}
+              <div class="error_next_box"></div>
             </div>
           </div>
         </div>
         <!-- 두번째 페이지 -->
         <div class="slide_item">
           <div class="form_list">
+            <!-- input : 생년월일 -->
+            <div class="form_field">
+              <label class="birth_label">생년월일</label>
+              <input type="date" class="user_input" name="birth" value="2000-01-01">
+            </div>
             <!-- input : 성별 -->
             <div class="select">
               <input type="radio" id="select" name="gender" value="M">
               <label for="select">남자</label>
               <input type="radio" id="select2" name="gender" value="F">
               <label for="select2">여자</label>
-            </div>
-            <!-- input : 생년월일 -->
-            <div class="form_field">
-              <input type="date" class="user_input" name="birth" value="2000-01-01">
             </div>
             <!-- input : 우편번호, 검색 기능 -->
             <div class="form_field">
@@ -63,9 +67,23 @@
             <div class="form_field">
               {% render_field form.address_detail class="user_input" placeholder="상세주소"%}
             </div>
+          </div>
+        </div>
+        <div class="slide_item">
+          <div class="form_list">
             <!-- 프로필 이미지 구현 후 작동 -->
             <div class="form_field">
-              {% render_field form.profile_pic class="user_input" placeholder="프로필 이미지"%}
+              <div class="profile">
+                <div>
+                  <img id="image_section" src="{% static 'image/default_profile_img.jpg' %}">
+                </div>
+                <div>
+                  {% render_field form.image id="imgInput" class="image_input" placeholder="프로필 이미지" %}
+                  <label class="input-file-button" for="imgInput">
+                    프로필 사진을 선택하세요
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -353,45 +371,7 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    const slide = document.querySelector(".slide");
-    let slideWidth = slide.clientWidth;
-    const prevBtn = document.querySelector(".slide_prev_button");
-    const nextBtn = document.querySelector(".slide_next_button");
-    const slideItems = document.querySelectorAll(".slide_item");
-    const maxSlide = slideItems.length;
-
-    let currSlide = 1;
-
-    nextBtn.addEventListener("click", () => {
-      currSlide++;
-      if (currSlide <= maxSlide) {
-        const offset = slideWidth * (currSlide - 1);
-        slideItems.forEach((i) => {
-          i.setAttribute("style", `left: ${ - offset}px`);
-        });
-        // 슬라이드 이동 시 현재 활성화된 pagination 변경
-      } else {
-        currSlide--;
-      }
-    });
-    // 버튼 엘리먼트에 클릭 이벤트 추가하기
-    prevBtn.addEventListener("click", () => {
-      // 이전 버튼 누를 경우 현재 슬라이드를 변경
-      currSlide--;
-      // 1번째 슬라이드 이하로 넘어가지 않게 하기 위해서
-      if (currSlide > 0) {
-        // 슬라이드를 이동시키기 위한 offset 계산
-        const offset = slideWidth * (currSlide - 1);
-        // 각 슬라이드 아이템의 left에 offset 적용
-        slideItems.forEach((i) => {
-          i.setAttribute("style", `left: ${ - offset}px`);
-        });
-      } else {
-        currSlide++;
-      }
-    });
-  </script>
+  <script src="{% static 'js/signup_form.js' %}"></script>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script>
     // 주소 검색 기능
@@ -434,5 +414,124 @@
         })
         .open();
     }
+  </script>
+  <script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+  <script>
+    var id = document.querySelector('#id');
+    var pw1 = document.querySelector('#pswd1');
+    var pw2 = document.querySelector('#pswd2');
+    var error = document.querySelectorAll('.error_next_box');
+    
+    id.addEventListener("focusout", checkId);
+    pw1.addEventListener("focusout", checkPw);
+    pw2.addEventListener("focusout", comparePw);
+    
+    // 아이디 중복 체크
+    function checkId() {
+        // input 빈 칸이면 실행
+        if(id.value === "") {
+            error[0].innerHTML = "필수 정보입니다.";
+            error[0].style.color = "red";
+            error[0].style.display = "block";
+            error[0].style.fontSize = "12px";
+        } else {
+            // input 입력된 후 실행
+            $.ajax({ 
+                // get으로 DB를 가져온다
+                type:"get",
+                // json 파일 가져올 url 설정
+                url:"{% url 'accounts:id_check' %}", 
+                // 받아오는 데이터 유형 설정
+                dataType:"json", 
+                // 성공
+                success: function(data){
+                    // DB에 저장된 유저들의 username을 배열에 저장
+                    var arr = [];
+                    for (let i in data.accounts){
+                    arr[i] = data.accounts[i]
+                    }
+                    // 배열 안에 input으로 입력한 값이 있다면 실행
+                    if (arr.includes(id.value)){
+                    error[0].innerHTML = "중복된 아이디입니다.";
+                    error[0].style.color = "red";
+                    error[0].style.display = "block";
+                    error[0].style.fontSize = "12px";
+                    } else {
+                        // 배열 안에 input으로 입력한 값이 없다면
+                        error[0].innerHTML = "사용 가능합니다.";
+                        error[0].style.color = "#08A600";;
+                        error[0].style.display = "block";
+                        error[0].style.fontSize = "12px";
+                    }
+                },
+                // 실패 (대부분 url 문제)
+                error:function(){
+                    console.log("error");
+                }
+            })
+        }  
+    }
+    
+    // 비밀번호 체크
+    function checkPw() {
+        var pwPattern = /[a-zA-Z0-9~!@#$%^&*()_+|<>?:{}]{8,16}/;
+        if(pw1.value === "") {
+            error[1].innerHTML = "필수 정보입니다.";
+            error[1].style.display = "block";
+            error[1].style.color = "red";
+            error[1].style.fontSize = "12px";
+        } else if(!pwPattern.test(pw1.value)) {
+            error[1].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+            error[1].style.display = "block";
+            error[1].style.color = "red";
+            error[1].style.fontSize = "12px";
+        } else {
+            error[1].style.display = "block";
+            error[1].innerHTML = "사용 가능합니다.";
+            error[1].style.color = "#08A600";
+            error[1].style.fontSize = "12px";
+        }
+    }
+    
+    // 비밀번호 재입력 체크
+    function comparePw() {
+        if(pw2.value === pw1.value && pw2.value != "") {
+            error[2].style.display = "none";
+        } else if(pw2.value !== pw1.value) {
+            error[2].innerHTML = "비밀번호가 일치하지 않습니다.";
+            error[2].style.display = "block";
+            error[2].style.color = "red";
+            error[2].style.fontSize = "12px";
+        } 
+    
+        if(pw2.value === "") {
+            error[2].innerHTML = "필수 정보입니다.";
+            error[2].style.display = "block";
+            error[2].style.color = "red";
+            error[2].style.fontSize = "12px";
+        }
+    }
+  </script>
+  <script>
+    function readURL(input) {
+      // 파일이 들어오면 실행
+      if (input.files && input.files[0]) {
+       var reader = new FileReader();
+       
+       // 이벤트 결과를 src에 집어넣음
+       reader.onload = function (e) {
+        $('#image_section').attr('src', e.target.result);  
+       }
+       
+       reader.readAsDataURL(input.files[0]);
+       }
+     }
+      
+     $("#imgInput").change(function(){
+        readURL(this);
+     });
   </script>
 {% endblock js %}
