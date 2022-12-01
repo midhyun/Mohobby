@@ -1,24 +1,62 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/community.css' %}">
+{% endblock %}
 {% block content %}
-<div class="container" style="margin-top: 5%;">
-  <h3 class="main_color fw-bold">새 피드 작성하기
-  </h3>
-  <small class='text-muted'>자유롭게 여러분의 일상을 공유해 주세요 !</small>
-  <form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div>
-      <p>제목</p>
-      <input type="text" name='title' placeholder='제목'>
+
+  <div class='container page'>
+    <div style=" text-align: center;">
+      <h3 class='main_title fw-bold'>새 피드 작성하기</h3>
+      <small class='text-muted'>자유롭게 여러분의 일상을 공유해 주세요 !</small>
     </div>
-    <div>
-      <p>내용</p>
-      <textarea type="text" name='content' placeholder='내용' style='width:500px;'></textarea>
-    </div>
-    <input type="file" name="images" multiple="multiple">
-    <div class="text-end"><input type="submit" value="작성"></div>
-  </form>
-</div>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class='d-flex justify-content-around'>
+        <div style='width:40%'>
+          <div>
+            <div id="image_container"></div>
+          </div>
+          <input type="file" name="images" multiple="multiple" id="image" accept="image/*" onchange="setThumbnail(event);">
+        </div>
+        <div style='width:40%'>
+          <div>
+            <span>제목</span>
+            <input type="text" class="form-control" id="formGroupExampleInput" placeholder='title'>
+
+          </div>
+          <div>
+            <span>내용</span>
+            <textarea class="form-control" placeholder="content" id="floatingTextarea2" style="height: 300px"></textarea>
+          </div>
+        </div>
+      </div>
+      <div style=" text-align: center;">
+        <button class='create_button' type="submit">
+          작성하기</button>
+      </div>
+
+    </form>
+  </div>
+  <script>
+    function setThumbnail(event) {
+      for (var image of event.target.files) {
+        var reader = new FileReader();
+
+        reader.onload = function (event) {
+          var img = document.createElement("img");
+          img.setAttribute("src", event.target.result);
+          document
+            .querySelector("div#image_container")
+            .appendChild(img);
+        };
+
+        console.log(image);
+        reader.readAsDataURL(image);
+      }
+    }
+  </script>
 
 {% endblock content %}
