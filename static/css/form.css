@@ -1,6 +1,9 @@
 * {
   font-family: 'Noto Sans KR', sans-serif;
 }
+.body {
+  background-color: #e7e7e7;
+}
 .wrapper{
   width:750px;
   max-width: 100%;
@@ -403,7 +406,6 @@ ul{
 
 /* detail pages */
 .image-banner{
-  margin-top: 80px;
   overflow: hidden;
   background-repeat: no-repeat;
   background-size: cover;
@@ -412,6 +414,37 @@ ul{
   height: 200px;
   background-color: #e7e7e7;
   border-radius: 10px;
-  display: flex;
   color:#BBBBBB;
+}
+
+.card{
+  width:90%;
+  max-width: 100%;
+  background: white;
+  margin: auto;
+  padding: 50px;
+  border-radius: 10px;
+  border: solid 0px white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.circle-image{
+  width:125px;
+  height: 125px;
+  border-radius: 100%;
+  margin: auto;
+  border: solid 2px #e7e7e7;
+}
+.circle-box{
+  transform: translateY(-40%);
+  position:relative;
+}
+.circle-title{
+  transform: translateY(-50px);
+  font-size: 24px;
+  font-weight:bold;
+}
+.transup{
+  transform: translateY(-20%);
 }

@@ -7,26 +7,54 @@
 {% endblock css %}
 {% block content %}
 <!-- 이미지 배너 -->
-<div class="container image-banner" style="background-image: url('{{ hobby.image.url }}');height:600px; ">
-<span class="badge bg-secondary">잔여 {{ hobby.limit }}자리</span><span class="badge bg-secondary">{{ hobby.tags }}</span>
-</div>
-<!-- 본문 -->
-<div>
-    {{ hobby.host }} {{ hobby.host.username }}
-    {{hobby.title}}
-    {{ hobby.recruit_type }} {{hobby.address }} {{ hobby.meeting_day.isoformat }}
+<div class="wrapper">
+    <div class="container image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:500px; ">
+        <span class="badge bg-danger mx-1" style="height:20px">잔여 {{ hobby.limit }}자리</span><span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
+    </div>
+    <!-- 본문 -->
+    <div class="transup">
+      <div class="card py-0">
+        <div class="circle-box">
+            {% if hobby.host.image %}
+              <img class="circle-image" src="{{ hobby.host.image.url }}" alt="">
+            {% else %}
+              <img class="circle-image" src="{% static 'image/default_profile_img.jpg' %}" alt="">
+            {% endif %}
+            <p class="text-center text-muted">{{ hobby.host }}</p>
+        </div>
+        <p class="circle-title">{{hobby.title}}</p>
+      </div>
+      <p class="text-center mt-3" style="font-size:20px;">
+        <ion-icon name="location-outline"></ion-icon>
+        {% if hobby.recruit_type %}
+          오프라인 {{ hobby.address }}
+        {% else %}
+          온라인
+        {% endif %}
+        <ion-icon name="calendar-outline"></ion-icon> {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
+      </p>
+    </div>
+    
     {{ hobby.contnet }}
+    <!-- 안내사항 -->
+    <ul>
+      <li>제한인원: {{ hobby.limit }}</li>
+      <li>회비: {{ hobby.entry_fee }}</li>
+      <li>활동일: {{ hobby.meeting_day }}</li>
+      <li>장소: {{ hobby.address }}</li>
+    </ul>
+    
+    
+    
+    
+    <!-- 지도넣기 -->
+    <div></div>
+    <!-- 참여 중인 유저  -->
+    <!-- 댓글 -->
+    <!-- 비슷한 소셜링 -->
+    {{ hobby.tags }}
 </div>
-<!-- 안내사항 -->
-제한인원: {{ hobby.limit }}
-회비: {{ hobby.entry_fee }}
-활동일: {{ hobby.meeting_day }}
-장소: {{ hobby.address }}
-<!-- 지도넣기 -->
-<div></div>
-<!-- 비슷한 소셜링 -->
-{{ hobby.tags }}
-
 {% endblock content %}
 {% block js %}
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 {% endblock js %}
