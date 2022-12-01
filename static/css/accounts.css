@@ -18,6 +18,30 @@
     transition: left 0.9s;
 } */
 
+.input-file-button {
+  padding: 6px 25px;
+  background-color:#E84545;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.image_input {
+    display: none;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile img {
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
 
 .slide {
     display: flex;

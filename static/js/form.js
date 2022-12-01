@@ -2,6 +2,7 @@ const slide = document.querySelector(".slide");
 let slideWidth = slide.clientWidth;
 const prevBtn = document.querySelector(".slide_prev_button");
 const nextBtn = document.querySelector(".slide_next_button");
+const submitBtn = document.querySelector(".submit_btn")
 const slideItems = document.querySelectorAll(".slide_item");
 const maxSlide = slideItems.length;
 let currSlide = 1;
@@ -10,11 +11,23 @@ const progress = document.querySelector('#progress_bar');
 progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`);
 const radio_1 = document.querySelector("#social_label");
 const radio_2 = document.querySelector("#club_label");
-
+// 엔터 submit prevent
+document.myform.addEventListener("keydown", evt => {
+  if (evt.code === "Enter") {
+  evt.preventDefault()};
+});
 // 다음 버튼 이벤트
 nextBtn.addEventListener("click", () => {
   currSlide++;
-  if (currSlide <= maxSlide) {
+  if (currSlide < maxSlide) {
+    progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
+    const offset = slideWidth * (currSlide - 1);
+    slideItems.forEach((i) => {
+      i.setAttribute("style", `left: ${-offset}px`);
+    });
+  } else if (currSlide == maxSlide) {
+    nextBtn.classList.add('d-none')
+    submitBtn.classList.remove('d-none')
     progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
     const offset = slideWidth * (currSlide - 1);
     slideItems.forEach((i) => {
@@ -28,6 +41,8 @@ nextBtn.addEventListener("click", () => {
 prevBtn.addEventListener("click", () => {
   currSlide--;
   if (currSlide > 0) {
+    nextBtn.classList.remove('d-none')
+    submitBtn.classList.add('d-none')
     progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
     const offset = slideWidth * (currSlide - 1);
     slideItems.forEach((i) => {
@@ -43,12 +58,12 @@ window.addEventListener("resize", () => {
 });
 // 소셜링, 클럽 소셜링 선택
 radio_1.addEventListener("click", () => {
-  radio_1.classList.add('active')
-  radio_2.classList.remove('active')
+  radio_1.classList.add('radio-active')
+  radio_2.classList.remove('radio-active')
 });
 radio_2.addEventListener("click", () => {
-  radio_2.classList.add('active')
-  radio_1.classList.remove('active')
+  radio_2.classList.add('radio-active')
+  radio_1.classList.remove('radio-active')
 });
 // 태그 이벤트 _ 다른 카테고리 선택시 현재 선택된 태그 해제
 const tags = document.querySelectorAll('div.accordion-body > .tag-btn');
@@ -70,7 +85,7 @@ const categories = document.querySelectorAll('.categories');
 [].forEach.call(categories, function(category){ 
 	category.addEventListener("click", () => {
     for (let j=0; j<(categories.length); j++){
-      categories[j].classList.remove('active')
+      categories[j].classList.remove('radio-active')
     }
     category.classList.add('active')
     n_tag.classList.remove('tag-btn-active')
@@ -81,7 +96,18 @@ const categories = document.querySelectorAll('.categories');
 function changeinner(event) {
   n_tag.innerText = event.parentNode.parentNode.querySelector('#tag').value
 }
+// 이미지 미리보기
+function setThumbnail(event) {
+  var reader = new FileReader();
+  var label = document.querySelector('.image-control')
+  reader.onload = function(event) {
+    var img = document.createElement("img");
+    label.style.backgroundImage = `url(${event.target.result})`
+    document.querySelector("div#image_container").appendChild(img);
+  };
 
+  reader.readAsDataURL(event.target.files[0]);
+}
 // Date/ Time picker
 
 // 온라인, 오프라인 버튼 active
@@ -89,28 +115,27 @@ const offlinebtn = document.querySelector('#offline-btn');
 const onlinebtn = document.querySelector('#online-btn');
 const addrcheck = document.querySelector('#address_type');
 const addrbox = document.querySelector('#offline-box');
-const limit_addr = document.querySelector('#limit_addr');
+const address = document.querySelector('#address')
 
 offlinebtn.addEventListener('click', () => {
   offlinebtn.classList.toggle('addr-btn-active');
   onlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.toggle('d-none');
   addrcheck.checked = false
-  limit_addr.innerText = '오프라인'
 });
 onlinebtn.addEventListener('click', () => {
   onlinebtn.classList.toggle('addr-btn-active');
   offlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.add('d-none');
   addrcheck.checked = true
-  limit_addr.innerText = '온라인'
+  address.value = '온라인'
 });
 
 // 키워드로 검색하기
 const keysearch = document.querySelector('#keysearch')
 const addrdiv = document.querySelector('#addrlist')
 const offbuttonaddr = document.querySelector('#offbuttonaddr')
-const address = document.querySelector('#address')
+
 var places = new kakao.maps.services.Places();
 
 var callback = function(result, status) {

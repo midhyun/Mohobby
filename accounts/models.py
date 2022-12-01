@@ -4,6 +4,7 @@ from django.utils import timezone
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from multiselectfield import MultiSelectField
+from imagekit.processors import Thumbnail
 # Create your models here.
 # 이름 비밀번호 설명 주소 생년월일
 
@@ -17,9 +18,17 @@ class User(AbstractUser):
         choices=GENDER_CHOICES,
     )
     address = models.CharField(max_length=50)  # 주소
-    address_detail = models.CharField(max_length=40, blank=True)  # 상세주소
+    address_detail = models.CharField(max_length=40, null=True, blank=True)  # 상세주소
     birth = models.DateTimeField(default=timezone.now)  # 나이
     followings = models.ManyToManyField('self',symmetrical=False, related_name='followers')
+
+    image = ProcessedImageField(
+        upload_to='image/',
+        format='JPEG',
+        options={'quality': 30},
+        blank=True,
+    )
+
     STORTS_CHOICES = (
         ("축구", "축구"),
         ("농구", "농구"),

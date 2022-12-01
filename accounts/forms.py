@@ -14,6 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
             "password1",
             "password2",
             "birth",
+            "image",
             "address",
             "address_detail",
             "gender",
