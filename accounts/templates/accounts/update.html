@@ -1,12 +1,75 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>업데이트</h1>
-<form action="" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% bootstrap_button button_type="submit" content="OK" %}
-  </form>
+  <div class="wrapper">
+    <h1 class="login_banner text-center">정보 수정</h1>
+    <form action="{% url 'accounts:update' user.pk %}" method="POST" autocomplete="off" onsubmit="return mySubmit()">
+      {% csrf_token %}
+      <div class="form_list">
+        <div class="form_field">
+          <label class="form-label">Sports</label>
+          <div id="id_sports">
+            {% for value, text in user_form.sports.field.choices %}
+            <span class="category_select">
+              <input id="id_sports_{{ forloop.counter0 }}" name="{{ user_form.sports.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.sports  %} checked="checked"{% endif %}>
+              <label for="id_sports_{{ forloop.counter0 }}">{{ text }}</label>
+            </span>
+            {% endfor %}
+          </div>
+          <label class="form-label">Art</label>
+          <div id="id_art">
+            {% for value, text in user_form.art.field.choices %}
+            <span class="category_select">
+              <input id="id_art_{{ forloop.counter0 }}" name="{{ user_form.art.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.art  %} checked="checked"{% endif %}>
+              <label for="id_art_{{ forloop.counter0 }}">{{ text }}</label>
+            </span>
+            {% endfor %}
+          </div>
+          <label class="form-label">Food</label>
+          <div id="id_food">
+            {% for value, text in user_form.food.field.choices %}
+            <span class="category_select">
+              <input id="id_food_{{ forloop.counter0 }}" name="{{ user_form.food.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.food  %} checked="checked"{% endif %}>
+              <label for="id_food_{{ forloop.counter0 }}">{{ text }}</label>
+            </span>
+            {% endfor %}
+          </div>
+          <label class="form-label">Travel</label>
+          <div id="id_travel">
+            {% for value, text in user_form.travel.field.choices %}
+            <span class="category_select">
+              <input id="id_travel_{{ forloop.counter0 }}" name="{{ user_form.travel.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.travel  %} checked="checked"{% endif %}>
+              <label for="id_travel_{{ forloop.counter0 }}">{{ text }}</label>
+            </span>
+            {% endfor %}
+          </div>
+          <label class="form-label">Develop</label>
+          <div id="id_develop">
+            {% for value, text in user_form.develop.field.choices %}
+            <span class="category_select">
+              <input id="id_develop_{{ forloop.counter0 }}" name="{{ user_form.develop.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.develop  %} checked="checked"{% endif %}>
+              <label for="id_develop_{{ forloop.counter0 }}">{{ text }}</label>
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="text-center">
+          <button class="signup_btn" type="submit">수정</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock content %}
 
-  {% endblock content %}
+
+{% block js %}
+
+{% endblock js %}
+
