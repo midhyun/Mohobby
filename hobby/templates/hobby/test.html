@@ -12,36 +12,20 @@
 <body>
 <input type="file" accept="image/*" onchange="setThumbnail(event);">
 <div id="image_container"></div>
-<div id="demo"></div>
+<div id="demo" style="width:300px; height:300px;"></div>
 <div id="demo-timegrid"></div>
 <script>
   function setThumbnail(event) {
     var reader = new FileReader();
-
+    var label = document.querySelector('#demo')
     reader.onload = function(event) {
       var img = document.createElement("img");
-      img.setAttribute("src", event.target.result);
+      label.style.backgroundImage = `url(${event.target.result})`
       document.querySelector("div#image_container").appendChild(img);
     };
 
     reader.readAsDataURL(event.target.files[0]);
   }
-</script>
-<script>
-mobiscroll.setOptions({
-    theme: 'ios',
-    themeVariant: 'light'
-});
-
-mobiscroll.datepicker('#demo', {
-    controls: ['calendar', 'time'],
-    display: 'inline'
-});
-
-mobiscroll.datepicker('#demo-timegrid', {
-    controls: ['calendar', 'timegrid'],
-    display: 'inline'
-});
 </script>
 </body>
 </html>

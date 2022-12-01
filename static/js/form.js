@@ -99,16 +99,15 @@ function changeinner(event) {
 // 이미지 미리보기
 function setThumbnail(event) {
   var reader = new FileReader();
-
+  var label = document.querySelector('.image-control')
   reader.onload = function(event) {
     var img = document.createElement("img");
-    img.setAttribute("src", event.target.result);
-    document.querySelector("label#image_container").appendChild(img);
+    label.style.backgroundImage = `url(${event.target.result})`
+    document.querySelector("div#image_container").appendChild(img);
   };
 
   reader.readAsDataURL(event.target.files[0]);
 }
-
 // Date/ Time picker
 
 // 온라인, 오프라인 버튼 active

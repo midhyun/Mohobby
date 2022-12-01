@@ -201,6 +201,10 @@ textarea:focus {
 
 /* image 인풋라벨 */
 .image-control{
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   width: 100%;
   height: 200px;
   background-color: #e7e7e7;
@@ -278,7 +282,9 @@ margin: auto;
   border: none;
   border-bottom: 2px solid #BBBBBB;
 }
-
+.addr-control:focus{
+  outline: none;
+}
 /* 장소 검색 인풋 */
 .search-control{
   background-color: #e7e7e7;
