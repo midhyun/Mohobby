@@ -9,7 +9,9 @@ class HobbyForm(forms.ModelForm):
         fields = [
             'title',
             'category',
+            'tags',
             'meeting_day',
+            'address_type',
             'address',
             'X',
             'Y',

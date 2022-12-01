@@ -9,12 +9,14 @@ from django.contrib.auth.decorators import login_required
 def create(request):
     if request.method == "POST":
         form = HobbyForm(request.POST, request.FILES)
+        print(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.host = request.user
-            temp.tags = tag
             temp.save()
             return redirect("main")
+        else:
+            pass
     else:
         form = HobbyForm()
     context = {
@@ -22,6 +24,8 @@ def create(request):
     }
     return render(request, "hobby/form.html", context)
 
+def test(request):
+    return render(request, "hobby/test.html")
 
 def index(request, category_name):
     # category_posts = Hobby.objects.filter(category=category_name)
