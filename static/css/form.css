@@ -107,7 +107,7 @@ margin: auto;
   color: #BBBBBB;
 }
 
-.active{
+.radio-active{
   border-color: #E84545;
   background-color:#E84545;
   color: white;
@@ -158,12 +158,14 @@ label{
 .tag-btn:hover{
   border-color:#e8454569;
   background-color: #e8454569;
+  color: white;
   transition: 0.15s;
 }
 
 .tag-btn-active{
   border-color:#e8454569;
   background-color: #e8454569;
+  color: white;
   transition: 0.15s;
 }
 
@@ -199,6 +201,10 @@ textarea:focus {
 
 /* image 인풋라벨 */
 .image-control{
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   width: 100%;
   height: 200px;
   background-color: #e7e7e7;
@@ -276,7 +282,9 @@ margin: auto;
   border: none;
   border-bottom: 2px solid #BBBBBB;
 }
-
+.addr-control:focus{
+  outline: none;
+}
 /* 장소 검색 인풋 */
 .search-control{
   background-color: #e7e7e7;
@@ -369,4 +377,26 @@ ul{
 .btn-none{
   background: none;
   border: none;
+}
+.datetimepick{
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  margin: 20px 0px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #E84545;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.datetimepick:focus{
+  outline: solid 2px #e8454565;
+  transition: 0.15s ease-in-out
 }

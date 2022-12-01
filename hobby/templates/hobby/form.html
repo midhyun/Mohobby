@@ -3,7 +3,10 @@
 {% load django_bootstrap5 %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
-<link href="{% static 'css/mobiscroll.javascript.min.css' %}" rel="stylesheet" >
+<link rel="stylesheet" href="{% static 'css/datepicker.min.css' %}">
+<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/datepicker.min.js' %}"></script>
+<script src="{% static 'js/datepicker.ko.js' %}"></script>
 {% endblock css %}
 {% block content %}
 <div class="wrapper">
@@ -30,7 +33,7 @@
               <input class="d-none" type="radio" name="temp" id="social" value="social" checked>
               <input class="d-none" type="radio" name="temp" id="club" value="club">
 
-              <label id="social_label" for="social" class="social-btn active">
+              <label id="social_label" for="social" class="social-btn radio-active">
                   <ion-icon name="earth-sharp" size="large"></ion-icon>
                   <div>
                       <h6>소셜링</h6>
@@ -230,7 +233,7 @@
           <!-- 4페이지/ 사진, 상세내용 -->
           <div class="slide_item">
               <h2 class="mt-3 fw-bold">소셜링을 소개해볼까요?</h2>
-              <label class="image-control mt-3" for="image">
+              <label style="" class="image-control mt-3" for="image">
                   <ion-icon name="image-outline" style="font-size:32px"></ion-icon><br>사진 추가
               </label>
               <input class="d-none" id="image" accept="image/*" onchange="setThumbnail(event)" name="image" type="file">
@@ -240,11 +243,10 @@
                   소셜링 상세 내용을 자세히 작성할수록 멤버들의 신청률도 높아져요!
               </p>
           </div>
-          <!-- 5페이지/ 시간, 날짜 picker 찾아보고 다시 수정 -->
+          <!-- 5페이지/ 시간, 날짜 picker -->
           <div class="slide_item">
               <h2 class="mt-3 fw-bold">언제 만날까요?</h2>
-                <div id="picker"></div>
-              <input class="form-control" id="meeting_day" name="meeting_day" type="datetime-local">
+              <input class="datetimepick" id="meeting_day" name="meeting_day">
 
           </div>
           <!-- 6페이지/ 모임장소 -->
@@ -333,16 +335,13 @@
 {% block js %}
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script src="{% static 'js/form.js' %}"></script>
-<script src="{% static 'js/mobiscroll.javascript.min.js' %}"></script>
+<script src="{% static 'js/form.js' %}"></script>  
 <script>
-mobiscroll.setOptions({
-theme: 'ios',
-themeVariant: 'light'
-});
-mobiscroll.datepicker('#picker', {
-controls: ['calendar', 'time'],
-touchUi: true
+$("#meeting_day").datepicker({
+    language: 'ko',
+    timepicker: true,
+    timeFormat: "hh:ii",
+    minDate: new Date(),
 });
 </script>
 {% endblock js %}
