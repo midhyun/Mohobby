@@ -7,7 +7,20 @@
 {% endblock %}
 {% block content %}
 
-<div style="margin-top: 5%;">
+<div style="margin-top:120px;">
+  <div class="tag_box container">
+    <h2 class="index_title fw-bold">{{ category_name }}</h2>
+    {% for tag in tags %}
+    <a href="" style="float: left;">
+      <div class="tag_button position-relative">
+        <span class="tag_text">
+          # {{ tag.tag }}
+        </span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
   <div class='container justify-content-center post_page'>
     <div style='width:100%'>
       <!-- 인기 모임 글 -->
