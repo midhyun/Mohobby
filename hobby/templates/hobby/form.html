@@ -52,7 +52,7 @@
           <div class="slide_item">
               <h2 class="mt-3 fw-bold">소셜링 주제를 선택해볼까요?</h2>
               <p class="text-muted mb-5">
-                  아래의 카테고리 중 하나를 선택해주세요!
+                  아래의 카테고리 중 하나를 선택해주세요!(필수)
               </p>
               <!-- 카테고리 인풋 -->
               <div name="categories">
@@ -72,7 +72,7 @@
                   <div class="offcanvas-body small">
                       <h5>원하는 소셜링 태그를 직접 등록해 보세요</h5>
                       <p class="text-muted">한글과 영어로 최대 10글자까지 등록할 수 있어요.</p>
-                      <input class="form-control mb-3" type="text" name="tags" id="tag" placeholder="태그 입력">
+                      <input class="form-control mb-3" type="text" name="tags" id="tag" placeholder="태그 입력" required>
                       <div class="text-center"><button type="button" class="input_btn" data-bs-dismiss="offcanvas"
                               aria-label="Close" onclick="changeinner(this)">등록하기</button></div>
                   </div>
@@ -228,12 +228,12 @@
                   ex) 연희동으로 함께 카페투어가요 :)
               </p>
               <input class="input-control" type="text" maxlength="80" name="title" id="title"
-                  placeholder="제목을 입력해 주세요.(필수)">
+                  placeholder="제목을 입력해 주세요.(필수)" required>
           </div>
           <!-- 4페이지/ 사진, 상세내용 -->
           <div class="slide_item">
               <h2 class="mt-3 fw-bold">소셜링을 소개해볼까요?</h2>
-              <label style="" class="image-control mt-3" for="image">
+              <label class="image-control mt-3" for="image">
                   <ion-icon name="image-outline" style="font-size:32px"></ion-icon><br>사진 추가
               </label>
               <input class="d-none" id="image" accept="image/*" onchange="setThumbnail(event)" name="image" type="file">
@@ -246,13 +246,13 @@
           <!-- 5페이지/ 시간, 날짜 picker -->
           <div class="slide_item">
               <h2 class="mt-3 fw-bold">언제 만날까요?</h2>
-              <input class="datetimepick" id="meeting_day" name="meeting_day">
+              <input class="datetimepick" id="meeting_day" name="meeting_day" placeholder="날짜와 시간을 입력해주세요.(필수)" required>
 
           </div>
           <!-- 6페이지/ 모임장소 -->
           <div class="slide_item">
               <!-- input addr *(in js) checkbox.checked = true or false -->
-              <input class="d-none" type="checkbox" id="address_type" name="address_type"> 
+              <input class="d-none" type="checkbox" id="address_type" name="address_type" valeu="True" required>
               <input class="d-none" type="text" id="address" name="address">
               <h2 class="mt-3 fw-bold">어디서 만날까요?</h2>
               <div class="row row-cols-2 g-3 mt-3">
@@ -287,7 +287,7 @@
           <!-- 7페이지/ 인원제한 -->
           <div class="slide_item">
               <!-- input limit -->
-              <input class="d-none" type="text" id="limit" name="limit">
+              <input class="d-none" type="text" id="limit" name="limit" value="3">
               <h2 class="mt-3 fw-bold">몇 명과 함께할까요?</h2>
               <p class="text-muted mb-5">
                   본인을 포함한 총 참여 인원 수를 알려주세요.

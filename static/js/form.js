@@ -115,28 +115,27 @@ const offlinebtn = document.querySelector('#offline-btn');
 const onlinebtn = document.querySelector('#online-btn');
 const addrcheck = document.querySelector('#address_type');
 const addrbox = document.querySelector('#offline-box');
-const limit_addr = document.querySelector('#limit_addr');
+const address = document.querySelector('#address')
 
 offlinebtn.addEventListener('click', () => {
   offlinebtn.classList.toggle('addr-btn-active');
   onlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.toggle('d-none');
   addrcheck.checked = false
-  limit_addr.innerText = '오프라인'
 });
 onlinebtn.addEventListener('click', () => {
   onlinebtn.classList.toggle('addr-btn-active');
   offlinebtn.classList.remove('addr-btn-active');
   addrbox.classList.add('d-none');
   addrcheck.checked = true
-  limit_addr.innerText = '온라인'
+  address.value = '온라인'
 });
 
 // 키워드로 검색하기
 const keysearch = document.querySelector('#keysearch')
 const addrdiv = document.querySelector('#addrlist')
 const offbuttonaddr = document.querySelector('#offbuttonaddr')
-const address = document.querySelector('#address')
+
 var places = new kakao.maps.services.Places();
 
 var callback = function(result, status) {
