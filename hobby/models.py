@@ -11,7 +11,7 @@ class Categories(models.Model):
 class Hobby(models.Model):
     host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Hobby')
     title = models.CharField(max_length=80)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20)
     tags = models.CharField(max_length=80)
     created_at = models.DateTimeField(auto_now_add=True)
     meeting_day = models.DateTimeField()

@@ -54,7 +54,20 @@ margin: 0;
 .next_btn {
 background-color: #E84545;
 font-weight: 400;
-font-size: 12px;
+font-size: 16px;
+line-height: 15px;
+width: 90%;
+height: 40px;
+border-radius: 30px;
+color: #ffffff;
+border: 0px;
+outline: 0px;
+margin:auto;
+}
+.submit_btn {
+background-color: #E84545;
+font-weight: 400;
+font-size: 16px;
 line-height: 15px;
 width: 90%;
 height: 40px;
@@ -347,4 +360,13 @@ ul{
   outline:#E84545;
   box-shadow: 2px 2px 2px 3px #e8454559;
   border: 1px solid #E84545;
+}
+.submit_slide{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.btn-none{
+  background: none;
+  border: none;
 }

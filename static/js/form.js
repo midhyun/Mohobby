@@ -2,6 +2,7 @@ const slide = document.querySelector(".slide");
 let slideWidth = slide.clientWidth;
 const prevBtn = document.querySelector(".slide_prev_button");
 const nextBtn = document.querySelector(".slide_next_button");
+const submitBtn = document.querySelector(".submit_btn")
 const slideItems = document.querySelectorAll(".slide_item");
 const maxSlide = slideItems.length;
 let currSlide = 1;
@@ -10,11 +11,23 @@ const progress = document.querySelector('#progress_bar');
 progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`);
 const radio_1 = document.querySelector("#social_label");
 const radio_2 = document.querySelector("#club_label");
-
+// 엔터 submit prevent
+document.myform.addEventListener("keydown", evt => {
+  if (evt.code === "Enter") {
+  evt.preventDefault()};
+});
 // 다음 버튼 이벤트
 nextBtn.addEventListener("click", () => {
   currSlide++;
-  if (currSlide <= maxSlide) {
+  if (currSlide < maxSlide) {
+    progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
+    const offset = slideWidth * (currSlide - 1);
+    slideItems.forEach((i) => {
+      i.setAttribute("style", `left: ${-offset}px`);
+    });
+  } else if (currSlide == maxSlide) {
+    nextBtn.classList.add('d-none')
+    submitBtn.classList.remove('d-none')
     progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
     const offset = slideWidth * (currSlide - 1);
     slideItems.forEach((i) => {
@@ -28,6 +41,8 @@ nextBtn.addEventListener("click", () => {
 prevBtn.addEventListener("click", () => {
   currSlide--;
   if (currSlide > 0) {
+    nextBtn.classList.remove('d-none')
+    submitBtn.classList.add('d-none')
     progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`)
     const offset = slideWidth * (currSlide - 1);
     slideItems.forEach((i) => {
@@ -80,6 +95,18 @@ const categories = document.querySelectorAll('.categories');
 
 function changeinner(event) {
   n_tag.innerText = event.parentNode.parentNode.querySelector('#tag').value
+}
+// 이미지 미리보기
+function setThumbnail(event) {
+  var reader = new FileReader();
+
+  reader.onload = function(event) {
+    var img = document.createElement("img");
+    img.setAttribute("src", event.target.result);
+    document.querySelector("label#image_container").appendChild(img);
+  };
+
+  reader.readAsDataURL(event.target.files[0]);
 }
 
 // Date/ Time picker
