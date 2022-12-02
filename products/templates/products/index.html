@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% load humanize %}
+{% load static %}
+
 {% block css %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{% static 'css/products.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -10,206 +14,74 @@
   </div>
   <div class="p-4">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
+      {% for product in page_list %}
+        <div class="col">
+          <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
+            <div class="card h-100">
+              {% if product.thumbnail %}
+                <img src="{{ product.thumbnail.url }}" class="card-img-top img-fluid" alt="thumbnail">
+              {% else %}
+                <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title text-black">{{ product.title }}</h5>
+                <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
+                <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.username }}</a>
+              </div>
+            </div>
+          </a>
         </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card">
-          <img src="https://dummyimage.com/200/000/fff" class="card-img-top" alt="dummyimage">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
+      {% empty %}
+        <h5 class="fw-bold flex-fill text-center">데이터가 없습니다.</h5>
+      {% endfor %}
     </div>
 
     <div class="d-flex justify-content-end mb-4">
-      <a class="btn btn-primary" href="#">글쓰기</a>
+      <a class="btn btn-primary" href="{% url 'products:product_create' %}">글쓰기</a>
     </div>
 
     <ul class="pagination justify-content-center mb-4">
-      <li class="page-item disabled">
-        <a class="page-link">이전</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">1</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">2</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">3</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">4</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">5</a>
-      </li>
-      <li class="page-item">
-        <a class="page-link" href="#">다음</a>
-      </li>
+      {% if page_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_list.previous_page_number }}">이전</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#">이전</a>
+        </li>
+      {% endif %}
+      {% for page_number in page_list.paginator.page_range %}
+        {% if page_number >= page_list.number|add:-5 and page_number <= page_list.number|add:5 %}
+          {% if page_number == page_list.number %}
+            <li class="page-item active">
+              <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if page_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_list.next_page_number }}">다음</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#">다음</a>
+        </li>
+      {% endif %}
     </ul>
 
     <div class="mx-auto mb-4">
-      <form action="" method="GET">
-        <div class="row row-cols-2 justify-content-center g-1">
-          <div class="col-8 col-sm-6 col-md-4 col-lg-2">
-            <input type="search" class="form-control" name="q">
-          </div>
-          <div class="col-auto">
-            <button class="btn btn-primary" type="submit">
-              <i class="bi bi-search"></i>
-            </button>
+      <form action="{% url 'products:search' %}" method="GET">
+        <div class="row justify-content-center">
+          <div class="col-9 col-sm-7 col-md-5 col-lg-3">
+            <div class="d-flex">
+              <input type="search" class="form-control" name="q" required="true">
+              <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+            </div>
           </div>
         </div>
       </form>

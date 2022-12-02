@@ -21,4 +21,18 @@
   </div>
 {% endblock content %}
 
-{% block js %}{% endblock js %}
+{% block js %}
+  <!-- 주소 API -->
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script>
+    const locationInput = document.querySelector("#id_location")
+    locationInput.addEventListener("click", function () {
+      new daum.Postcode({
+        oncomplete: function (data) {
+          // 주소 정보를 해당 필드에 넣는다.
+          locationInput.value = `${data.sido} ${data.sigungu}`
+        }
+      }).open()
+    })
+  </script>
+{% endblock js %}

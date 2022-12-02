@@ -25,6 +25,11 @@ class ProductForm(forms.ModelForm):
             "content": "",
         }
         widgets = {
+            "location": forms.TextInput(
+                attrs={
+                    "readonly": "True",
+                }
+            ),
             "content": SummernoteWidget(),
         }
 
