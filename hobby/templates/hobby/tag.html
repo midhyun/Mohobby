@@ -2,15 +2,16 @@
 
 {% load django_bootstrap5 %}
 {% load static %}
-{% block css %}{% endblock css %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/hobby_index.css' %}">
+{% endblock %}
 
 {% block content %}
-<div>
+<div class="tag_top">
   <div class='container justify-content-center post_page'>
     <div style='width:100%'>
-      <!-- 인기 모임 글 -->
+      <!-- 태그 전체 글 -->
       <div class='my-5'>
-        <h3 class="main_color fw-bold">인기 소셜링</h3>
         <div class="d-flex justify-content-center">
           <div class='d-flex flex-column post_size'>
             <div class='d-flex my-2 post'>
@@ -28,13 +29,22 @@
                   <h3>본문에 제목이 들어갈 곳입니다.
                   </h3>
                   <small class='text-muted'>
-                    해당 글의
+
                     <i class="bi bi-calendar-check-fill"></i>
                     날짜
                     <i class="bi bi-geo-alt-fill"></i>
                     장소
                     <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
+                    인원수</small>
+                  <div class="profil_box d-flex">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                    <i class="bi bi-plus-circle"></i>
+                  </div>
                 </div>
               </div>
             </div>
