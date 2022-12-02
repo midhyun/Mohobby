@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
-
+{% load humanize %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
@@ -146,8 +146,27 @@
       {% else %}
         <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
       {% endif %}
-      <input class="comment-control" type="text" placeholder="댓글 달기...">
+      <form id="comment-form" data-review-id="{{ review.pk }}" action="{% url 'reviews:comment_create' review.pk %}" method="POST" >
+        <input class="comment-control" type="text" placeholder="댓글 달기...">
+        <input type="submit" value="제출">
+      </form>
     </li>
+    {% for comment in hobby.comment_set.all %}
+      <li class="comment-elem">
+        {% if comment.user.image %}
+          <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
+        {% else %}
+          <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+        {% endif %}
+        <div>
+          <p>{{ comment.user }}</p>
+          <p>{{ comment.content }}</p>
+          <div>
+            <span>{{ comment.created_at|naturaltime }}</span>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
   </ul>
   <!-- 비슷한 소셜링 -->
   {{ hobby.tags }}

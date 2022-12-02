@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .models import Hobby, Accepted
+from .models import Hobby, Accepted, HobbyComment
 
 class HobbyForm(forms.ModelForm):
     class Meta:
@@ -26,3 +26,10 @@ class AcceptedForm(forms.ModelForm):
     class Meta:
         model = Accepted
         fields = []
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = HobbyComment
+        fields = [
+            'content'
+        ]

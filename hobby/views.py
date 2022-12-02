@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import HobbyForm, AcceptedForm
-from .models import Hobby, Accepted, Tag
+from .forms import HobbyForm, AcceptedForm, CommentForm
+from .models import Hobby, Accepted, Tag, HobbyComment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
-
+from django.http import JsonResponse
+from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
 # Create your views here.
 
 
@@ -47,7 +48,7 @@ def detail(request, hobby_pk):
     return render(request, "hobby/detail.html", context)
 
 def index(request, category_name):
-    category_posts = Hobby.objects.filter(category=category_name)
+    category_posts = Hobby.objects.filter(category=category_name).annotate(joinmembers = Count('accepted', filter=Q(accepted__joined=True)))
     category_posts_hit = category_posts.order_by("-hits")[:3]
     category_posts_new = category_posts.order_by("-created_at")[:3]
     tags = Tag.objects.filter(category=category_name)
@@ -98,5 +99,36 @@ def reject(request, hobby_pk, user_pk):
         print('권한이 없습니다.')
     return redirect('hobby:detail', hobby_pk)
 
-def comment_create(request):
-    pass
+def comment_create(request, hobby_pk):
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            temp = comment_form.save(commit=False)
+            temp.user = request.user
+            temp.hobby_id = hobby_pk
+            temp.save()
+    context = {
+    }    
+    return JsonResponse(context)
+
+def comment_delete(request, comment_pk):
+    comment = get_object_or_404(HobbyComment, pk=comment_pk)
+    if comment.user == request.user:
+        comment.delete()
+    else:
+        print('권한이 없습니다.')
+    return JsonResponse({})
+
+def comment_like(request, comment_pk):
+    comment = get_object_or_404(HobbyComment, pk=comment_pk)
+    if request.user not in comment.like_user.all():
+        comment.like_user.add(request.user)
+        is_like = True
+    else:
+        comment.like_user.remove(request.user)
+        is_like = False
+    data = {
+        'is_like': is_like,
+        'likeCount': comment.like_user.count(),
+    }
+    return JsonResponse(data)
