@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordChangeForm
 from django.contrib.auth import get_user_model
 from .models import User
+
 class DateInput(forms.DateInput):
     input_type = "Date"
    
@@ -38,7 +39,18 @@ class CustomUserChangeForm(UserChangeForm):
             "art",
             "food",
             "develop",
+            "address",
+            "address_detail",
         ]
         widgets = {
             "birth": DateInput(),
         }
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def clean_new_password1(self):
+        old_password = self.cleaned_data.get('old_password')
+        new_password1 = self.cleaned_data.get('new_password1')
+
+        if old_password == new_password1:
+            raise forms.ValidationError('현재 암호와 동일합니다.')
+        return new_password1
