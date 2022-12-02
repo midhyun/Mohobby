@@ -1,0 +1,72 @@
+{% for comment in reply_list %}
+  <div class="d-flex mt-2">
+    <a href="#comment-{{ parent.pk }}" class="m-2"><i class="bi bi-arrow-return-right fs-5"></i></a>
+    <div class="flex-fill">
+      <div id="comment-{{ comment.pk }}-block" class="d-flex d-block">
+        {% if comment.user.image %}
+          <img class="img-thumbnail rounded" src="{{ comment.user.image.url }}" alt="image" style="max-width: 100px; max-height: 100px;">
+        {% else %}
+          <img class="img-thumbnail rounded" src="https://dummyimage.com/100/000/fff" alt="dummyimage" style="max-width: 100px; max-height: 100px;">
+        {% endif %}
+        <div class="ms-4 align-items-center flex-fill position-relative">
+          <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.username }}</a>
+          <p id="comment-{{ comment.pk }}-content" class="fs-5 my-2">{{ comment.content }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="mb-0">
+              {% if comment.updated_at_string %}
+                {{ comment.updated_at_string }}
+              {% else %}
+                {{ comment.updated_at|date:'Y-m-d H:i' }}
+              {% endif %}
+            </p>
+            {% if request.user.is_authenticated %}
+              <button class="btn btn-outline-secondary border-0 reply-btn" data-comment-id="{{ comment.pk }}">답글쓰기</button>
+            {% endif %}
+          </div>
+          {% if request.user.is_authenticated %}
+            <div id="reply-form-{{ comment.pk }}" class="d-none">
+              <form action="{% url 'products:reply_create' product.pk comment.pk %}" method="POST" class="reply-create-form" data-product-id="{{ product.pk }}">
+                {% csrf_token %}
+                <div class="d-flex">
+                  <input type="text" name="content" placeholder="답글을 남겨보세요 💬" class="form-control" required="true">
+                  <button class="btn btn-primary" type="submit" style="min-width: 60px;">등록</button>
+                </div>
+              </form>
+            </div>
+          {% endif %}
+          {% if request.user == comment.user %}
+            <div class="position-absolute top-0 end-0">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <button class="dropdown-item comment-update-btn" data-comment-id="{{ comment.pk }}">수정</button>
+                  </li>
+                  <li>
+                    <form action="{% url 'products:comment_delete' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
+                      {% csrf_token %}
+                      <button class="dropdown-item comment-delete-btn" type="submit">삭제</button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div id="comment-{{ comment.pk }}-update" class="flex-fill d-none">
+        <form action="{% url 'products:comment_update' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
+          {% csrf_token %}
+          <div class="d-flex">
+            <input type="text" name="content" placeholder="댓글을 남겨보세요 💬" class="form-control" required="true" value="{{ comment.content }}">
+            <button class="btn btn-primary" type="submit" style="min-width: 60px;">수정</button>
+            <button class="btn btn-secondary update-cancel-btn" type="button" data-comment-id="{{ comment.pk }}" style="min-width: 60px;">취소</button>
+          </div>
+        </form>
+      </div>
+      {% with parent=comment reply_list=comment.reply_set.all %}
+        {% include 'products/reply.html' %}
+      {% endwith %}
+    </div>
+  </div>
+{% endfor %}

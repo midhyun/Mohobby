@@ -18,7 +18,6 @@ def index(request):
     paginator = Paginator(products, 12)  # Paginator(분할될 객체, 페이지 당 담길 객체 수)
     page_list = paginator.get_page(page)  # 페이지 번호를 받아 해당 페이지를 리턴
     context = {
-        "products": products,
         "page_list": page_list,
     }
     return render(request, "products/index.html", context)
@@ -41,7 +40,6 @@ def search(request):
     paginator = Paginator(products, 8)  # Paginator(분할될 객체, 페이지 당 담길 객체 수)
     page_list = paginator.get_page(page)  # 페이지 번호를 받아 해당 페이지를 리턴
     context = {
-        "products": products,
         "query": query,
         "page_list": page_list,
     }
