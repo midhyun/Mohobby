@@ -1,40 +1,50 @@
 * {
   font-family: 'Noto Sans KR', sans-serif;
 }
+a{
+  text-decoration: none;
+  color: inherit;
+}
+a:hover{
+  color: inherit;
+}
 .body {
-  background-color: #e7e7e7;
+  background-color: #ebebeb;
 }
 .wrapper{
   width:750px;
   max-width: 100%;
   background: var(--white);
-  margin: 100px auto 20px;
+  margin: 10px auto 20px;
   padding: 50px;
   border-radius: 5px;
+}
+.create-height{
+  height: 90vh;
 }
 .progress-bar{
   transition: 0.15s
 }
 .slide {
     /* layout */
-    display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-  }
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
 .slide_item {
-overflow:auto;
-display: relative;
-align-items: flex-start;
-justify-content: center;
-position: relative;
-left: 0px;
-width: 100%;
-height: 650px;
-padding: 10px;
-flex-shrink: 0;
-transition: left 0.15s;
+  overflow:auto;
+  display: relative;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  left: 0px;
+  width: 100%;
+  height: 70vh;
+  padding: 10px;
+  flex-shrink: 0;
+  transition: left 0.15s;
 }
 .slide_button {
 display: flex;
@@ -47,8 +57,7 @@ border: none;
 background-color: var(--parent);
 }
 
-ul,
-li {
+ul, li {
 list-style-type: none;
 padding: 0;
 margin: 0;
@@ -107,6 +116,7 @@ margin: auto;
   border-radius: 10px;
   padding:20px;
   margin: 0px 0px 10px;
+  background-color: white;
   color: #BBBBBB;
 }
 
@@ -244,7 +254,7 @@ textarea:focus {
 
 /* 장소버튼 */
 .addr-btn{
-background-color: var(--parent);
+background-color: white;
 font-weight: 400;
 font-size: 16px;
 line-height: 15px;
@@ -253,7 +263,7 @@ height: 48px;
 border: solid 1px;
 border-color:#BBBBBB;
 border-radius: 10px;
-color: #BBBBBB;
+color: black;
 margin: auto;
 }
 
@@ -304,13 +314,13 @@ margin: auto;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .search-control:focus{
-  outline: none;
-  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.377)
+  outline: 3px solid rgba(0, 0, 0, 0.253);
+  transition: 0.15s
 }
 #offcanvasBottom2{
  height: 800px; 
 }
-ul{
+.addrlist li{
   cursor: pointer;
 }
 .addr_title{
@@ -436,6 +446,13 @@ ul{
   margin: auto;
   border: solid 2px #e7e7e7;
 }
+.member-image{
+  width:70px;
+  height: 70px;
+  border-radius: 100%;
+  margin: 10px;
+  border: solid 2px #e7e7e7;
+}
 .circle-box{
   transform: translateY(-40%);
   position:relative;
@@ -447,4 +464,48 @@ ul{
 }
 .transup{
   transform: translateY(-20%);
+}
+.detail-content{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size : 16px;
+  font-weight: 500;
+  overflow-wrap: normal;
+  white-space: pre-wrap;
+}
+.detail-title{
+  margin-top : 50px;
+  color: #E84545
+}
+.detail-subtitle{
+  font-size: 24px;
+  font-weight: 600;
+}
+.member-more{
+  cursor: pointer;
+}
+/* 댓글 */
+.comment-elem{
+  display: flex;
+  align-items: center;
+  max-height:500px;
+  overflow:hidden;
+}
+.comment-image{
+  width:35px;
+  height: 35px;
+  border-radius: 100%;
+  margin: 10px;
+  border: solid 2px #e7e7e7;
+}
+.comment-control{
+  background-color: var(--parent);
+  border:none;
+  border-radius:10px;
+  padding: 5px;
+  height: 35px;
+  width: 100%
+}
+.comment-control:focus{  
+  outline: none;
+  transition : 0.2s ease
 }

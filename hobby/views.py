@@ -37,8 +37,12 @@ def test(request):
 
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
+    accepted = Accepted.objects.filter(hobby=hobby, joined=True)
+    waiting = Accepted.objects.filter(hobby=hobby, joined=False)
     context = {
         'hobby':hobby,
+        'accepted': accepted,
+        'waiting': waiting,
     }
     return render(request, "hobby/detail.html", context)
 
@@ -62,13 +66,14 @@ def tag(request, tag_name):
 
 def call(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
-    accepted = Accepted.objects.filter(hobby=hobby).values_list('user_id')
-    if request.user.pk not in accepted[0]:
+    accepted = Accepted.objects.filter(hobby=hobby, user=request.user)
+    if not accepted.exists():
         aform = AcceptedForm()
         temp = aform.save(commit=False)
         temp.hobby = hobby
         temp.user = request.user
         temp.save()
+        print('호스트의 승인을 기다려주세요.')
     else:
         print('이미 신청한 소셜링입니다.')
     return redirect('hobby:detail', hobby_pk)
@@ -79,6 +84,7 @@ def approve(request, hobby_pk, user_pk):
         accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
         accepted.joined = True
         accepted.save()
+        print(f'{request.user}님의 가입을 승인했습니다.')
     else:
         print('권한이 없습니다.')
     return redirect('hobby:detail', hobby_pk)
@@ -91,3 +97,6 @@ def reject(request, hobby_pk, user_pk):
     else:
         print('권한이 없습니다.')
     return redirect('hobby:detail', hobby_pk)
+
+def comment_create(request):
+    pass
