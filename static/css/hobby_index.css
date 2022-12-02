@@ -24,14 +24,57 @@
     width: 100%;
 }
 
+.tag_profil {
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    margin: 4px
+}
+
+.bi-plus-circle {
+    color: #E84545;
+    font-size: 33px;
+    margin: 4px;
+    line-height: 25px;
+}
+
+.tag_top {
+    margin-top: 5%;
+}
+
 @media (max-width: 767px) {
     .tag_box {
         height: 180px;
         width: 100%;
     }
+
+    .tag_profil {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        margin: 3px
+    }
+
+    .bi-plus-circle {
+        color: #E84545;
+        font-size: 28px;
+        margin: 3px;
+        line-height: 25px;
+    }
+
+    .tag_top {
+        margin-top: 15%;
+    }
+
 }
 
 .index_title {
     color: #E84545;
+
+}
+
+
+.profil_box {
+    margin-top: 12px;
 
 }
