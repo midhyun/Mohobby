@@ -19,6 +19,25 @@
     color: white;
 }
 
+.post_title {
+    margin: 3px;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.post_detail {
+    margin: 7px;
+}
+
+.tag_a {
+    text-decoration: none;
+    color: black;
+}
+
+.tag_a:hover {
+    color: black;
+}
+
 .tag_box {
     height: 120px;
     width: 100%;
@@ -28,19 +47,25 @@
     width: 33px;
     height: 33px;
     border-radius: 50%;
-    margin: 4px
+    margin: 3px
 }
 
 .bi-plus-circle {
     color: #E84545;
     font-size: 33px;
-    margin: 4px;
+    margin: 3px;
     line-height: 25px;
 }
 
 .tag_top {
     margin-top: 5%;
 }
+
+.profil_box {
+    margin-top: 12px;
+
+}
+
 
 @media (max-width: 767px) {
     .tag_box {
@@ -66,15 +91,25 @@
         margin-top: 15%;
     }
 
+    .post_title {
+        margin: 3px;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .detail {
+        display: block;
+    }
+
+    .profil_box {
+        margin-top: 0px;
+
+    }
+
+
 }
 
 .index_title {
     color: #E84545;
-
-}
-
-
-.profil_box {
-    margin-top: 12px;
 
 }
