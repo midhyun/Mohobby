@@ -35,6 +35,7 @@ class Hobby(models.Model):
         format="JPEG",
         options={"quality": 80},
     )
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_hobby')
 
 class Accepted(models.Model):
     joindate = models.DateTimeField(auto_now=True)
@@ -51,3 +52,4 @@ class Comment(models.Model):
     hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comment')
