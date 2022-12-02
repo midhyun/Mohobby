@@ -4,7 +4,7 @@
 {% block css %}{% endblock css %}
 
 {% block content %}
-  <div class="d-flex justify-content-center align-items-center" style="margin-top: 7rem">
+  <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
     {% if request.resolver_match.url_name == "product_create" %}
       <h1 class="my-2">게시글 작성</h1>
     {% elif request.resolver_match.url_name == "product_update" %}

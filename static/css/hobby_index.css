@@ -1,30 +1,37 @@
-/* 카테고리 버튼 그룹 */
-.category_select {
-
-}
-.category_select input[type=checkbox]{
-    display: none;
-}
-.category_select input[type=checkbox]+label{
-    border-radius: 7px;
+.tag_button {
     height: 40px;
     line-height: 38px;
-    border: 1px solid #DADCE0;
-    font-weight:bold;
-    font-size: 14px;
-    padding: 0 10px;
-    outline: none;
-    background: none;
+    border: 0px;
+    outline: 0px;
+    margin: 3px;
+}
+
+.tag_text {
+    height: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #E84545;
     text-align: center;
-    margin-bottom: 5px;
+    display: inline-block;
+    border-radius: 30px;
+    padding-left: 12px;
+    padding-right: 12px;
+    color: white;
 }
-.category_select input[type=checkbox]+label{
-    color: 	#888888;
-    transition: 0.4s;
+
+.tag_box {
+    height: 120px;
+    width: 100%;
 }
-.category_select input[type=checkbox]:checked+label{
-    background-color: #e45454;
-    color: #fff;
-    transition: 0.4s;
+
+@media (max-width: 767px) {
+    .tag_box {
+        height: 180px;
+        width: 100%;
+    }
 }
-/* 카테고리 버튼 그룹 */
+
+.index_title {
+    color: #E84545;
+
+}

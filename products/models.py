@@ -1,5 +1,4 @@
 from django.db import models
-from django_summernote.fields import SummernoteTextField
 from multiselectfield import MultiSelectField
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill, Thumbnail
@@ -37,7 +36,7 @@ class Product(models.Model):
         processors=[Thumbnail(200, 200)],
         format="JPEG",
     )
-    content = SummernoteTextField()
+    content = models.TextField()
     contentStripTag = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
