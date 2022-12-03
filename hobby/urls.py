@@ -12,5 +12,5 @@ urlpatterns = [
     path('<int:hobby_pk>/<int:user_pk>/reject', views.reject, name='reject'),
     path('<int:hobby_pk>/comment_create', views.comment_create, name='comment_create'),
     path("index/<str:category_name>/", views.index, name="index"),
-    path("index/<str:tag_name>/", views.tag, name="tag"),
+    path("index/tag/<str:tag_name>/", views.tag, name="tag"),
 ]

@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/hobby_index.css' %}">
 {% endblock %}
 {% block content %}
 
@@ -12,7 +11,7 @@
   <div class="tag_box container">
     <h2 class="index_title fw-bold">{{ category_name }}</h2>
     {% for tag in tags %}
-    <a href="" style="float: left;">
+    <a href="{% url 'hobby:tag' tag.tag  %}" style="float: left;">
       <div class="tag_button position-relative">
         <span class="tag_text">
           # {{ tag.tag }}

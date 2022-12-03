@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% block content %}
+{% load static %}
 
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
 <!-- 프로필 -->
   <!-- 팔로워 모달 -->
   <div class="modal fade title-font" id="followerModal" tabindex="-1" aria-labelledby="followerModalLabel" aria-hidden="true">
@@ -16,7 +21,7 @@
               <a href="{% url 'accounts:detail' follower.pk %}" class="modal-participater" style="color: black; text-decoration: none;">
                 <div class="d-flex align-items-center">
                   <!-- 프로필 이미지가 있으면 -->
-                  <img src="{{ follower.profile_pic.url }}">
+                  <img src="{{ follower.image.url }}" style="width:50px; height:50px;">
                   <!-- 이름이 있으면 이름, 없으면 아이디 -->
                   <h1>{{ follower.username }}</h1>
                 </div>
@@ -27,7 +32,7 @@
           {% endif %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn pos-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -44,7 +49,7 @@
             {% for following in user.followings.all %}
               <a href="{% url 'accounts:detail' following.pk %}" class="modal-participater" style="color: black; text-decoration: none;">
                 <div class="d-flex align-items-center">
-                  <img src="{{ following.profile_pic.url }}">
+                  <img src="{{ following.image.url }}" style="width:50px; height:50px;">
                   <!-- 이름이 있으면 이름, 없으면 아이디 -->
                   <h1>{{ following.username }}</h1>
                 </div>
@@ -55,7 +60,7 @@
           {% endif %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn pos-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -71,24 +76,37 @@
           <!--프사-->
           <div class="pf-right">
             <div class='pf-detail d-flex justify-content-around'>
-            <div>
-              <h3 class="display-7 fw-bolder">프로필 사진</h3>
+
+            <div class="profile-m">
+                <h3 class="">{{user}}님의 프로필</h3>
+                {% if user.image %}
+                <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
+                {% endif %}
               <p class="small mb-1 lh-lg">
-                {{user}}<br>
             </div>
             <!--프사 옆-->
-            <div>
-                <h4 class="mt-3">Hobbys</h4>
-                sports : {{user.sports}}
-                <br>
-                travel : {{user.travel}}
-                <br>
-                art : {{user.art}}
-                <br>
-                food : {{user.food}}
-                <br>
-                develop : {{user.develop}}
-              </p>
+            <div class="acoounts-all">
+                <h4 class="mt-5">Hobbys</h4>
+                <div class="accounts-height">
+                <div class="accounts-hoddys">
+                {% for sports in user.sports %}
+                <p class="all-tag">#{{ sports }}&nbsp</p>
+                {% endfor %}
+                {% for travel in user.travel %}
+                <p class="all-tag">#{{ travel }}&nbsp</p>
+                {% endfor %}
+                {% for art in user.art %}
+                <p class="all-tag">#{{ art }}&nbsp</p>
+                {% endfor %}
+                {% for food in user.food %}
+                <p class="all-tag">#{{ food }}&nbsp</p>
+                {% endfor %}
+                {% for develop in user.develop %}
+                <p class="all-tag">#{{ develop }}&nbsp</p>
+                {% endfor %}
+              </div>
+              </div>
+  
             <!-- 팔로우 표시 -->
             <div class="counts d-flex">
               <div class="me-5">
@@ -114,13 +132,11 @@
             </div>
             <div class="pf-btns">
               {% if request.user != user %}
-                <a href="{% url 'accounts:follow' user.pk %}">
                   {% if request.user in user.followers.all %}
-                    <button type="button" class="btn btn-danger">팔로우 취소</button>
+                    <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-dark follow-btn">Unfollow</button>
                   {% else %}
-                    <button type="button" class="btn btn-primary">팔로우</button>
+                    <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-dark follow-btn">Follow</button>
                   {% endif %}
-                </a>
               {% endif %}
               {% if request.user == user %}
               <a href="{% url 'accounts:update' user.pk %}" type="button" class="btn btn-secondary">수정</a>
@@ -139,7 +155,7 @@
                       정말 탈퇴하시겠습니까?
                     </div>
                     <div class="modal-footer">
-                      <a href="{% url 'accounts:delete' %}" type="button" class="btn neg-btn">탈퇴</a>
+                      <a href="{% url 'accounts:delete' %}" type="button" class="btn btn-dark">탈퇴</a>
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
                   </div>
@@ -149,40 +165,143 @@
             </div>
         </div>
       </div>
+      <br>
+      <div class='mt-5 text-center'>
+      <nav id="tab-button-nav">
+      <button class="tab-button" data-tab-section="tab-section-1">Community</button>
+      <button class="tab-button" data-tab-section="tab-section-2">Hobby</button>
+      <button class="tab-button" data-tab-section="tab-section-3">product</button>
+      </nav>
+    </div>
+      <main>
+        <br>
+        <section id="tab-section-1" class="tab-section">
+          <h3 class="text-center mb-5">Community</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for community in user.community_set.all %}
+                <div class="card">
+                  {% if community.image %}
+                  <img src="{{ community.image.url }}" class="img-feed" alt="community">
+                  {% else %}
+                  <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ community.title }}</h5>
+                    <p class="card-text">{{ community.content }}</p>
+                    <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
+                  </div>
+                </div>
+            {% endfor %}
+            </div>
+        </section>
+        <section id="tab-section-2" class="tab-section" hidden>
+          <h3 class="text-center mb-5">Hobby</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for hobby in user.hobby_set.all %}
+                  <div class="card">
+                    {% if hobby.image %}
+                    <img src="{{ hobby.image.url }}" class="img-feed" alt="hobby">
+                    {% else %}
+                    <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                    {% endif %}
+                    <div class="card-body">
+                      <p class="card-title">제목 : {{ hobby.title }}</p>
+                      <p class="card-text">내용 : {{ hobby.content }}</p>
+                      <p class="card-text">주소 : {{ hobby.address }}</p>
+                      <p class="card-text">활동 : {{ hobby.tags }}</p>
+                      <p class="card-text">시간 : {{ hobby.meeting_day }}</p>
+                      <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+        </section>
+        
+        <section id="tab-section-3" class="tab-section" hidden>
+          <h3 class="text-center mb-5">product</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+          {% for product in user.product_set.all %}
+                <div class="card">
+                  {% if product.image %}
+                  <img src="{{ product.image.url }}" class="img-feed" alt="product">
+                  {% else %}
+                  <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">{{ product.content|safe }}</p>
+                    <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                  </div>
+                </div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
     </section>
+    
     
 {% endblock content %}
 
-{% block script %}
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    const followForm = document.querySelector('.follow-form')
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const followBtn = document.querySelector('#follow-btn')
 
-    followForm.addEventListener('submit', function (event) {
-    event.preventDefault()
-    axios({
-     method: 'post',
-     url: `/accounts/${followForm.dataset.userPk}/follow/`,
-     headers: { 'X-CSRFToken': csrftoken },
-     }).then((response) => {
-     // 팔로우 버튼 토글
-      const followBtn = document.querySelector('.follow-btn')
-      if (response.data.is_followed === false) {
-        followBtn.value = 'Follow'
-       } else {
-         followBtn.value = 'Unfollow'
-     }
-
-      // 팔로잉/팔로워 수 변경
-     const followingCnt = document.querySelector('.following-cnt')
-      const followerCnt = document.querySelector('.follower-cnt')
-
-       followingCnt.innerText = response.data.following_cnt
-     followerCnt.innerText = response.data.follower_cnt
+  // 버튼을 클릭하면
+  followBtn.addEventListener('click', function (event) {
+      // 팔로우 할 유저 아이디를 불러옴
+      axios({
+          method: 'get',
+          url: `/accounts/${event.target.dataset.userId}/follow/`
       })
-    })
-  </script>
-{% endblock script %}
+          .then(response => {
+              // 응답 데이터를 출력함
+              console.log(response.data)
+              // 만약에 팔로우 상태일 경우
+              if (response.data.isFollowing === true) {
+                  // 팔로우 취소 버튼을 위임하고
+                  event.target.classList.add('unfollow-button')
+                  followBtn.innerText = 'Unfollow'
+                  // 팔로우 버튼을 없앰
+                  event.target.classList.remove('follow-button')
+                  // 팔로우 상태가 아닐 경우
+              } else {
+                  // 팔로우 버튼을 위임하고
+                  event.target.classList.add('follow-button')
+                  followBtn.innerText = 'Follow'
+                  // 팔로우 취소 버튼을 없앰
+                  event.target.classList.remove('unfollow-button')
+              }
+              // 팔로우 숫자 변수 설정하고
+              const followerscount = document.querySelector('#followers-count')
+              const followingcount = document.querySelector('#following-count')
+              
+              followerscount.innerText = response.data.followers
+              followingcount.innerText = response.data.followings
+              // console.log(followingcount)
+          })
+  })
+</script>
+<script>
+  const $nav = document.querySelector('#tab-button-nav')
+  const $sections = document.querySelectorAll('.tab-section');
+
+  $nav.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('tab-button')) {
+      return;
+    }
+    
+    const focusedTabId = e.target.dataset.tabSection;
+
+    $sections.forEach(($section) => {
+      if ($section.id === focusedTabId) {
+        $section.removeAttribute('hidden');
+      } else {
+        $section.setAttribute('hidden', true);
+      }
+    });
+  });
+</script>
+{% endblock js %}
 
 

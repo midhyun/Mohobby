@@ -5,8 +5,10 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from multiselectfield import MultiSelectField
 from imagekit.processors import Thumbnail
+
 # Create your models here.
 # 이름 비밀번호 설명 주소 생년월일
+
 
 class User(AbstractUser):
     GENDER_CHOICES = (
@@ -20,12 +22,12 @@ class User(AbstractUser):
     address = models.CharField(max_length=50)  # 주소
     address_detail = models.CharField(max_length=40, null=True, blank=True)  # 상세주소
     birth = models.DateTimeField(default=timezone.now)  # 나이
-    followings = models.ManyToManyField('self',symmetrical=False, related_name='followers')
+    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")
 
     image = ProcessedImageField(
-        upload_to='image/',
-        format='JPEG',
-        options={'quality': 30},
+        upload_to="image/",
+        format="JPEG",
+        options={"quality": 30},
         blank=True,
     )
 
@@ -57,7 +59,7 @@ class User(AbstractUser):
         choices=STORTS_CHOICES,
         blank=True,
     )
-    
+
     Travel_CHOICES = (
         ("복합문화공간", "복합문화공간"),
         ("테마파크", "테마파크"),
@@ -72,8 +74,8 @@ class User(AbstractUser):
         max_length=100,
         choices=Travel_CHOICES,
         blank=True,
-    )  
-    
+    )
+
     ART_CHOICES = (
         ("전시", "전시"),
         ("영화", "영화"),
@@ -88,11 +90,11 @@ class User(AbstractUser):
     )
 
     art = MultiSelectField(  # 관심 문화*예술 선택
-        max_length=100,
+        max_length=4,
         choices=ART_CHOICES,
         blank=True,
-    ) 
-    
+    )
+
     FOOD_CHOICES = (
         ("맛집투어", "맛집투어"),
         ("카페", "카페"),
@@ -114,7 +116,7 @@ class User(AbstractUser):
         max_length=100,
         choices=FOOD_CHOICES,
         blank=True,
-    )    
+    )
 
     DEVELOP_CHOICES = (
         ("습관만들기", "습관만들기"),
@@ -128,18 +130,11 @@ class User(AbstractUser):
         ("사이드프로젝트", "사이드프로젝트"),
     )
 
-    develop = MultiSelectField(  # 관심 음식 선택
-        max_length=100,
-        choices=DEVELOP_CHOICES,
-        blank=True
-    )  
+    develop = MultiSelectField(max_length=100, choices=DEVELOP_CHOICES, blank=True)  # 관심 음식 선택
 
-    
-    
     @property
     def get_photo_url(self):
 
         if self.profile_pic:
             return self.profile_pic.url
         return None
-    
