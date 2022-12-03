@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -11,12 +11,13 @@ from django.contrib.auth import get_user_model
 
 # Create your views here.
 
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
     else:
         form = CustomUserCreationForm()
@@ -25,11 +26,10 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
-    data = {
-        'accounts' : accounts
-    }
+    data = {"accounts": accounts}
     return JsonResponse(data)
 
 
@@ -80,6 +80,7 @@ def follow(request, pk):
 
     return JsonResponse(data)
 
+
 @login_required
 def delete(request):
     request.user.delete()
@@ -90,7 +91,7 @@ def delete(request):
 @login_required
 def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
-    
+
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
         user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
