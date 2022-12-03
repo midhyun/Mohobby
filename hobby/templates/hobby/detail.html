@@ -1,60 +1,211 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% load static %}
-
+{% load humanize %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
 {% block content %}
-<!-- 이미지 배너 -->
-<div class="wrapper">
-    <div class="container image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:500px; ">
-        <span class="badge bg-danger mx-1" style="height:20px">잔여 {{ hobby.limit }}자리</span><span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
-    </div>
-    <!-- 본문 -->
-    <div class="transup">
-      <div class="card py-0">
-        <div class="circle-box">
-            {% if hobby.host.image %}
-              <img class="circle-image" src="{{ hobby.host.image.url }}" alt="">
-            {% else %}
-              <img class="circle-image" src="{% static 'image/default_profile_img.jpg' %}" alt="">
-            {% endif %}
-            <p class="text-center text-muted">{{ hobby.host }}</p>
-        </div>
-        <p class="circle-title">{{hobby.title}}</p>
-      </div>
-      <p class="text-center mt-3" style="font-size:20px;">
-        ⏰
-        {% if hobby.recruit_type %}
-          오프라인 {{ hobby.address }}
+<div class="detail-wrapper wrapper" style="margin-top: 100px;">
+  <!-- 이미지 배너 -->
+  <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
+    <span class="badge bg-danger mx-1" style="height:20px">{{ accepted|length }}명 참여중</span>
+    <span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
+  </div>
+  <!-- 본문 -->
+  <div class="transup">
+    <div class="card py-0">
+      <a href="{% url 'accounts:detail' hobby.host.pk %}"><div class="circle-box">
+        {% if hobby.host.image %}
+        <img class="circle-image" src="{{ hobby.host.image.url }}" alt="">
         {% else %}
-          온라인
+        <img class="circle-image" src="{% static 'image/default_profile_img.jpg' %}" alt="">
         {% endif %}
-        📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
-      </p>
+        <p class="text-center text-muted">{{ hobby.host }}</p>
+      </div></a>
+      <p class="circle-title">{{hobby.title}}</p>
     </div>
-    
-    {{ hobby.content }}
-    <!-- 안내사항 -->
-    <ul>
-      <li>제한인원: {{ hobby.limit }}</li>
-      <li>회비: {{ hobby.entry_fee }}</li>
-      <li>활동일: {{ hobby.meeting_day }}</li>
-      <li>장소: {{ hobby.address }}</li>
-    </ul>
-    
-    
-    
-    
+    <p class="text-center mt-3" style="font-size:16px;">
+      ⏰
+      {% if hobby.recruit_type %}
+      오프라인 {{ hobby.address }}
+      {% else %}
+      온라인
+      {% endif %}
+      📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
+    </p>
+  </div>
+
+  <pre class="detail-content">{{ hobby.content }}</pre>
+  <!-- 참여 중인 유저  -->
+  <ul id="accepted-user">
+    <li class="detail-title">멤버소개</li>
+    <li class="detail-subtitle">우리 반갑게 만나요</li>
+    {% for member in accepted %}
+    <a href="{% url 'accounts:detail' member.user.pk %}"><li class="d-flex">
+        {% if member.user.image %}
+        <img class="member-image" src="{{ member.user.image.url }}" alt="">
+        {% else %}
+        <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+        {% endif %}
+        <p class="m-3">
+          <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
+          <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
+        </p>
+    </li></a>
+    {% endfor %}
+  </ul>
+  <!-- 승인 대기 멤버 -->
+  <ul>
+    <li class="detail-title">승인 대기 멤버</li>
+    <li class="detail-subtitle d-flex justify-content-between">
+      <span>호스트의 승인을 기다리고 있어요</span>
+      <span class="text-muted fs-6 member-more" type="button" id="offline-box" class="" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasBottom2" aria-controls="offcanvasBottom">더보기》</span>
+    </li>
+    <li class="d-flex" style="overflow:hidden;">
+      {% for member in waiting %}
+        <a href="{% url 'accounts:detail' member.user.pk %}">
+          {% if member.user.image %}
+            <img class="member-image" src="{{ member.user.image.url }}" alt="">
+          {% else %}
+            <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
+        </a>
+      {% endfor %}
+    </li>
+    <!-- 현재 승락 대기중인 멤버 -->
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom2">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasBottomLabel">호스트의 승인을 기다리고 있어요</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <hr>
+        <div class="offcanvas-body small">
+          {% if waiting %}
+            <ul class="" id="addrlist">
+              {% for member in waiting %}
+              <li class="d-flex justify-content-between"><a class="d-flex" href="{% url 'accounts:detail' member.user.pk %}">
+                  {% if member.user.image %}
+                  <img class="member-image" src="{{ member.user.image.url }}" alt="">
+                  {% else %}
+                  <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+                  {% endif %}
+                  <p class="m-3">
+                    <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
+                    <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
+                  </p></a>
+                  <div>
+                    <a href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
+                    <a href="{% url 'hobby:reject' hobby.pk member.user.pk %}">거절하기</a>
+                  </div>
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <div class="text-center mt-5">
+                <p>
+                    <ion-icon name="people" size="large"></ion-icon>
+                </p>
+                <h5>아직 신청한 멤버가 없습니다.</h5>
+                <p class="text-muted">조금만 더 기다려 주세요!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+  </ul>
+  <!-- 안내사항 -->
+  <ul>
+    <li class="detail-title">안내사항</li>
+    <li class="detail-subtitle">자세한 정보를 알려드릴게요</li>
+    <li>👨‍👨‍👦 {{ hobby.limit }}명</li>
+    <li>💵 {{ hobby.entry_fee }}원</li>
+    <li>📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}</li>
+    <li>🗺 {{ hobby.address }}</li>
     <!-- 지도넣기 -->
-    <div></div>
-    <!-- 참여 중인 유저  -->
-    <!-- 댓글 -->
-    <!-- 비슷한 소셜링 -->
-    {{ hobby.tags }}
+    {% if hobby.address == 온라인 %}
+    {% else %}
+    {% endif %}
+    <div id="map" style="width:100%;height:350px; border-radius:10px; border: solid 5px #e7e7e7"></div>
+  </ul>
+
+  <!-- 댓글 -->
+  <ul>
+    <li class="detail-title">커뮤니티</li>
+    <li class="detail-subtitle">소셜링이 궁금하다면 댓글을 남겨보세요</li>
+    <li>
+      <ion-icon name="heart-outline" size="large"></ion-icon>
+      <ion-icon style="color:#E84545" name="heart" size="large"></ion-icon>
+      <ion-icon name="chatbubble-outline" size="large"></ion-icon>
+      <ion-icon name="ellipsis-horizontal"></ion-icon>
+    </li>
+    <!-- 댓글작성 -->
+    <li class="comment-elem">
+      {% if user.image %}
+        <img class="comment-image" src="{{ user.image.url }}" alt="">
+      {% else %}
+        <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+      {% endif %}
+      <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}" method="POST" onsubmit="submitComment(this.id)">
+        {% csrf_token %}
+        <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+        <input class="d-none" type="submit" value="제출">
+      </form>
+    </li>
+    <!-- 댓글목록 -->
+    <li id="comment-list">
+    {% for comment in comments.all %}
+    <hr>
+        <div class="comment-elem" >
+          {% if comment.user.image %}
+            <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
+          {% else %}
+            <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
+          <div>
+            <p>{{ comment.user }}</p>
+            <p>{{ comment.content }}</p>
+            <div>
+              <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 0개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </li>
+  </ul>
+  <!-- 비슷한 소셜링 -->
+  {{ hobby.tags }}
 </div>
 {% endblock content %}
 {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
+<script type="text/javascript" src="{% static 'js/hobby_detail.js' %}" ></script>
+<!-- 주소로 지도띄우기 스크립트 -->
+<script>
+  var places = new kakao.maps.services.Places();
+  var callback = function(result, status) {
+      // 주소가 유효할 경우
+      if (status === kakao.maps.services.Status.OK) {
+          console.log(result[0]);
+          var mapContainer = document.getElementById('map'),
+              mapOption = { 
+                  center: new kakao.maps.LatLng(result[0].y, result[0].x),
+                  level: 3
+              };
+
+          var map = new kakao.maps.Map(mapContainer, mapOption);
+          var markerPosition  = new kakao.maps.LatLng(result[0].y, result[0].x); 
+          var marker = new kakao.maps.Marker({
+              position: markerPosition
+          });
+          marker.setMap(map);
+      }
+  };
+  // 주소를 입력하면 콜백함수 실행
+  places.keywordSearch('{{ hobby.address }}', callback);
+</script>
 {% endblock js %}

@@ -4,6 +4,7 @@ from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 # Create your models here.
 class Categories(models.Model):
     category = models.CharField(max_length=20)
@@ -35,6 +36,7 @@ class Hobby(models.Model):
         format="JPEG",
         options={"quality": 80},
     )
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_hobby')
 
 class Accepted(models.Model):
     joindate = models.DateTimeField(auto_now=True)
@@ -45,3 +47,11 @@ class Accepted(models.Model):
 class Tag(models.Model):
     tag = models.CharField(max_length=20, unique=True)
     category = models.CharField(max_length=20, null=True) 
+
+class HobbyComment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comment')
+
