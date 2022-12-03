@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
-{% block content %}
+{% load static %}
 
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
 <!-- 프로필 -->
   <!-- 팔로워 모달 -->
   <div class="modal fade title-font" id="followerModal" tabindex="-1" aria-labelledby="followerModalLabel" aria-hidden="true">
@@ -27,7 +32,7 @@
           {% endif %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn pos-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -55,7 +60,7 @@
           {% endif %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn pos-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -71,26 +76,37 @@
           <!--프사-->
           <div class="pf-right">
             <div class='pf-detail d-flex justify-content-around'>
-            <div>
-                <h3 class="">{{user}}</h3>
+
+            <div class="profile-m">
+                <h3 class="">{{user}}님의 프로필</h3>
                 {% if user.image %}
                 <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
                 {% endif %}
               <p class="small mb-1 lh-lg">
             </div>
             <!--프사 옆-->
-            <div>
+            <div class="acoounts-all">
                 <h4 class="mt-5">Hobbys</h4>
-                sports : {{user.sports}}
-                <br>
-                travel : {{user.travel}}
-                <br>
-                art : {{user.art}}
-                <br>
-                food : {{user.food}}
-                <br>
-                develop : {{user.develop}}
-              </p>
+                <div class="accounts-height">
+                <div class="accounts-hoddys">
+                {% for sports in user.sports %}
+                <p class="all-tag">#{{ sports }}&nbsp</p>
+                {% endfor %}
+                {% for travel in user.travel %}
+                <p class="all-tag">#{{ travel }}&nbsp</p>
+                {% endfor %}
+                {% for art in user.art %}
+                <p class="all-tag">#{{ art }}&nbsp</p>
+                {% endfor %}
+                {% for food in user.food %}
+                <p class="all-tag">#{{ food }}&nbsp</p>
+                {% endfor %}
+                {% for develop in user.develop %}
+                <p class="all-tag">#{{ develop }}&nbsp</p>
+                {% endfor %}
+              </div>
+              </div>
+  
             <!-- 팔로우 표시 -->
             <div class="counts d-flex">
               <div class="me-5">
@@ -139,7 +155,7 @@
                       정말 탈퇴하시겠습니까?
                     </div>
                     <div class="modal-footer">
-                      <a href="{% url 'accounts:delete' %}" type="button" class="btn neg-btn">탈퇴</a>
+                      <a href="{% url 'accounts:delete' %}" type="button" class="btn btn-dark">탈퇴</a>
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     </div>
                   </div>
@@ -149,6 +165,78 @@
             </div>
         </div>
       </div>
+      <br>
+      <div class='mt-5 text-center'>
+      <nav id="tab-button-nav">
+      <button class="tab-button" data-tab-section="tab-section-1">Community</button>
+      <button class="tab-button" data-tab-section="tab-section-2">Hobby</button>
+      <button class="tab-button" data-tab-section="tab-section-3">product</button>
+      </nav>
+    </div>
+      <main>
+        <br>
+        <section id="tab-section-1" class="tab-section">
+          <h3 class="text-center mb-5">Community</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for community in user.community_set.all %}
+                <div class="card">
+                  {% if community.image %}
+                  <img src="{{ community.image.url }}" class="img-feed" alt="community">
+                  {% else %}
+                  <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ community.title }}</h5>
+                    <p class="card-text">{{ community.content }}</p>
+                    <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
+                  </div>
+                </div>
+            {% endfor %}
+            </div>
+        </section>
+        <section id="tab-section-2" class="tab-section" hidden>
+          <h3 class="text-center mb-5">Hobby</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for hobby in user.hobby_set.all %}
+                  <div class="card">
+                    {% if hobby.image %}
+                    <img src="{{ hobby.image.url }}" class="img-feed" alt="hobby">
+                    {% else %}
+                    <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                    {% endif %}
+                    <div class="card-body">
+                      <p class="card-title">제목 : {{ hobby.title }}</p>
+                      <p class="card-text">내용 : {{ hobby.content }}</p>
+                      <p class="card-text">주소 : {{ hobby.address }}</p>
+                      <p class="card-text">활동 : {{ hobby.tags }}</p>
+                      <p class="card-text">시간 : {{ hobby.meeting_day }}</p>
+                      <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+        </section>
+        
+        <section id="tab-section-3" class="tab-section" hidden>
+          <h3 class="text-center mb-5">product</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+          {% for product in user.product_set.all %}
+                <div class="card">
+                  {% if product.image %}
+                  <img src="{{ product.image.url }}" class="img-feed" alt="product">
+                  {% else %}
+                  <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">{{ product.content|safe }}</p>
+                    <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                  </div>
+                </div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
     </section>
     
     
@@ -193,6 +281,26 @@
               // console.log(followingcount)
           })
   })
+</script>
+<script>
+  const $nav = document.querySelector('#tab-button-nav')
+  const $sections = document.querySelectorAll('.tab-section');
+
+  $nav.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('tab-button')) {
+      return;
+    }
+    
+    const focusedTabId = e.target.dataset.tabSection;
+
+    $sections.forEach(($section) => {
+      if ($section.id === focusedTabId) {
+        $section.removeAttribute('hidden');
+      } else {
+        $section.setAttribute('hidden', true);
+      }
+    });
+  });
 </script>
 {% endblock js %}
 

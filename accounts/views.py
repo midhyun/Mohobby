@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
@@ -13,12 +14,13 @@ from django.contrib import messages
 
 # Create your views here.
 
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
     else:
         form = CustomUserCreationForm()
@@ -27,11 +29,10 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
-    data = {
-        'accounts' : accounts
-    }
+    data = {"accounts": accounts}
     return JsonResponse(data)
 
 
@@ -74,6 +75,7 @@ def follow(request, pk):
         accounts.save()
     # 상세 페이지로 redirect
     return redirect("accounts:detail", pk)
+
 
 
 @login_required
