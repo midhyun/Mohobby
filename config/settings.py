@@ -40,6 +40,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # 숫자 천 단위 콤마 포맷
+    "django.contrib.humanize",
     # Allauth를 위한 Apps
     "django.contrib.sites",
     "allauth",

@@ -76,9 +76,12 @@
           <!--프사-->
           <div class="pf-right">
             <div class='pf-detail d-flex justify-content-around'>
+
             <div class="profile-m">
                 <h3 class="">{{user}}님의 프로필</h3>
+                {% if user.image %}
                 <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
+                {% endif %}
               <p class="small mb-1 lh-lg">
             </div>
             <!--프사 옆-->

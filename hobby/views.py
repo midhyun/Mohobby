@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import HobbyForm, AcceptedForm
 from .models import Hobby, Accepted, Tag
+from django.db.models import Avg, Count, Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
@@ -35,17 +36,20 @@ def create(request):
 def test(request):
     return render(request, "hobby/test.html")
 
+
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
     context = {
-        'hobby':hobby,
+        "hobby": hobby,
     }
     return render(request, "hobby/detail.html", context)
 
+
+# 카테고리별 인기글 , 최신글, 전체 글
 def index(request, category_name):
     category_posts = Hobby.objects.filter(category=category_name)
     category_posts_hit = category_posts.order_by("-hits")[:3]
-    category_posts_new = category_posts.order_by("-created_at")[:3]
+    category_posts_new = category_posts.order_by("-pk")[:3]
     tags = Tag.objects.filter(category=category_name)
     context = {
         "category_name": category_name,
@@ -57,12 +61,28 @@ def index(request, category_name):
     return render(request, "hobby/index.html", context)
 
 
+# 전체 인기글, 최신글, 태그글 모음
 def tag(request, tag_name):
-    return render(request)
+    if tag_name == "hits":
+        tag_posts = Hobby.objects.all().order_by("-hits")
+    if tag_name == "news":
+        tag_posts = (
+            Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        )
+    else:
+        tag_posts = Hobby.objects.filter(tags=tag_name)
+
+    context = {
+        "tag_posts": tag_posts,
+        "tag_name": tag_name,
+    }
+
+    return render(request, "hobby/tag.html", context)
+
 
 def call(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
-    accepted = Accepted.objects.filter(hobby=hobby).values_list('user_id')
+    accepted = Accepted.objects.filter(hobby=hobby).values_list("user_id")
     if request.user.pk not in accepted[0]:
         aform = AcceptedForm()
         temp = aform.save(commit=False)
@@ -70,8 +90,9 @@ def call(request, hobby_pk):
         temp.user = request.user
         temp.save()
     else:
-        print('이미 신청한 소셜링입니다.')
-    return redirect('hobby:detail', hobby_pk)
+        print("이미 신청한 소셜링입니다.")
+    return redirect("hobby:detail", hobby_pk)
+
 
 def approve(request, hobby_pk, user_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
@@ -80,8 +101,9 @@ def approve(request, hobby_pk, user_pk):
         accepted.joined = True
         accepted.save()
     else:
-        print('권한이 없습니다.')
-    return redirect('hobby:detail', hobby_pk)
+        print("권한이 없습니다.")
+    return redirect("hobby:detail", hobby_pk)
+
 
 def reject(request, hobby_pk, user_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
@@ -89,5 +111,5 @@ def reject(request, hobby_pk, user_pk):
         accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
         accepted.delete()
     else:
-        print('권한이 없습니다.')
-    return redirect('hobby:detail', hobby_pk)
+        print("권한이 없습니다.")
+    return redirect("hobby:detail", hobby_pk)

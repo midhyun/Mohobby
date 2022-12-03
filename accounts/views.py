@@ -1,5 +1,7 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 # Create your views here.
 
@@ -60,25 +63,19 @@ def detail(request, pk):
     return render(request, "accounts/detail.html", context)
 
 
-@login_required
 def follow(request, pk):
-    user = get_user_model().objects.get(pk=pk)
+    accounts = get_user_model().objects.get(pk=pk)
+    if request.user == accounts:
+        return redirect("accounts:detail", pk)
+    if request.user in accounts.followers.all():
+        accounts.followers.remove(request.user)
+        accounts.save()
+    else:
+        accounts.followers.add(request.user)
+        accounts.save()
+    # 상세 페이지로 redirect
+    return redirect("accounts:detail", pk)
 
-    if request.user != user:
-        if request.user not in user.followers.all():
-            user.followers.add(request.user)
-            is_following = True
-        else:
-            user.followers.remove(request.user)
-            is_following = False
-
-    data = {
-        "isFollowing": is_following,
-        "followers": user.followers.all().count(),
-        "followings": user.followings.all().count(),
-    }
-
-    return JsonResponse(data)
 
 
 @login_required
@@ -91,7 +88,6 @@ def delete(request):
 @login_required
 def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
-
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
         user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
@@ -106,3 +102,22 @@ def update(request, pk):
         "user_info": user_info,
     }
     return render(request, "accounts/update.html", context)
+
+def password_change(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "비밀번호를 변경하였습니다.")
+            return redirect('main')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+
+    context = {
+        "form" : form
+    }
+
+
+
+    return render(request, 'accounts/password.html', context)
