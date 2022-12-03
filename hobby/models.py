@@ -50,7 +50,7 @@ class Tag(models.Model):
 
 class HobbyComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE)
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comment')

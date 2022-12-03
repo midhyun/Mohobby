@@ -38,12 +38,14 @@ def test(request):
 
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
+    comments = HobbyComment.objects.filter(hobby=hobby).order_by('-pk')
     accepted = Accepted.objects.filter(hobby=hobby, joined=True)
     waiting = Accepted.objects.filter(hobby=hobby, joined=False)
     context = {
         'hobby':hobby,
         'accepted': accepted,
         'waiting': waiting,
+        'comments':comments,        
     }
     return render(request, "hobby/detail.html", context)
 
@@ -107,7 +109,17 @@ def comment_create(request, hobby_pk):
             temp.user = request.user
             temp.hobby_id = hobby_pk
             temp.save()
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+    comments_data = []
+    for comment in comments:
+        created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        comments_data.append({
+            "user": comment.user.username,
+            "content": comment.content,
+            "created_at": created_at,
+        })
     context = {
+        "comments_data": comments_data,
     }    
     return JsonResponse(context)
 

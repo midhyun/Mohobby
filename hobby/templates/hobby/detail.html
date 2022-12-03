@@ -139,40 +139,48 @@
       <ion-icon name="chatbubble-outline" size="large"></ion-icon>
       <ion-icon name="ellipsis-horizontal"></ion-icon>
     </li>
-    <!-- 댓글목록 -->
+    <!-- 댓글작성 -->
     <li class="comment-elem">
       {% if user.image %}
         <img class="comment-image" src="{{ user.image.url }}" alt="">
       {% else %}
         <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
       {% endif %}
-      <form id="comment-form" data-review-id="{{ review.pk }}" action="{% url 'reviews:comment_create' review.pk %}" method="POST" >
-        <input class="comment-control" type="text" placeholder="댓글 달기...">
-        <input type="submit" value="제출">
+      <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}" method="POST" onsubmit="submitComment(this.id)">
+        {% csrf_token %}
+        <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+        <input class="d-none" type="submit" value="제출">
       </form>
     </li>
-    {% for comment in hobby.comment_set.all %}
-      <li class="comment-elem">
-        {% if comment.user.image %}
-          <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
-        {% else %}
-          <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-        {% endif %}
-        <div>
-          <p>{{ comment.user }}</p>
-          <p>{{ comment.content }}</p>
+    <!-- 댓글목록 -->
+    <li id="comment-list">
+    {% for comment in comments.all %}
+    <hr>
+        <div class="comment-elem" >
+          {% if comment.user.image %}
+            <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
+          {% else %}
+            <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
           <div>
-            <span>{{ comment.created_at|naturaltime }}</span>
+            <p>{{ comment.user }}</p>
+            <p>{{ comment.content }}</p>
+            <div>
+              <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 0개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+            </div>
           </div>
         </div>
+        {% endfor %}
       </li>
-    {% endfor %}
   </ul>
   <!-- 비슷한 소셜링 -->
   {{ hobby.tags }}
 </div>
 {% endblock content %}
 {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
 <script type="text/javascript" src="{% static 'js/hobby_detail.js' %}" ></script>

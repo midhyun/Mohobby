@@ -509,3 +509,7 @@ margin: auto;
   outline: none;
   transition : 0.2s ease
 }
+.comment-elem p{
+  margin: 0px;
+  padding: 0px;
+}
