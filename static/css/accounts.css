@@ -6,7 +6,6 @@
 
 a:hover { 
     text-decoration:none;
-    color: #FFF !important;
 }
 
 /* .page_wrap {
@@ -40,6 +39,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .side_bar {
@@ -100,12 +100,12 @@ background-color: transparent;
 }
 
 .input-file-button {
-  padding: 6px 25px;
-  background-color:#E84545;
-  border-radius: 7px;
-  color: white;
-  cursor: pointer;
-  text-decoration: none;
+    padding: 6px 25px;
+    background-color:#E84545;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 
@@ -359,13 +359,13 @@ background-color: transparent;
 
 .signup_btn {
     background-color: #E84545;
-    width: 400px;
+    width: 500px;
     height: 55px;
     border-radius: 30px;
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px; 
+    margin: 20px 0px 20px 0px; 
 }
 
 .social_button {

@@ -108,8 +108,8 @@ def password_change(request):
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)
             messages.success(request, "비밀번호를 변경하였습니다.")
+            update_session_auth_hash(request, user)
             return redirect('main')
     else:
         form = CustomPasswordChangeForm(request.user)
@@ -117,7 +117,4 @@ def password_change(request):
     context = {
         "form" : form
     }
-
-
-
     return render(request, 'accounts/password.html', context)

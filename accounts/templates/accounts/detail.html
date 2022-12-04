@@ -80,7 +80,9 @@
             <div class="profile-m">
                 <h3 class="">{{user}}님의 프로필</h3>
                 {% if user.image %}
-                <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
+                  <img class="id-img rounded-4" id="profile_img" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
+                {% else %}
+                  <img class="id-img rounded-4" id="profile_img" style="width:280px; height:280px;" src="{% static '/image/default_profile_img.jpg' %}" class='mb-2'>
                 {% endif %}
               <p class="small mb-1 lh-lg">
             </div>
@@ -192,7 +194,7 @@
                   </div>
                 </div>
             {% endfor %}
-            </div>
+          </div>
         </section>
         <section id="tab-section-2" class="tab-section" hidden>
           <h3 class="text-center mb-5">Hobby</h3>
@@ -302,6 +304,7 @@
     });
   });
 </script>
+
 {% endblock js %}
 
 
