@@ -22,6 +22,8 @@ def signup(request):
             user = form.save()
             auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
+        else:
+            messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
     context = {
