@@ -41,6 +41,7 @@ class CustomUserChangeForm(UserChangeForm):
             "develop",
             "address",
             "address_detail",
+            "image",
         ]
         widgets = {
             "birth": DateInput(),

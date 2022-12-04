@@ -210,7 +210,6 @@ else:
 
 # Message Framework
 # https://docs.djangoproject.com/en/4.1/ref/contrib/messages/
-
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
