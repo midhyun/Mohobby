@@ -17,13 +17,21 @@
         <!-- 첫번째 페이지 (ID, PW)-->
         <div class="slide_item">
           <div class="form_list">
+            {% if messages %}
+            <div class="messages">
+                {% for msg in messages %}       
+                <div>
+                    <div class="alert alert-danger" role="alert">
+                      {{msg.message}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <!-- input : 아이디, -->
             <div class="form_field">
               {% render_field form.username id="id" class="user_input" placeholder="아이디" %}
               <div class="error_next_box"></div>
-              {% if form.username.errors %}
-                <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
-              {% endif %} 
             </div>
             <!-- input : 비밀번호 -->
             <div class="form_field">
@@ -65,7 +73,7 @@
             </div>
             <!-- input : 상세 주소 -->
             <div class="form_field">
-              {% render_field form.address_detail class="user_input" placeholder="상세주소"%}
+              {% render_field form.address_detail class="user_input" placeholder="상세주소 (선택)"%}
             </div>
           </div>
         </div>
@@ -80,7 +88,7 @@
                 <div>
                   {% render_field form.image id="imgInput" class="image_input" placeholder="프로필 이미지" %}
                   <label class="input-file-button" for="imgInput">
-                    프로필 사진을 선택하세요
+                    프로필 사진 지정 <small>(선택)</small>
                   </label>
                 </div>
               </div>
@@ -91,6 +99,9 @@
         <div class="slide_item">
           <div class="category_form">
             <div class="category_list">
+              <div>
+                <label class="birth_label">취미 <small>(선택)</small></label>
+              </div>
               <label class="form-label">Sports</label>
               <div id="id_sports">
                 {% for value, text in form.sports.field.choices %}

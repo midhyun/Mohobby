@@ -22,6 +22,8 @@ def signup(request):
             user = form.save()
             auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
+        else:
+            messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -43,8 +45,11 @@ def login(request):
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect("main")
+        else:
+            messages.warning(request, '비밀번호나 아이디가 틀립니다.')
     else:
         form = AuthenticationForm()
+
     context = {"form": form}
     return render(request, "accounts/login.html", context)
 
@@ -52,6 +57,7 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
+    messages.warning(request, '로그아웃 하였습니다.')
     return redirect("accounts:login")
 
 
