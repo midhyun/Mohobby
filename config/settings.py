@@ -51,6 +51,13 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.kakao",
     "allauth.socialaccount.providers.google",
+    # 설치한 라이브러리
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     "accounts",
     "hobby",
     "community",
@@ -247,3 +254,10 @@ SUMMERNOTE_CONFIG = {
 LOGIN_REDIRECT_URL = "/"  # 로그인 후 리디렉션할 페이지
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
