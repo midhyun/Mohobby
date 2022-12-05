@@ -8,7 +8,11 @@
 {% block content %}
 <div class="detail-wrapper wrapper" style="margin-top: 100px;">
   <!-- 이미지 배너 -->
-  <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
+  {% if hobby.image %}
+    <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
+  {% else %}
+    <div class="image-banner p-5" style="background-image: url('https://dummyimage.com/750x300/000/fff'); height:300px; ">
+  {% endif %}
     <span class="badge bg-danger mx-1" style="height:20px">{{ accepted|length }}명 참여중</span>
     <span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
   </div>
@@ -123,10 +127,10 @@
     <li>📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}</li>
     <li>🗺 {{ hobby.address }}</li>
     <!-- 지도넣기 -->
-    {% if hobby.address == 온라인 %}
+    {% if hobby.address == '온라인' %}
     {% else %}
+      <div id="map" style="width:100%;height:350px; border-radius:10px; border: solid 5px #e7e7e7"></div>
     {% endif %}
-    <div id="map" style="width:100%;height:350px; border-radius:10px; border: solid 5px #e7e7e7"></div>
   </ul>
 
   <!-- 댓글 -->
@@ -134,9 +138,14 @@
     <li class="detail-title">커뮤니티</li>
     <li class="detail-subtitle">소셜링이 궁금하다면 댓글을 남겨보세요</li>
     <li>
-      <ion-icon name="heart-outline" size="large"></ion-icon>
-      <ion-icon style="color:#E84545" name="heart" size="large"></ion-icon>
-      <ion-icon name="chatbubble-outline" size="large"></ion-icon>
+      {% if request.user in hobby.like_user.all %}
+      <ion-icon onclick="likeHobby(this)" class="hobby-like-btn" data-hobby-id="{{ hobby.pk }}" style="color:#E84545" name="heart" size="large"></ion-icon>
+      {% else %}
+      <ion-icon onclick="likeHobby(this)" class="hobby-like-btn" data-hobby-id="{{ hobby.pk }}" style="color:#E84545" name="heart-outline" size="large"></ion-icon>
+      {% endif %}
+      <span id="like-count" style="font-size:24px; width:40px;">{{ hobby.like_user.count }} </span>
+      <ion-icon name="chatbubble-outline" size="large" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon>
       <ion-icon name="ellipsis-horizontal"></ion-icon>
     </li>
     <!-- 댓글작성 -->
@@ -154,24 +163,80 @@
     </li>
     <!-- 댓글목록 -->
     <li id="comment-list">
-    {% for comment in comments.all %}
-    <hr>
-        <div class="comment-elem" >
-          {% if comment.user.image %}
-            <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
-          {% else %}
-            <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-          {% endif %}
-          <div>
-            <p>{{ comment.user }}</p>
-            <p>{{ comment.content }}</p>
+      {% for comment in comments.all|slice:":7" %}
+        <hr>
+        <div class="d-flex justify-content-between">
+          <div class="comment-elem" >
+            {% if comment.user.image %}
+              <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
+            {% else %}
+              <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+            {% endif %}
             <div>
-              <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 0개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+              <p>{{ comment.user }}</p>
+              <p>{{ comment.content }}</p>
+              <div>
+                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+              </div>
             </div>
           </div>
+          <div>
+            {% if request.user in comment.like_user.all %}
+              <ion-icon id="comment-{{comment.pk}}-likebtn" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
+            {% else %}
+              <ion-icon id="comment-{{comment.pk}}-likebtn" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
+            {% endif %}
+          </div>
         </div>
-        {% endfor %}
-      </li>
+      {% endfor %}
+    </li>
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom3">
+      <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasBottomLabel">소셜링이 궁금하다면 댓글을 남겨보세요.</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <hr>
+      <div class="offcanvas-body small">
+        {% if comments %}
+          <ul class="" id="commentlist">
+            {% for comment in comments.all %}
+            <hr>
+            <div class="d-flex justify-content-between">
+              <div class="comment-elem" >
+                {% if comment.user.image %}
+                  <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
+                {% else %}
+                  <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+                {% endif %}
+                <div>
+                  <p>{{ comment.user }}</p>
+                  <p>{{ comment.content }}</p>
+                  <div>
+                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {% if request.user in comment.like_user.all %}
+                  <ion-icon id="comment-{{comment.pk}}-likebtn-off" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
+                {% else %}
+                  <ion-icon id="comment-{{comment.pk}}-likebtn-off" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+          </ul>
+          {% else %}
+          <div class="text-center mt-5">
+              <p>
+                  <ion-icon name="people" size="large"></ion-icon>
+              </p>
+              <h5>아직 댓글이 없습니다.</h5>
+              <p class="text-muted">다양한 의견을 공유해보세요!</p>
+          </div>
+          {% endif %}
+      </div>
+  </div>
   </ul>
   <!-- 비슷한 소셜링 -->
   {{ hobby.tags }}
@@ -180,6 +245,9 @@
 {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
