@@ -44,11 +44,12 @@
             </div>
           </div>
           <div class="form_field">
+            
             <div>
               <h6 style="color:#888888;">비밀번호 변경</h6>
               <hr>
               <div>
-                <a class="input-file-button" href="{% url 'accounts:password_change' %}">비밀번호 변경</a>
+                <a class="input-file-button" href="{% url 'accounts:password_change' request.user.pk %}">비밀번호 변경</a>
               </div>
             </div>
           </div>
@@ -201,7 +202,7 @@
 </script>
 <script>
   function readURL(input) {
-    // 파일이 들어오면 실행
+
     if (input.files && input.files[0]) {
       var reader = new FileReader();
 

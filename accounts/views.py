@@ -1,5 +1,6 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
@@ -109,14 +110,15 @@ def update(request, pk):
     }
     return render(request, "accounts/update.html", context)
 
-def password_change(request):
+def password_change(request, pk):
+    user_info = get_user_model().objects.get(pk=pk)
+
     if request.method == 'POST':
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, "비밀번호를 변경하였습니다.")
             update_session_auth_hash(request, user)
-            return redirect('main')
+            return redirect("accounts:detail", user_info.pk)
     else:
         form = CustomPasswordChangeForm(request.user)
 
@@ -124,3 +126,84 @@ def password_change(request):
         "form" : form
     }
     return render(request, 'accounts/password.html', context)
+
+import os
+def kakao_login(request):
+    app_key = os.getenv("KAKAO_REST_API_KEY")
+    redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
+    kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+
+    return redirect(
+        f'{kakao_auth_api}&client_id={app_key}&redirect_uri={redirect_uri}'
+    )
+
+import requests
+def KakaoCallBack(request):
+    auth_code = request.GET.get('code')
+    kakao_token_api = 'https://kauth.kakao.com/oauth/token'
+    data = {
+        'grant_type': 'authorization_code',
+        'client_id': os.getenv("KAKAO_REST_API_KEY"),
+        'redirection_uri': 'http://localhost:8000/accounts/login/kakao/callback',
+        'code': auth_code,
+    }
+    token_response = requests.post(kakao_token_api, data=data)
+    access_token = token_response.json().get('access_token')
+    user_info_response = requests.get('https://kapi.kakao.com/v2/user/me', headers={"Authorization": f'Bearer ${access_token}'})
+
+    kakao_user_data = user_info_response.json()
+
+    kakao_user_nickname = kakao_user_data['properties']['nickname']
+    
+
+    # 1.
+    if get_user_model().objects.filter(username=kakao_user_nickname).exists():
+        kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
+        auth_login(request, kakao_user)
+        return redirect(request.GET.get("next") or "main")
+    else:
+        kakao_login_user = get_user_model()()
+        kakao_login_user.username = kakao_user_nickname
+        kakao_login_user.save()
+        kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
+    
+        auth_login(request, kakao_user)
+        return redirect("accounts:social_signup", kakao_user.pk)
+
+    # 2.
+    # if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
+    #     kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    #     auth_login(request, kakao_user)
+    #     return redirect(request.GET.get("next") or "main")
+    # else:
+    #     kakao_login_user = get_user_model()()
+    #     kakao_login_user.username = kakao_user_nickname
+    #     kakao_login_user.kakao_id = kakao_user_id
+    #     kakao_login_user.save()
+    #     kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    
+    #     auth_login(request, kakao_user)
+    #     return redirect("accounts:social_signup", kakao_user.pk)
+
+@login_required
+def social_signup(request, pk):
+    user_info = get_user_model().objects.get(pk=pk)
+    if request.user == user_info:
+        if request.method == "POST":
+            form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect("main")
+            else: 
+                messages.warning(request, '필수 정보를 입력해주세요.')
+        else:
+            form = CustomUserChangeForm(instance=request.user)
+    
+    context = {
+        "form": form,
+        "user_info": user_info,
+    }
+
+    return render(request, 'accounts/social_signup.html', context)
+
+
