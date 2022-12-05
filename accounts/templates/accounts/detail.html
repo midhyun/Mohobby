@@ -80,9 +80,7 @@
             <div class="profile-m">
                 <h3 class="">{{user}}님의 프로필</h3>
                 {% if user.image %}
-                  <img class="id-img rounded-4" id="profile_img" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
-                {% else %}
-                  <img class="id-img rounded-4" id="profile_img" style="width:280px; height:280px;" src="{% static '/image/default_profile_img.jpg' %}" class='mb-2'>
+                <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
                 {% endif %}
               <p class="small mb-1 lh-lg">
             </div>
@@ -115,7 +113,7 @@
                 <p class="fs-6" data-bs-target="#followerModal" data-bs-toggle="modal">
                   팔로워
                   <span class="ms-2 fw-bold" id="followers-count">
-                    {{ user.followers.all|length }}
+                    {{ user.followers.count }}
                   </span>
                 </p>
               </div>
@@ -123,7 +121,7 @@
                 <p class="fs-6" data-bs-target="#followingModal" data-bs-toggle="modal">
                     팔로잉
                     <span class="ms-2 fw-bold" id="followings-count">
-                    {{ user.followings.all|length }}</span>
+                    {{ user.followings.count}}</span>
                 </p>
               </div>
               <div class="me-5">
@@ -134,12 +132,20 @@
             </div>
             <div class="pf-btns">
               {% if request.user != user %}
-                  {% if request.user in user.followers.all %}
-                    <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-dark follow-btn">Unfollow</button>
-                  {% else %}
-                    <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-dark follow-btn">Follow</button>
-                  {% endif %}
-              {% endif %}
+            <form action="{% url 'accounts:follow' user.pk %}" method="POST">
+              {% if request.user.is_authenticated %}
+                {% csrf_token %}
+                {% if request.user in user.followers.all %}
+                  <div id="follow-btn" data-post-id="{{ user.pk }}" class="btn btn-dark follow-btn" type="submit">
+                    Unfollow</div>
+                {% else %}
+                  <div id="follow-btn" data-post-id="{{ user.pk }}" class="btn btn-dark follow-btn" type="submit">
+                    Follow
+                  </div>
+                {% endif %}
+              </form>
+            {% endif %}
+          {% endif %}
               {% if request.user == user %}
               <a href="{% url 'accounts:update' user.pk %}" type="button" class="btn btn-secondary">수정</a>
               <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -177,7 +183,7 @@
     </div>
       <main>
         <br>
-        <section id="tab-section-1" class="tab-section">
+        <section id="tab-section-1" class="tab-section" hidden>
           <h3 class="text-center mb-5">Community</h3>
           <div class="row row-cols-1 row-cols-md-4 g-4">
             {% for community in user.community_set.all %}
@@ -194,7 +200,7 @@
                   </div>
                 </div>
             {% endfor %}
-          </div>
+            </div>
         </section>
         <section id="tab-section-2" class="tab-section" hidden>
           <h3 class="text-center mb-5">Hobby</h3>
@@ -248,40 +254,22 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   const followBtn = document.querySelector('#follow-btn')
-
-  // 버튼을 클릭하면
   followBtn.addEventListener('click', function (event) {
-      // 팔로우 할 유저 아이디를 불러옴
-      axios({
-          method: 'get',
-          url: `/accounts/${event.target.dataset.userId}/follow/`
-      })
-          .then(response => {
-              // 응답 데이터를 출력함
-              console.log(response.data)
-              // 만약에 팔로우 상태일 경우
-              if (response.data.isFollowing === true) {
-                  // 팔로우 취소 버튼을 위임하고
-                  event.target.classList.add('unfollow-button')
-                  followBtn.innerText = 'Unfollow'
-                  // 팔로우 버튼을 없앰
-                  event.target.classList.remove('follow-button')
-                  // 팔로우 상태가 아닐 경우
-              } else {
-                  // 팔로우 버튼을 위임하고
-                  event.target.classList.add('follow-button')
-                  followBtn.innerText = 'Follow'
-                  // 팔로우 취소 버튼을 없앰
-                  event.target.classList.remove('unfollow-button')
-              }
-              // 팔로우 숫자 변수 설정하고
-              const followerscount = document.querySelector('#followers-count')
-              const followingcount = document.querySelector('#following-count')
-              
-              followerscount.innerText = response.data.followers
-              followingcount.innerText = response.data.followings
-              // console.log(followingcount)
-          })
+    console.log(event.target.dataset)
+    axios({method: 'get', url: `/accounts/${event.target.dataset.postId}/follow/`}).then(response => {
+      console.log(event.target.dataset)
+      console.log(response.data)
+      if (response.data.is_followed === true) {
+        event.target.classList.add('unfollow-button')
+        event.target.classList.remove('follow-button')
+        followBtn.innerText = "Unfollow"
+      } else {
+        event.target.classList.add('follow-button')
+        event.target.classList.remove('unfollow-button')
+        followBtn.innerText = "Follow"
+      }
+      location.reload();
+    })
   })
 </script>
 <script>
@@ -304,7 +292,6 @@
     });
   });
 </script>
-
 {% endblock js %}
 
 

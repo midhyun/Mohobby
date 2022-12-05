@@ -77,17 +77,40 @@ outline: 0px;
 margin:auto;
 }
 .submit_btn {
-background-color: #E84545;
+background-color: white;
+color: #E84545;
 font-weight: 400;
 font-size: 16px;
 line-height: 15px;
 width: 90%;
 height: 40px;
 border-radius: 30px;
-color: #ffffff;
-border: 0px;
+border: solid 1px #E84545;
 outline: 0px;
 margin:auto;
+}
+.submit_btn:hover {
+  background-color: #E84545;
+  color: #ffffff;
+  transition: 0.15s
+}
+.close_btn {
+  background-color: #ffffff;
+  color: #BBBBBB;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 15px;
+  width: 90%;
+  height: 40px;
+  border-radius: 30px;
+  border: solid 1px #BBBBBB;
+  outline: 0px;
+  margin:auto;
+  }
+.close_btn:hover {
+  background-color: #BBBBBB;
+  color: #ffffff;
+  transition: 0.15s
 }
 .input_btn{
 background-color: #E84545;
@@ -521,4 +544,25 @@ margin: auto;
 }
 .comment-like-btn{
   cursor: pointer;
+}
+.accept-btn{
+  position: fixed;
+  bottom: 120px;
+  right: 23px;
+}
+.accept-btn div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 4px 4px 25px 0px #0714271f;
+}
+
+.footer_accept {
+  color: rgb(232, 69, 69);
+  font-size: 12px;
+  font-weight: bolder !important;
 }

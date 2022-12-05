@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
+
 # Create your views here.
 
 
@@ -205,5 +206,3 @@ def social_signup(request, pk):
     }
 
     return render(request, 'accounts/social_signup.html', context)
-
-

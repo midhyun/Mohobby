@@ -17,4 +17,3 @@ urlpatterns = [
     path("login/kakao/callback/", views.KakaoCallBack),
     path("social_signup/<int:pk>", views.social_signup, name="social_signup"),
 ]
-

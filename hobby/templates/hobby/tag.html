@@ -14,7 +14,7 @@
         <div class="d-flex justify-content-center">
           <div class='d-flex flex-column post_size'>
             {% for tag_post in tag_posts %}
-            <a href="" class="tag_a">
+            <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
               <div class='d-flex my-2 post'>
                 <div class="col-4">
                   {% if tag_post.image %}

@@ -5,6 +5,7 @@ app_name = "hobby"
 
 urlpatterns = [
     path("create", views.create, name="create"),
+    path('save/', views.save, name='save'),
     path('test', views.test, name='test'),
     path('<int:hobby_pk>', views.detail, name='detail'),
     path('<int:hobby_pk>/call', views.call, name='call'),
@@ -15,4 +16,5 @@ urlpatterns = [
     path("index/<str:tag_name>/", views.tag, name="tag"),
     path('<int:hobby_pk>/like_hobby', views.like_hobby, name='like_hobby'),
     path('<int:comment_pk>/like_comment', views.like_comment, name='like_comment'),
+    path('<int:comment_pk>/comment_delete',views.comment_delete, name='comment_delete'),
 ]
