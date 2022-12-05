@@ -320,6 +320,9 @@ margin: auto;
 #offcanvasBottom2{
  height: 800px; 
 }
+#offcanvasBottom3{
+  height: 800px; 
+ }
 .addrlist li{
   cursor: pointer;
 }
@@ -512,4 +515,10 @@ margin: auto;
 .comment-elem p{
   margin: 0px;
   padding: 0px;
+}
+.hobby-like-btn{
+  cursor: pointer;
+}
+.comment-like-btn{
+  cursor: pointer;
 }

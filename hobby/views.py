@@ -112,15 +112,21 @@ def comment_create(request, hobby_pk):
     comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
     comments_data = []
     for comment in comments:
+        if request.user in comment.like_user.all():
+            is_like = True
+        else: is_like = False
         created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
         comments_data.append({
+            "pk": comment.pk,
             "user": comment.user.username,
             "content": comment.content,
             "created_at": created_at,
+            "is_like": is_like,
+            'likeCount': comment.like_user.count(),
         })
     context = {
         "comments_data": comments_data,
-    }    
+    }
     return JsonResponse(context)
 
 def comment_delete(request, comment_pk):
@@ -142,5 +148,33 @@ def comment_like(request, comment_pk):
     data = {
         'is_like': is_like,
         'likeCount': comment.like_user.count(),
+    }
+    return JsonResponse(data)
+
+def like_hobby(request, hobby_pk):
+    hobby = get_object_or_404(Hobby, pk=hobby_pk)
+    if request.user not in hobby.like_user.all():
+        hobby.like_user.add(request.user)
+        is_like = True
+    else:
+        hobby.like_user.remove(request.user)
+        is_like = False
+    data = {
+        'is_like': is_like,
+        'likeCount': hobby.like_user.count()
+    }
+    return JsonResponse(data)
+
+def like_comment(request, comment_pk):
+    comment = get_object_or_404(HobbyComment, pk=comment_pk)
+    if request.user not in comment.like_user.all():
+        comment.like_user.add(request.user)
+        is_like = True
+    else:
+        comment.like_user.remove(request.user)
+        is_like = False
+    data = {
+        'is_like': is_like,
+        'likeCount': comment.like_user.count()
     }
     return JsonResponse(data)
