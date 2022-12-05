@@ -1,3 +1,13 @@
+/* 초기화 */
+.form_field a { 
+    text-decoration:none;
+    color: #FFF;
+}
+
+a:hover { 
+    text-decoration:none;
+}
+
 /* .page_wrap {
     height: 680px;
     display: flex;
@@ -17,14 +27,88 @@
     flex-shrink: 0;
     transition: left 0.9s;
 } */
+.update_wrap {
+    display: flex;
+}
+
+.update_wrapper {
+    width: 600px;
+    max-width: 100%;
+    padding: 50px 0px 50px 0px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.side_bar {
+    width: 300px;
+    height: 500px;
+    margin-top: 130px;
+}
+
+.side_bar_menu a:hover {
+    background-color: transparent;
+    color: #888888;
+}
+  
+.side_bar_menu.active a {
+    color: #fff;
+}
+
+.side_bar_menu.active a:hover {
+background-color: transparent;
+}
+
+.side_bar_item {
+    border-radius: 8px;
+    padding: 10px;
+    color: #888888;
+    border: 1px solid #DADCE0;
+}
+
+.side_bar_item.active, .side_bar_item.active:focus, .side_bar_item.active:hover {
+    background-color: #e45454;
+    color: #fff;
+}
+
+
+.side_bar ul li {
+    list-style: none;
+
+}
+
+.side_bar_title {
+    color: #e45454;
+    font-weight: bold;
+}
+
+.side_bar_menu {
+    margin-bottom: 20px;
+    width: 350px;
+}
+
+
+.update_label {
+    color: #E84545;
+    
+}
+.prev_button {
+    background: none;
+    border: none;
+}
 
 .input-file-button {
-  padding: 6px 25px;
-  background-color:#E84545;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
+    padding: 6px 25px;
+    background-color:#E84545;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
 }
+
+
 
 .image_input {
     display: none;
@@ -93,7 +177,6 @@
     padding: 50px;
     border-radius: 5px;
     margin-top: 50px;
-
 }
 
 .login_banner {
@@ -156,7 +239,7 @@
     border-radius: 7px;
     height: 56px;
     width: 250px;
-    border: 1px solid #DADCE0;
+    border: 1px solid #a6a8ae;
     line-height: 55px;
     font-weight:bold;
     font-size: 14px;
@@ -187,7 +270,7 @@
     border-radius: 7px;
     height: 40px;
     line-height: 38px;
-    border: 1px solid #DADCE0;
+    border: 1px solid #7f7575;
     font-weight:bold;
     font-size: 14px;
     padding: 0 10px;
@@ -222,7 +305,7 @@
 .user_input {
     height: 56px;
     width: 100%;
-    border: 1px solid #DADCE0;
+    border: 1px solid #a6a8ae;
     border-radius: 7px;
     font-size: 14px;
     padding: 0 10px;
@@ -234,7 +317,7 @@
 .sm_user_input {
     height: 36px;
     width: 40%;
-    border: 1px solid #DADCE0;
+    border: 1px solid #a6a8ae;
     border-radius: 7px;
     font-size: 14px;
     padding: 0 10px;
@@ -276,13 +359,13 @@
 
 .signup_btn {
     background-color: #E84545;
-    width: 400px;
+    width: 500px;
     height: 55px;
     border-radius: 30px;
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px; 
+    margin: 20px 0px 20px 0px; 
 }
 
 .social_button {
@@ -323,4 +406,47 @@
     align-items: center;
     justify-content: center;
     border-radius: 30px;
+}
+
+.img-feed {
+    width: 100%;
+    height: 259px;
+}
+.tab-button{
+    background-color: #E84545;
+    width: 200px;
+    height: 55px;
+    border-radius: 30px;
+    color: #ffffff;
+    border: 0px;
+    outline: 0px;
+    margin: 20px; 
+}
+.tab-button:focus {
+    background-color: rgb(177, 12, 12);
+    }
+.profile-m{
+    margin-left: 11%;
+}
+
+.acoounts-all{
+    margin-left: 32%;
+}
+.accounts-hoddys{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 50%;
+    min-width: 300px;
+}    
+.all-tag{
+    background-color: #E84545;
+    background-size: contain;
+    color: #ffffff;
+    border-radius: 20px;
+    text-align: center;
+    margin: 0.2rem;
+}
+.accounts-height{
+    height: 200px;
 }

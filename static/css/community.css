@@ -5,12 +5,16 @@
 .main_title {
   color: #E84545;
 }
-
+.write{
+ 
+  border: 3px solid #E84545;
+  border-radius: 30px;
+}
 #slideShow{
   width: 1000px;
   height: 500px;
   position: relative;
-  margin: 50px auto;
+  margin: 0px auto;
   overflow: hidden;   
 }
 
@@ -88,36 +92,39 @@
   outline: 0px;
   margin: 20px;
 }
-
-
-/* create 이미지 캐러셀 */
-.kind_wrap {
-  border:2px solid black; 
-  width:100%; 
-  max-width:800px; 
-  margin:0 auto; 
-  position: relative;
+.feed_img{
+  border-top-left-radius:20px;
+  border-top-right-radius:20px;
 }
-.kind_wrap > .kind_slider {
+
+.feed_content{
+  border-bottom-left-radius:20px;
+  border-bottom-right-radius:20px;
+}
+
+/* create 이미지 슬라이드 */
+
+.album{
+  height: auto;
+  width: auto;
   overflow: hidden;
 }
-.kind_wrap > .kind_slider .slider { 
-  position: relative; 
-  transition: 0.5s;
+
+.plus-btn {
+  position: fixed;
+  bottom: 120px;
+  right: 23px;
 }
-.kind_wrap > .kind_slider .slider li {
-  float:left;
-}
-.kind_wrap > .kind_slider img {
-  vertical-align: top;
-}
-.kind_wrap .arrow > a.prev {
-  position: absolute; 
-  left:-50px; 
-  top:100px;
-}
-.kind_wrap .arrow > a.next {
-  position: absolute; 
-  right:-50px; 
-  top:100px;
+
+.plus-btn div {
+  color: #E84545;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 4px 4px 25px 0px #0714271f;
 }

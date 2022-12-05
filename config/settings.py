@@ -40,6 +40,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # 숫자 천 단위 콤마 포맷
+    "django.contrib.humanize",
     # Allauth를 위한 Apps
     "django.contrib.sites",
     "allauth",
@@ -67,7 +69,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'django.contrib.humanize',
 ]
 
 # 소셜
@@ -209,7 +210,6 @@ else:
 
 # Message Framework
 # https://docs.djangoproject.com/en/4.1/ref/contrib/messages/
-
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"

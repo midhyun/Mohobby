@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,16 +10,20 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 # Create your views here.
+
 
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
+        else:
+            messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -25,11 +31,10 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
-    data = {
-        'accounts' : accounts
-    }
+    data = {"accounts": accounts}
     return JsonResponse(data)
 
 
@@ -40,8 +45,11 @@ def login(request):
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect("main")
+        else:
+            messages.warning(request, '비밀번호나 아이디가 틀립니다.')
     else:
         form = AuthenticationForm()
+
     context = {"form": form}
     return render(request, "accounts/login.html", context)
 
@@ -49,6 +57,7 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
+    messages.warning(request, '로그아웃 하였습니다.')
     return redirect("accounts:login")
 
 
@@ -74,6 +83,7 @@ def follow(request, pk):
     return redirect("accounts:detail", pk)
 
 
+
 @login_required
 def delete(request):
     request.user.delete()
@@ -84,7 +94,6 @@ def delete(request):
 @login_required
 def update(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
-    
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
         user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
@@ -99,3 +108,19 @@ def update(request, pk):
         "user_info": user_info,
     }
     return render(request, "accounts/update.html", context)
+
+def password_change(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "비밀번호를 변경하였습니다.")
+            update_session_auth_hash(request, user)
+            return redirect('main')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+
+    context = {
+        "form" : form
+    }
+    return render(request, 'accounts/password.html', context)

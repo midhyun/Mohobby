@@ -17,13 +17,21 @@
         <!-- 첫번째 페이지 (ID, PW)-->
         <div class="slide_item">
           <div class="form_list">
+            {% if messages %}
+            <div class="messages">
+                {% for msg in messages %}       
+                <div>
+                    <div class="alert alert-danger" role="alert">
+                      {{msg.message}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <!-- input : 아이디, -->
             <div class="form_field">
               {% render_field form.username id="id" class="user_input" placeholder="아이디" %}
               <div class="error_next_box"></div>
-              {% if form.username.errors %}
-                <span class="error_msg">이미 존재하거나 사용할 수 없는 이름입니다.</span>
-              {% endif %}
             </div>
             <!-- input : 비밀번호 -->
             <div class="form_field">
@@ -65,7 +73,7 @@
             </div>
             <!-- input : 상세 주소 -->
             <div class="form_field">
-              {% render_field form.address_detail class="user_input" placeholder="상세주소"%}
+              {% render_field form.address_detail class="user_input" placeholder="상세주소 (선택)"%}
             </div>
           </div>
         </div>
@@ -80,7 +88,7 @@
                 <div>
                   {% render_field form.image id="imgInput" class="image_input" placeholder="프로필 이미지" %}
                   <label class="input-file-button" for="imgInput">
-                    프로필 사진을 선택하세요
+                    프로필 사진 지정 <small>(선택)</small>
                   </label>
                 </div>
               </div>
@@ -91,31 +99,34 @@
         <div class="slide_item">
           <div class="category_form">
             <div class="category_list">
+              <div>
+                <label class="birth_label">취미 <small>(선택)</small></label>
+              </div>
               <label class="form-label">Sports</label>
               <div id="id_sports">
                 {% for value, text in form.sports.field.choices %}
-                <span class="category_select">
-                  <input id="id_sprots_{{ forloop.counter0 }}" name="{{ form.sports.name }}" type="checkbox" value="{{ value }}">
-                  <label for="id_sprots_{{ forloop.counter0 }}">{{ text }}</label>
-                </span>
+                  <span class="category_select">
+                    <input id="id_sprots_{{ forloop.counter0 }}" name="{{ form.sports.name }}" type="checkbox" value="{{ value }}">
+                    <label for="id_sprots_{{ forloop.counter0 }}">{{ text }}</label>
+                  </span>
                 {% endfor %}
               </div>
               <label class="form-label">Art</label>
               <div id="id_art">
                 {% for value, text in form.art.field.choices %}
-                <span class="category_select">
-                  <input id="id_art_{{ forloop.counter0 }}" name="{{ form.art.name }}" type="checkbox" value="{{ value }}">
-                  <label for="id_art_{{ forloop.counter0 }}">{{ text }}</label>
-                </span>
+                  <span class="category_select">
+                    <input id="id_art_{{ forloop.counter0 }}" name="{{ form.art.name }}" type="checkbox" value="{{ value }}">
+                    <label for="id_art_{{ forloop.counter0 }}">{{ text }}</label>
+                  </span>
                 {% endfor %}
               </div>
               <label class="form-label">Food</label>
               <div id="id_food">
                 {% for value, text in form.food.field.choices %}
-                <span class="category_select">
-                  <input id="id_food_{{ forloop.counter0 }}" name="{{ form.food.name }}" type="checkbox" value="{{ value }}">
-                  <label for="id_food_{{ forloop.counter0 }}">{{ text }}</label>
-                </span>
+                  <span class="category_select">
+                    <input id="id_food_{{ forloop.counter0 }}" name="{{ form.food.name }}" type="checkbox" value="{{ value }}">
+                    <label for="id_food_{{ forloop.counter0 }}">{{ text }}</label>
+                  </span>
                 {% endfor %}
               </div>
             </div>
@@ -129,19 +140,19 @@
                 <label class="form-label">Travel</label>
                 <div class="" id="id_travel">
                   {% for value, text in form.travel.field.choices %}
-                  <span class="category_select">
-                    <input id="id_travel_{{ forloop.counter0 }}" name="{{ form.travel.name }}" type="checkbox" value="{{ value }}">
-                    <label for="id_travel_{{ forloop.counter0 }}">{{ text }}</label>
-                  </span>
+                    <span class="category_select">
+                      <input id="id_travel_{{ forloop.counter0 }}" name="{{ form.travel.name }}" type="checkbox" value="{{ value }}">
+                      <label for="id_travel_{{ forloop.counter0 }}">{{ text }}</label>
+                    </span>
                   {% endfor %}
                 </div>
                 <label class="form-label">Develop</label>
                 <div id="id_develop">
                   {% for value, text in form.develop.field.choices %}
-                  <span class="category_select">
-                    <input id="id_develop_{{ forloop.counter0 }}" name="{{ form.develop.name }}" type="checkbox" value="{{ value }}">
-                    <label for="id_develop_{{ forloop.counter0 }}">{{ text }}</label>
-                  </span>
+                    <span class="category_select">
+                      <input id="id_develop_{{ forloop.counter0 }}" name="{{ form.develop.name }}" type="checkbox" value="{{ value }}">
+                      <label for="id_develop_{{ forloop.counter0 }}">{{ text }}</label>
+                    </span>
                   {% endfor %}
                 </div>
               </div>
@@ -207,123 +218,120 @@
         .open();
     }
   </script>
-  <script
-  src="https://code.jquery.com/jquery-3.6.1.min.js"
-  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
   <script>
     var id = document.querySelector('#id');
     var pw1 = document.querySelector('#pswd1');
     var pw2 = document.querySelector('#pswd2');
     var error = document.querySelectorAll('.error_next_box');
-    
+
     id.addEventListener("focusout", checkId);
     pw1.addEventListener("focusout", checkPw);
     pw2.addEventListener("focusout", comparePw);
-    
+
     // 아이디 중복 체크
     function checkId() {
-        // input 빈 칸이면 실행
-        if(id.value === "") {
-            error[0].innerHTML = "필수 정보입니다.";
-            error[0].style.color = "red";
-            error[0].style.display = "block";
-            error[0].style.fontSize = "12px";
-        } else {
-            // input 입력된 후 실행
-            $.ajax({ 
-                // get으로 DB를 가져온다
-                type:"get",
-                // json 파일 가져올 url 설정
-                url:"{% url 'accounts:id_check' %}", 
-                // 받아오는 데이터 유형 설정
-                dataType:"json", 
-                // 성공
-                success: function(data){
-                    // DB에 저장된 유저들의 username을 배열에 저장
-                    var arr = [];
-                    for (let i in data.accounts){
-                    arr[i] = data.accounts[i]
-                    }
-                    // 배열 안에 input으로 입력한 값이 있다면 실행
-                    if (arr.includes(id.value)){
-                    error[0].innerHTML = "중복된 아이디입니다.";
-                    error[0].style.color = "red";
-                    error[0].style.display = "block";
-                    error[0].style.fontSize = "12px";
-                    } else {
-                        // 배열 안에 input으로 입력한 값이 없다면
-                        error[0].innerHTML = "사용 가능합니다.";
-                        error[0].style.color = "#08A600";;
-                        error[0].style.display = "block";
-                        error[0].style.fontSize = "12px";
-                    }
-                },
-                // 실패 (대부분 url 문제)
-                error:function(){
-                    console.log("error");
-                }
-            })
-        }  
+      // input 빈 칸이면 실행
+      if (id.value === "") {
+        error[0].innerHTML = "필수 정보입니다.";
+        error[0].style.color = "red";
+        error[0].style.display = "block";
+        error[0].style.fontSize = "12px";
+      } else {
+        // input 입력된 후 실행
+        $.ajax({
+          // get으로 DB를 가져온다
+          type: "get",
+          // json 파일 가져올 url 설정
+          url: "{% url 'accounts:id_check' %}",
+          // 받아오는 데이터 유형 설정
+          dataType: "json",
+          // 성공
+          success: function (data) {
+            // DB에 저장된 유저들의 username을 배열에 저장
+            var arr = [];
+            for (let i in data.accounts) {
+              arr[i] = data.accounts[i]
+            }
+            // 배열 안에 input으로 입력한 값이 있다면 실행
+            if (arr.includes(id.value)) {
+              error[0].innerHTML = "중복된 아이디입니다.";
+              error[0].style.color = "red";
+              error[0].style.display = "block";
+              error[0].style.fontSize = "12px";
+            } else {
+              // 배열 안에 input으로 입력한 값이 없다면
+              error[0].innerHTML = "사용 가능합니다.";
+              error[0].style.color = "#08A600";;
+              error[0].style.display = "block";
+              error[0].style.fontSize = "12px";
+            }
+          },
+          // 실패 (대부분 url 문제)
+          error: function () {
+            console.log("error");
+          }
+        })
+      }
     }
-    
+
     // 비밀번호 체크
     function checkPw() {
-        var pwPattern = /[a-zA-Z0-9~!@#$%^&*()_+|<>?:{}]{8,16}/;
-        if(pw1.value === "") {
-            error[1].innerHTML = "필수 정보입니다.";
-            error[1].style.display = "block";
-            error[1].style.color = "red";
-            error[1].style.fontSize = "12px";
-        } else if(!pwPattern.test(pw1.value)) {
-            error[1].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
-            error[1].style.display = "block";
-            error[1].style.color = "red";
-            error[1].style.fontSize = "12px";
-        } else {
-            error[1].style.display = "block";
-            error[1].innerHTML = "사용 가능합니다.";
-            error[1].style.color = "#08A600";
-            error[1].style.fontSize = "12px";
-        }
+      var pwPattern = /[a-zA-Z0-9~!@#$%^&*()_+|<>?:{}]{8,16}/;
+      if (pw1.value === "") {
+        error[1].innerHTML = "필수 정보입니다.";
+        error[1].style.display = "block";
+        error[1].style.color = "red";
+        error[1].style.fontSize = "12px";
+      } else if (!pwPattern.test(pw1.value)) {
+        error[1].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+        error[1].style.display = "block";
+        error[1].style.color = "red";
+        error[1].style.fontSize = "12px";
+      } else {
+        error[1].style.display = "block";
+        error[1].innerHTML = "사용 가능합니다.";
+        error[1].style.color = "#08A600";
+        error[1].style.fontSize = "12px";
+      }
     }
-    
+
     // 비밀번호 재입력 체크
     function comparePw() {
-        if(pw2.value === pw1.value && pw2.value != "") {
-            error[2].style.display = "none";
-        } else if(pw2.value !== pw1.value) {
-            error[2].innerHTML = "비밀번호가 일치하지 않습니다.";
-            error[2].style.display = "block";
-            error[2].style.color = "red";
-            error[2].style.fontSize = "12px";
-        } 
-    
-        if(pw2.value === "") {
-            error[2].innerHTML = "필수 정보입니다.";
-            error[2].style.display = "block";
-            error[2].style.color = "red";
-            error[2].style.fontSize = "12px";
-        }
+      if (pw2.value === pw1.value && pw2.value != "") {
+        error[2].style.display = "none";
+      } else if (pw2.value !== pw1.value) {
+        error[2].innerHTML = "비밀번호가 일치하지 않습니다.";
+        error[2].style.display = "block";
+        error[2].style.color = "red";
+        error[2].style.fontSize = "12px";
+      }
+
+      if (pw2.value === "") {
+        error[2].innerHTML = "필수 정보입니다.";
+        error[2].style.display = "block";
+        error[2].style.color = "red";
+        error[2].style.fontSize = "12px";
+      }
     }
   </script>
   <script>
     function readURL(input) {
       // 파일이 들어오면 실행
       if (input.files && input.files[0]) {
-       var reader = new FileReader();
-       
-       // 이벤트 결과를 src에 집어넣음
-       reader.onload = function (e) {
-        $('#image_section').attr('src', e.target.result);  
-       }
-       
-       reader.readAsDataURL(input.files[0]);
-       }
-     }
-      
-     $("#imgInput").change(function(){
-        readURL(this);
-     });
+        var reader = new FileReader();
+
+        // 이벤트 결과를 src에 집어넣음
+        reader.onload = function (e) {
+          $('#image_section').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $("#imgInput").change(function () {
+      readURL(this);
+    });
   </script>
 {% endblock js %}
