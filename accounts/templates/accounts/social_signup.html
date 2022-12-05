@@ -14,9 +14,10 @@
     <form action="{% url 'accounts:social_signup' user.pk %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
       <div class="slide">
-        <!-- 두번째 페이지 (인적사항) -->
+        <!-- 첫번째 페이지 (인적사항) -->
         <div class="slide_item">
             <div class="form_list">
+                <!-- 에러 메시지 출력 -->
                 {% if messages %}
                     {% for msg in messages %}       
                         <div class="alert alert-danger" role="alert">
@@ -24,7 +25,7 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-            <!-- input : 생년월일 -->
+                 <!-- input : 생년월일 -->
                 <div class="form_field">
                 <label class="birth_label">생년월일</label>
                 <input type="date" class="user_input" name="birth" value="2000-01-01">
@@ -53,15 +54,17 @@
                 </div>
             </div>
         </div>
-        <!-- 세번째 페이지 (프로필 이미지) -->
+        <!-- 두번째 페이지 (프로필 이미지) -->
         <div class="slide_item">
           <div class="form_list">
             <div class="form_field">
               <div class="profile">
                 <div>
+                <!-- 이미지 미리보기 -->
                   <img id="image_section" src="{% static 'image/default_profile_img.jpg' %}">
                 </div>
                 <div>
+                <!-- input : 이미지 -->
                   {% render_field form.image id="imgInput" class="image_input" placeholder="프로필 이미지" %}
                   <label class="input-file-button" for="imgInput">
                     프로필 사진 지정 <small>(선택)</small>
@@ -71,7 +74,7 @@
             </div>
           </div>
         </div>
-        <!-- 네번째 페이지 (카테고리) -->
+        <!-- 세번째 페이지 (카테고리) -->
         <div class="slide_item">
           <div class="category_form">
             <div class="category_list">
@@ -80,6 +83,7 @@
               </div>
               <label class="form-label">Sports</label>
               <div id="id_sports">
+                <!-- 스포츠 멀티셀렉트 -->
                 {% for value, text in form.sports.field.choices %}
                   <span class="category_select">
                     <input id="id_sprots_{{ forloop.counter0 }}" name="{{ form.sports.name }}" type="checkbox" value="{{ value }}">
@@ -89,6 +93,7 @@
               </div>
               <label class="form-label">Art</label>
               <div id="id_art">
+                <!-- 예술 멀티셀렉트 -->
                 {% for value, text in form.art.field.choices %}
                   <span class="category_select">
                     <input id="id_art_{{ forloop.counter0 }}" name="{{ form.art.name }}" type="checkbox" value="{{ value }}">
@@ -98,6 +103,7 @@
               </div>
               <label class="form-label">Food</label>
               <div id="id_food">
+                <!-- 음식 멀티셀렉트 -->
                 {% for value, text in form.food.field.choices %}
                   <span class="category_select">
                     <input id="id_food_{{ forloop.counter0 }}" name="{{ form.food.name }}" type="checkbox" value="{{ value }}">
@@ -108,13 +114,14 @@
             </div>
           </div>
         </div>
-        <!-- 다섯번째 페이지 (카테고리) -->
+        <!-- 네번째 페이지 (카테고리) -->
         <div class="slide_item">
           <div class="category_wrap">
             <div class="category_form">
               <div class="category_list">
                 <label class="form-label">Travel</label>
                 <div class="" id="id_travel">
+                <!-- 여행 멀티셀렉트 -->
                   {% for value, text in form.travel.field.choices %}
                     <span class="category_select">
                       <input id="id_travel_{{ forloop.counter0 }}" name="{{ form.travel.name }}" type="checkbox" value="{{ value }}">
@@ -124,6 +131,7 @@
                 </div>
                 <label class="form-label">Develop</label>
                 <div id="id_develop">
+                <!--자기계발 멀티셀렉트 -->
                   {% for value, text in form.develop.field.choices %}
                     <span class="category_select">
                       <input id="id_develop_{{ forloop.counter0 }}" name="{{ form.develop.name }}" type="checkbox" value="{{ value }}">
