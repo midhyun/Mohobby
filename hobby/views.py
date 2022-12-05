@@ -137,12 +137,16 @@ def comment_create(request, hobby_pk):
             is_like = True
         else: is_like = False
         created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        if comment.user.image:
+            image = comment.user.image.url
+        else: image = 'https://dummyimage.com/80x80/000/fff'
         comments_data.append({
             "pk": comment.pk,
             "user": comment.user.username,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,
+            "image": image,
             'likeCount': comment.like_user.count(),
         })
     context = {
@@ -152,11 +156,34 @@ def comment_create(request, hobby_pk):
 
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
+    hobby_pk = comment.hobby.pk
     if comment.user == request.user:
         comment.delete()
     else:
         print('권한이 없습니다.')
-    return JsonResponse({})
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+    comments_data = []
+    for comment in comments:
+        if request.user in comment.like_user.all():
+            is_like = True
+        else: is_like = False
+        created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        if comment.user.image:
+            image = comment.user.image.url
+        else: image = 'https://dummyimage.com/80x80/000/fff'
+        comments_data.append({
+            "pk": comment.pk,
+            "user": comment.user.username,
+            "content": comment.content,
+            "created_at": created_at,
+            "is_like": is_like,
+            "image": image,
+            'likeCount': comment.like_user.count(),
+        })
+    context = {
+        "comments_data": comments_data,
+    }
+    return JsonResponse(context)
 
 def comment_like(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
