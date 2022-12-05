@@ -137,12 +137,16 @@ def comment_create(request, hobby_pk):
             is_like = True
         else: is_like = False
         created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        if comment.user.image:
+            image = comment.user.image.url
+        else: image = 'https://dummyimage.com/80x80/000/fff'
         comments_data.append({
             "pk": comment.pk,
             "user": comment.user.username,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,
+            "image": image,
             'likeCount': comment.like_user.count(),
         })
     context = {

@@ -144,8 +144,8 @@
       <ion-icon onclick="likeHobby(this)" class="hobby-like-btn" data-hobby-id="{{ hobby.pk }}" style="color:#E84545" name="heart-outline" size="large"></ion-icon>
       {% endif %}
       <span id="like-count" style="font-size:24px; width:40px;">{{ hobby.like_user.count }} </span>
-      <ion-icon name="chatbubble-outline" size="large" data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon>
+      <ion-icon style="cursor:pointer;" name="chatbubble-outline" size="large" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon> <span id="comment-count" style="font-size:24px; width:40px;">{{ comments.count }} </span>
       <ion-icon name="ellipsis-horizontal"></ion-icon>
     </li>
     <!-- 댓글작성 -->
@@ -198,7 +198,7 @@
       <hr>
       <div class="offcanvas-body small">
         {% if comments %}
-          <ul class="" id="commentlist">
+          <ul class="" id="comment-list-off">
             {% for comment in comments.all %}
             <hr>
             <div class="d-flex justify-content-between">
@@ -258,7 +258,6 @@
   var callback = function(result, status) {
       // 주소가 유효할 경우
       if (status === kakao.maps.services.Status.OK) {
-          console.log(result[0]);
           var mapContainer = document.getElementById('map'),
               mapOption = { 
                   center: new kakao.maps.LatLng(result[0].y, result[0].x),
