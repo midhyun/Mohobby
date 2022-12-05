@@ -46,7 +46,7 @@ def detail(request, community_pk):
     context = {
         "post": post,
     }
-    response = render(request, "communuty/detail.html", context)
+    response = render(request, "community/detail.html", context)
     if f"_{community_pk}_" not in cookie_value:
         cookie_value += f"{community_pk}_"
         response.set_cookie(
