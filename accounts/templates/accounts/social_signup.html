@@ -25,6 +25,9 @@
                         </div>
                     {% endfor %}
                 {% endif %}
+                <div class="form_field">
+                  {% render_field form.nickname class="user_input" placeholder="닉네임 (필수)"%}
+                </div>
                  <!-- input : 생년월일 -->
                 <div class="form_field">
                 <label class="birth_label">생년월일</label>

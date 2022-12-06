@@ -24,6 +24,7 @@ class CustomUserCreationForm(UserCreationForm):
             "art",
             "food",
             "develop",
+            "nickname",
         ]
         widgets = {
             "birth": DateInput(),
@@ -42,6 +43,26 @@ class CustomUserChangeForm(UserChangeForm):
             "address",
             "address_detail",
             "image",
+        ]
+        widgets = {
+            "birth": DateInput(),
+        }
+
+class CustomSocialForm(UserChangeForm):
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "sports",
+            "travel",
+            "art",
+            "food",
+            "develop",
+            "address",
+            "address_detail",
+            "image",
+            "gender",
+            "birth",
+            "nickname",
         ]
         widgets = {
             "birth": DateInput(),
