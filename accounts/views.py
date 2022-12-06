@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -164,42 +164,41 @@ def KakaoCallBack(request):
 
     # 일단 닉네임만. 받을 수 있는 개인정보는 설정으로 바꿀수있음.
     kakao_user_nickname = kakao_user_data['properties']['nickname']
+    kakao_user_id = kakao_user_data['id']
     
 
     # 1.
     
-    # filter 활용 username(id)에 카카오 user_nickname 존재하는지 확인 (problem.1 : 카카오 닉네임이 같은 경우는?)
-    if get_user_model().objects.filter(username=kakao_user_nickname).exists():
-        # 존재하는 경우 유저의 오브젝트를 가져오고 로그인 후 메인페이지로 리다이렉트
-        kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
-        auth_login(request, kakao_user)
-        return redirect(request.GET.get("next") or "main")
-    # 서버 DB에 존재하지 않는 경우
-    else:
-        # username을 DB에 젖아하고 로그인 후 소셜 로그인 전용 회원가입 페이지로 넘겨줌.
-        kakao_login_user = get_user_model()()
-        kakao_login_user.username = kakao_user_nickname
-        kakao_login_user.save()
-        kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
-    
-        auth_login(request, kakao_user)
-        return redirect("accounts:social_signup", kakao_user.pk)
-
-    # 2. 위와 같은 방법을 카카오의 고유 ID로 바꾼 로직
-
-    # if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
-    #     kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    # # filter 활용 username(id)에 카카오 user_nickname 존재하는지 확인 (problem.1 : 카카오 닉네임이 같은 경우는?)
+    # if get_user_model().objects.filter(username=kakao_user_nickname).exists():
+    #     # 존재하는 경우 유저의 오브젝트를 가져오고 로그인 후 메인페이지로 리다이렉트
+    #     kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
     #     auth_login(request, kakao_user)
     #     return redirect(request.GET.get("next") or "main")
+    # # 서버 DB에 존재하지 않는 경우
     # else:
+    #     # username을 DB에 저장하고 로그인 후 소셜 로그인 전용 회원가입 페이지로 넘겨줌.
     #     kakao_login_user = get_user_model()()
     #     kakao_login_user.username = kakao_user_nickname
-    #     kakao_login_user.kakao_id = kakao_user_id
     #     kakao_login_user.save()
-    #     kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    #     kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
     
     #     auth_login(request, kakao_user)
     #     return redirect("accounts:social_signup", kakao_user.pk)
+
+    if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+        auth_login(request, kakao_user)
+        return redirect(request.GET.get("next") or "main")
+    else:
+        kakao_login_user = get_user_model()()
+        kakao_login_user.last_name = kakao_user_nickname
+        kakao_login_user.kakao_id = kakao_user_id
+        kakao_login_user.save()
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    
+        auth_login(request, kakao_user)
+        return redirect("accounts:social_signup", kakao_user.pk)
 
 @login_required
 def social_signup(request, pk):
@@ -208,7 +207,7 @@ def social_signup(request, pk):
     if request.user == user_info:
         if request.method == "POST":
             # 소셜 회원가입이지만 커스텀폼 재활용. 따로 만들어도 문제없음
-            form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+            form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 form.save()
                 return redirect("main")
@@ -216,7 +215,7 @@ def social_signup(request, pk):
                 # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
                 messages.warning(request, '필수 정보를 입력해주세요.')
         else:
-            form = CustomUserChangeForm(instance=request.user)
+            form = CustomSocialForm(instance=request.user)
     
 
     context = {
