@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     # 설치한 라이브러리
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_simplejwt',
 
     'dj_rest_auth',
     'dj_rest_auth.registration',
