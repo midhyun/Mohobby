@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-
+from hobby.models import Accepted
 
 # Create your views here.
 
@@ -64,8 +64,12 @@ def logout(request):
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
+    accepted = Accepted.objects.filter(user=user, joined=True)
+    waiting = Accepted.objects.filter(user=user, joined=False)
     context = {
         "user": user,
+        "accepted":accepted,
+        "waiting" : waiting,
     }
     return render(request, "accounts/detail.html", context)
 
