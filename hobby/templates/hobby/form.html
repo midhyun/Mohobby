@@ -30,10 +30,10 @@
                     장기간 함께 활동하는 모임을 원하실 경우 '클럽'으로 열어주세요!
                 </p>
                 <!-- radio input / 소셜or클럽 -->
-                <input class="d-none" type="radio" name="temp" id="social" value="social" checked>
+                <input class="d-none" type="radio" name="temp" id="social" value="social">
                 <input class="d-none" type="radio" name="temp" id="club" value="club">
 
-                <label id="social_label" for="social" class="social-btn radio-active">
+                <label id="social_label" for="social" class="social-btn">
                     <ion-icon name="earth-sharp" size="large"></ion-icon>
                     <div>
                         <h6>소셜링</h6>
@@ -234,9 +234,9 @@
             <div class="slide_item">
                 <h2 class="mt-3 fw-bold">소셜링을 소개해볼까요?</h2>
                 <label class="image-control mt-3" for="image">
-                    <ion-icon name="image-outline" style="font-size:32px"></ion-icon><br>사진 추가
+                    <ion-icon name="image-outline" style="font-size:32px;"></ion-icon><br>사진 추가
                 </label>
-                <input class="d-none" id="image" accept="image/*" onchange="setThumbnail(event)" name="image"
+                <input class="d-none" id="image" accept="image/*" name="image"
                     type="file">
                 <textarea class="area-control mt-3" rows="10" name="content" id="content"
                     placeholder="내용을 입력해 주세요.(선택)"></textarea>
@@ -255,7 +255,7 @@
             <div class="slide_item">
                 <!-- input addr *(in js) checkbox.checked = true or false -->
                 <input class="d-none" type="checkbox" id="address_type" name="address_type">
-                <input class="d-none" type="text" id="address" name="address">
+                <input class="d-none" type="text" id="address" name="address" required>
                 <h2 class="mt-3 fw-bold">어디서 만날까요?</h2>
                 <div class="row row-cols-2 g-3 mt-3">
                     <div class="col text-center"><button type="button" id="offline-btn" class="addr-btn">오프라인</button>
@@ -340,17 +340,19 @@
                         <p class="text-muted">- 소셜링 진행에 필요한 모든 금액을 참가비로 설정해주세요. 가이드 위반 시 소셜링 삭제 및 이용 제재를 받을 수 있어요.</p>
                     </div>
                 </div>
-
+                <!-- 유효성 메시지 -->
             </div>
         </div>
         <div class="container">
             <button class="mt-3 submit_btn d-none slide_button" type="submit">소셜링 시작하기</button>
             <button type="button" class="mt-3 next_btn slide_next_button slide_button">다음</button>
+            <div class="error-message"></div>
         </div>
     </form>
 </div>
 {% endblock content %}
 {% block js %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script src="{% static 'js/form.js' %}"></script>

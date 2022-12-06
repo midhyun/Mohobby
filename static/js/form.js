@@ -12,9 +12,10 @@ progress.setAttribute('style', `width:${(currSlide/maxSlide)*100}%`);
 const radio_1 = document.querySelector("#social_label");
 const radio_2 = document.querySelector("#club_label");
 // 엔터 submit prevent
-document.myform.addEventListener("keydown", evt => {
-  if (evt.code === "Enter") {
-  evt.preventDefault()};
+document.myform.addEventListener("submit", event => {
+  event.preventDefault()
+  if (event.code === "Enter") {
+  event.preventDefault()};
 });
 // 다음 버튼 이벤트
 nextBtn.addEventListener("click", () => {
@@ -67,8 +68,7 @@ radio_2.addEventListener("click", () => {
 });
 // 태그 이벤트 _ 다른 카테고리 선택시 현재 선택된 태그 해제
 const tags = document.querySelectorAll('div.accordion-body > .tag-btn');
-let tag_input = document.querySelector('#tag')
-console.log(tag_input)
+const tag_input = document.querySelector('#tag')
 var n_tag = null;
 [].forEach.call(tags, function(tag){
 	tag.addEventListener("click", () => {
@@ -97,16 +97,19 @@ function changeinner(event) {
   n_tag.innerText = event.parentNode.parentNode.querySelector('#tag').value
 }
 // 이미지 미리보기
+const label = document.querySelector('.image-control')
 function setThumbnail(event) {
   var reader = new FileReader();
-  var label = document.querySelector('.image-control')
   reader.onload = function(event) {
-    var img = document.createElement("img");
+    document.createElement("img");
     label.style.backgroundImage = `url(${event.target.result})`;
   };
 
   reader.readAsDataURL(event.target.files[0]);
 }
+const imageInput = document.querySelector('#image')
+imageInput.addEventListener('change', setThumbnail )
+
 // Date/ Time picker
 
 // 온라인, 오프라인 버튼 active
@@ -199,3 +202,37 @@ free_fee.addEventListener('click', () => {
   fee_box.classList.add('d-none');
   fee_input.value = ''
 });
+
+//  유효성 검사
+const titleInput = document.querySelector('#title')
+const meetingDay = document.querySelector('#meeting_day')
+const errorMessage = document.querySelector('.error-message')
+
+submitBtn.addEventListener('click', checkvalid)
+function checkvalid(e) {
+  let arr = []
+  e.preventDefault()
+  if (tag_input.value === "") {
+    arr.push('태그선택')};
+  if (titleInput.value === "") {
+    arr.push('제목')};
+  if (meetingDay.value === "") {
+    arr.push('소셜링 일시')};
+  if (address.value === "") {
+    arr.push('장소선택')};
+  if (arr.length != 0) {
+    let temp = ""
+    for (let i = 0; i < arr.length; i++){
+      if (i === (arr.length-1)) {
+        temp += arr[i]
+      } else {
+        temp += arr[i]+', '
+      }
+    }
+    errorMessage.innerText = temp + '(은)는 필수 입력사항입니다.'
+    swal("필수 사항을 입력해주세요!", `${temp}(은)는 필수 입력사항입니다.`, "error");
+  } else {
+    errorMessage.innerText = ""
+    document.myform.submit();
+  }
+}
