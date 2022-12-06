@@ -125,6 +125,3 @@ def password_change(request):
         "form" : form
     }
     return render(request, 'accounts/password.html', context)
-
-
-    
