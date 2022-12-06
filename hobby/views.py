@@ -174,6 +174,7 @@ def comment_delete(request, comment_pk):
         comments_data.append({
             "pk": comment.pk,
             "user": comment.user.username,
+            "user_pk": comment.user.pk,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,
