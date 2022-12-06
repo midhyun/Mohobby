@@ -37,7 +37,10 @@ def signup(request):
 
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
-    data = {"accounts": accounts}
+    data = {
+        "accounts": accounts,
+    }
+
     return JsonResponse(data)
 
 
@@ -47,17 +50,19 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("main")
+
+            return redirect((request.GET.get("next") or request.POST.get("next")) or "main")
         else:
             messages.warning(request, '비밀번호나 아이디가 틀립니다.')
     else:
         form = AuthenticationForm()
 
-    context = {"form": form}
+    context = {
+        "form": form,
+    }
     return render(request, "accounts/login.html", context)
 
 
-@login_required
 def logout(request):
     auth_logout(request)
     messages.warning(request, '로그아웃 하였습니다.')
@@ -76,6 +81,7 @@ def detail(request, pk):
     return render(request, "accounts/detail.html", context)
 
 
+@login_required
 def follow(request, pk):
     accounts = get_user_model().objects.get(pk=pk)
     if request.user == accounts:
@@ -116,6 +122,7 @@ def update(request, pk):
     return render(request, "accounts/update.html", context)
 
 
+@login_required
 def password_change(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
 
@@ -124,15 +131,15 @@ def password_change(request, pk):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+
             return redirect("accounts:detail", user_info.pk)
     else:
         form = CustomPasswordChangeForm(request.user)
 
     context = {
-        "form" : form
+        "form": form,
     }
     return render(request, 'accounts/password.html', context)
-
 
 def kakao_login(request):
     app_key = os.getenv("KAKAO_REST_API_KEY")
