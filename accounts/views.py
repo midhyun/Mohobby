@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
@@ -224,4 +223,3 @@ def social_signup(request, pk):
     }
 
     return render(request, 'accounts/social_signup.html', context)
-
