@@ -176,8 +176,8 @@ def KakaoCallBack(request):
         return redirect(request.GET.get("next") or "main")
     # 서버 DB에 존재하지 않는 경우
     else:
-        # username을 DB에 젖아하고 로그인 후 소셜 로그인 전용 회원가입 페이지로 넘겨줌.
-        kakao_login_user = get_user_model()()
+        # username을 DB에 저장하고 로그인 후 소셜 로그인 전용 회원가입 페이지로 넘겨줌.
+        kakao_login_user = get_user_model()
         kakao_login_user.username = kakao_user_nickname
         kakao_login_user.save()
         kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
