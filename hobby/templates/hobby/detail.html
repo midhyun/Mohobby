@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
 {% block content %}
+<input id="request-user-id" class="d-none" type="text" value="{{ request.user.pk }}">
 <div class="detail-wrapper wrapper" style="margin-top: 100px;">
   <!-- 이미지 배너 -->
   {% if hobby.image %}
@@ -25,7 +26,7 @@
         {% else %}
         <img class="circle-image" src="{% static 'image/default_profile_img.jpg' %}" alt="">
         {% endif %}
-        <p class="text-center text-muted">{{ hobby.host }}</p>
+        <p class="text-center text-muted">{{ hobby.host.nickname }}</p>
       </div></a>
       <p class="circle-title">{{hobby.title}}</p>
     </div>
@@ -46,16 +47,25 @@
     <li class="detail-title">멤버소개</li>
     <li class="detail-subtitle">우리 반갑게 만나요</li>
     {% for member in accepted %}
-    <a href="{% url 'accounts:detail' member.user.pk %}"><li class="d-flex">
-        {% if member.user.image %}
-        <img class="member-image" src="{{ member.user.image.url }}" alt="">
-        {% else %}
-        <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-        {% endif %}
-        <p class="m-3">
-          <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
-          <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
-        </p>
+    <a href="{% url 'accounts:detail' member.user.pk %}"><li class="d-flex justify-content-between">
+        <div class="d-flex">
+          {% if member.user.image %}
+          <img class="member-image" src="{{ member.user.image.url }}" alt="">
+          {% else %}
+          <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
+          <p class="m-3">
+            <span style="font-size:20px; font-weight:600;">{{ member.user.nickname }}</span><br>
+            <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
+          </p>
+        </div>
+        <div>
+          {% if request.user == hobby.host %}
+          {% if request.user.pk != member.user.pk %}
+            <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">강퇴하기</a>
+          {% endif %}
+          {% endif %}
+        </div>
     </li></a>
     {% endfor %}
   </ul>
@@ -96,12 +106,14 @@
                   <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
                   {% endif %}
                   <p class="m-3">
-                    <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
+                    <span style="font-size:20px; font-weight:600;">{{ member.user.nickname }}</span><br>
                     <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
                   </p></a>
                   <div>
-                    <a href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
-                    <a href="{% url 'hobby:reject' hobby.pk member.user.pk %}">거절하기</a>
+                  {% if request.user == hobby.host %}
+                    <a style="color:forestgreen" href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
+                    <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">거절하기</a>
+                  {% endif %}
                   </div>
               </li>
               {% endfor %}
@@ -123,7 +135,13 @@
     <li class="detail-title">안내사항</li>
     <li class="detail-subtitle">자세한 정보를 알려드릴게요</li>
     <li>👨‍👨‍👦 {{ hobby.limit }}명</li>
-    <li>💵 {{ hobby.entry_fee }}원</li>
+    <li>💵 
+      {% if hobby.entry_fee %}
+        {{ hobby.entry_fee }}원
+      {% else %}
+        없음
+      {% endif %}
+    </li>
     <li>📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}</li>
     <li>🗺 {{ hobby.address }}</li>
     <!-- 지도넣기 -->
@@ -138,15 +156,18 @@
     <li class="detail-title">커뮤니티</li>
     <li class="detail-subtitle">소셜링이 궁금하다면 댓글을 남겨보세요</li>
     <li>
+      <!-- Hobby 좋아요 -->
       {% if request.user in hobby.like_user.all %}
       <ion-icon onclick="likeHobby(this)" class="hobby-like-btn" data-hobby-id="{{ hobby.pk }}" style="color:#E84545" name="heart" size="large"></ion-icon>
       {% else %}
       <ion-icon onclick="likeHobby(this)" class="hobby-like-btn" data-hobby-id="{{ hobby.pk }}" style="color:#E84545" name="heart-outline" size="large"></ion-icon>
       {% endif %}
       <span id="like-count" style="font-size:24px; width:40px;">{{ hobby.like_user.count }} </span>
-      <ion-icon name="chatbubble-outline" size="large" data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon>
-      <ion-icon name="ellipsis-horizontal"></ion-icon>
+      <!-- 댓글의 수, 모든 댓글보기 -->
+      <ion-icon style="cursor:pointer;" name="chatbubble-outline" size="large" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon>
+       <span id="comment-count" style="font-size:24px; width:40px;">{{ comments.count }} </span>
+      <!-- 좋아요를 누른 사람 목록 보기... -->
+      <ion-icon style="cursor:pointer;" name="ellipsis-horizontal" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom4" aria-controls="offcanvasBottom"></ion-icon>
     </li>
     <!-- 댓글작성 -->
     <li class="comment-elem">
@@ -155,41 +176,61 @@
       {% else %}
         <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
       {% endif %}
-      <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}" method="POST" onsubmit="submitComment(this.id)">
+      <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}" method="POST">
         {% csrf_token %}
         <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
         <input class="d-none" type="submit" value="제출">
       </form>
     </li>
+    <!-- 댓글 삭제 모달 -->
+    <div class="modal fade" id="comment-delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">더보기</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 close_btn slide_button" type="button">창 닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 댓글목록 -->
     <li id="comment-list">
       {% for comment in comments.all|slice:":7" %}
         <hr>
         <div class="d-flex justify-content-between">
           <div class="comment-elem" >
+            <a href="{% url 'accounts:detail' comment.user.pk %}">
             {% if comment.user.image %}
               <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
             {% else %}
               <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-            {% endif %}
+            {% endif %}</a>
             <div>
-              <p>{{ comment.user }}</p>
+              <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> 
+                  <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}" data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
+                </p>
               </div>
             </div>
           </div>
           <div>
             {% if request.user in comment.like_user.all %}
-              <ion-icon id="comment-{{comment.pk}}-likebtn" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
+            <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn" data-comment-id="{{ comment.pk }}" class="comment-like-btn"  style="color:#E84545" name="heart"></ion-icon>
             {% else %}
-              <ion-icon id="comment-{{comment.pk}}-likebtn" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
+            <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn" data-comment-id="{{ comment.pk }}" class="comment-like-btn"  style="color:#E84545" name="heart-outline"></ion-icon>
             {% endif %}
           </div>
         </div>
       {% endfor %}
     </li>
+    <!-- 댓글 오프캔버스 -->
     <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom3">
       <div class="offcanvas-header">
           <h5 class="offcanvas-title" id="offcanvasBottomLabel">소셜링이 궁금하다면 댓글을 남겨보세요.</h5>
@@ -198,29 +239,32 @@
       <hr>
       <div class="offcanvas-body small">
         {% if comments %}
-          <ul class="" id="commentlist">
+          <ul class="" id="comment-list-off">
             {% for comment in comments.all %}
             <hr>
             <div class="d-flex justify-content-between">
               <div class="comment-elem" >
+                <a href="{% url 'accounts:detail' comment.user.pk %}">
                 {% if comment.user.image %}
                   <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
                 {% else %}
                   <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-                {% endif %}
+                {% endif %}</a>
                 <div>
-                  <p>{{ comment.user }}</p>
+                  <p>{{ comment.user.nickname }}</p>
                   <p>{{ comment.content }}</p>
                   <div>
-                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> <ion-icon name="ellipsis-horizontal"></ion-icon></p>
+                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> 
+                      <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}" data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
+                    </p>
                   </div>
                 </div>
               </div>
               <div>
                 {% if request.user in comment.like_user.all %}
-                  <ion-icon id="comment-{{comment.pk}}-likebtn-off" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
+                  <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
                 {% else %}
-                  <ion-icon id="comment-{{comment.pk}}-likebtn-off" onclick="likeComment(this)" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
+                  <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" class="comment-like-btn" data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
                 {% endif %}
               </div>
             </div>
@@ -237,9 +281,50 @@
           {% endif %}
       </div>
   </div>
+  <!-- 좋아요 오프캔버스 -->
+  <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom4">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasBottom4Label">좋아요</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <hr>
+    <div class="offcanvas-body small">
+      {% if hobby.like_user %}
+        <ul class="" id="like-list-off">
+          {% for member in hobby.like_user.all %}
+            <a href="{% url 'accounts:detail' member.pk %}"><li class="d-flex justify-content-between">
+                <div class="d-flex">
+                  {% if member.image %}
+                  <img class="member-image" src="{{ member.image.url }}" alt="">
+                  {% else %}
+                  <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+                  {% endif %}
+                  <p class="m-3">
+                    <span style="font-size:20px; font-weight:600;">{{ member.nickname }}</span><br>
+                    <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
+                  </p>
+                </div>
+            </li></a>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="text-center mt-5">
+            <p>
+                <ion-icon name="people" size="large"></ion-icon>
+            </p>
+            <h5>아직 댓글이 없습니다.</h5>
+            <p class="text-muted">다양한 의견을 공유해보세요!</p>
+        </div>
+        {% endif %}
+    </div>
+  </div>
   </ul>
+  <a href="{% url 'hobby:call' hobby.pk %}" class="accept-btn text-black">
+    <div>
+        <span class=" footer_accept">참여</span>
+    </div>
+  </a>
   <!-- 비슷한 소셜링 -->
-  {{ hobby.tags }}
 </div>
 {% endblock content %}
 {% block js %}
@@ -258,7 +343,6 @@
   var callback = function(result, status) {
       // 주소가 유효할 경우
       if (status === kakao.maps.services.Status.OK) {
-          console.log(result[0]);
           var mapContainer = document.getElementById('map'),
               mapOption = { 
                   center: new kakao.maps.LatLng(result[0].y, result[0].x),
