@@ -5,7 +5,6 @@
   <link rel="stylesheet" href="{% static 'css/community.css' %}">
 {% endblock %}
 {% block content %}
-
   <div class='container' style="margin-top: 5%;">
     <div class='d-flex justify-content-between'>
       <h3 class='main_title align-self-center'>
@@ -16,7 +15,7 @@
         {{post.user.username}}</div>
     </div>
 
-    <div id='slideShow'>
+    <div class='slideShow'>
       <ul class='slides list-unstyled'>
         {% for photo in post.photo_set.all %}
           <!-- 이미지 설정 -->
@@ -30,10 +29,148 @@
         <span class="next">&rang;</span>
       </p>
     </div>
-
-    {{post.content}}
-    {{post.created_at}}
+    <div>
+      {{post.content}}
+    </div>
+    <div>
+      {{post.created_at}}
+    </div>
     {{post.hits}}
+    <!-- 댓글 작성 -->
+    <form data-post-id="{{ post.pk }}" action="{% url 'community:comments_create' post.pk %}" method="POST">
+      {% csrf_token %}
+      <div class='d-flex justify-content-center'>
+        <div>
+          {% if request.user.image %}
+            <img class='user_img' id="profile_img" style="width:60px; height:60px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+          {% else %}
+            <img class='user_img' style="width:60px; height:60px;" src="{% static 'image/default_profile_img.jpg' %}">
+          {% endif %}
+          <input name="content" class='comment_input' type="text" placeholder="댓글 달기...">
+        </div>
+        <div class='d-flex align-items-center'>
+          <input type="submit" class='comment_sbmit mx-2' value="등록">
+        </div>
+      </div>
+    </form>
+    <!-- 댓글 목록 -->
+    <div>
+      {% for comment in comments %}
+        {% if comment.patrent_comment == NULL %}
+          <div class='d-flex'>
+            <div>
+              {% if comment.user.image %}
+                <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
+              {% else %}
+                <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
+              {% endif %}
+            </div>
+            <div>
+              <div class='d-flex'>
+                <strong>{{comment.user.username}}</strong>
+                {% if request.user == comment.user %}
+                  <div class='d-flex'>
+                    <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#comment{{comment.pk}}" aria-expanded="false" aria-controls="collapseExample">
+                      <i class="bi bi-pencil comment_small_btn"></i>
+                    </button>
+                    <form action="{% url 'community:comments_delete' post.pk comment.pk %}" method="POST">
+                      {% csrf_token %}
+                      <button class='comment_update_btn' type="submit">
+                        <i class="bi bi-x-lg comment_small_btn"></i>
+                      </button>
+                    </form>
+                  </div>
+
+                {% endif %}
+              </div>
+
+              <div class='comment_content'>{{comment.content}}
+              </div>
+              <div class='comment_small_text d-flex'>
+                <div class='mx-1'>좋아요 0 개</div>
+                <div>
+                  <a class="text-decoration-none mx-1" data-bs-toggle="collapse" style='color:#979AA0;' href="#collapse{{comment.pk}}">답글달기</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 댓글 수정 -->
+          {% if request.user == comment.user %}
+            <div class="collapse" id="comment{{comment.pk}}">
+              <form action="{% url 'community:comments_update' post.pk comment.pk %}" method="POST" class="align-self-center">
+                {% csrf_token %}
+                {% if comment.user.image %}
+                  <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
+                {% else %}
+                  <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                {% endif %}
+                <input name="content" class='comment_input' type="text" value='{{comment.content}}'>
+                <input type="submit" class='comment_sbmit mx-2' value="수정">
+              </form>
+            </div>
+          {% endif %}
+          <!-- 대댓글 목록 -->
+          <div class='recomment_list'>
+            {% for recom in comment.recomment.all %}
+              <div class='d-flex'>
+                <div>
+                  {% if comment.user.image %}
+                    <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
+                  {% else %}
+                    <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                  {% endif %}
+                </div>
+                <div>
+                  <div class='d-flex'>
+                    <div>{{ recom.user.username }}</div>
+                    {% if request.user == recom.user %}
+                      <div class='d-flex'>
+                        <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#recomment{{recom.pk}}" aria-expanded="false" aria-controls="collapseExample">
+                          <i class="bi bi-pencil comment_small_btn"></i>
+                        </button>
+                        <form action="{% url 'community:recomments_delete' post.pk recom.pk %}" method="POST">
+                          {% csrf_token %}
+                          <button class='comment_update_btn' type="submit">
+                            <i class="bi bi-x-lg comment_small_btn"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div>{{ recom.content}}</div>
+                </div>
+              </div>
+              <!-- 대댓글 수정 -->
+              {% if request.user == recom.user %}
+                <div class="collapse" id="recomment{{recom.pk}}">
+                  <form action="{% url 'community:recomments_update' post.pk comment.pk recom.pk%}" method="POST">
+                    {% csrf_token %}
+                    {% bootstrap_form recomment_form %}
+                    <input class="btn post_detail_comment_btn" type="submit" value="수정">
+                  </form>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- 답글 작성 form -->
+          <div class="collapse recomment_list" id="collapse{{comment.pk}}">
+            <form action="{% url 'community:recomments_create' post.pk comment.pk %}" method="POST">
+              {% csrf_token %}
+              {% if request.user.image %}
+                <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+              {% else %}
+                <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+              {% endif %}
+              <input name="content" class='comment_input' type="text" placeholder="댓글 달기...">
+              <input type="submit" class='comment_sbmit mx-2' value="등록">
+            </form>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
   </div>
   <script>
     const slides = document.querySelector('.slides'); //전체 이미지 슬라이드 컨테이너

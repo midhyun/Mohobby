@@ -51,8 +51,10 @@
                 <div class='d-flex'>
                   <p class='px-1'>
                     <i class="bi bi-eye"></i>{{post.hits}}</p>
-                  <p>
+                  <p class='px-1'>
                     <i class="bi bi-hand-thumbs-up"></i>0</p>
+                  <p class='px-1'>
+                    <i id='modal_comment' class="bi bi-chat"></i>0</p>
                 </div>
                 <div>
                   <small class='text-muted'>
@@ -77,11 +79,13 @@
       </div>
     {% endfor %}
   </div>
+  <!-- 피드 추가 버튼 -->
   <a href="{% url 'community:create' %}" class='plus-btn'>
     <div>
       <i class="bi bi-plus"></i>
     </div>
   </a>
+
   <!-- 이미지 캐러셀 설정 -->
   <script>
     const feeds = document.querySelectorAll('.feeds')
@@ -116,4 +120,5 @@
       });
     });
   </script>
+
 {% endblock content %}
