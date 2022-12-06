@@ -74,7 +74,11 @@ def send(request):
             sent_note.save()
             return redirect("notes:sent_box")
     else:
-        form = NoteForm()
+        if "to" in request.GET:
+            username = request.GET.get("to").split("&")[0]
+            form = NoteForm(initial={"received_username": username})
+        else:
+            form = NoteForm()
     context = {
         "form": form,
     }

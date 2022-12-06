@@ -41,7 +41,10 @@
               <button class="btn btn-outline-danger disabled me-2" type="submit"><i class="bi bi-heart me-2"></i><span>{{ product.like_users.count }}</span></button>
             {% endif %}
             {% if request.user.is_authenticated %}
-              <button class="btn btn-outline-success me-2">쪽지</button>
+              <form action="{% url 'notes:send' %}" method="GET">
+                <input type="hidden" class="form-control" value="{{ product.user.username }}" name="to">
+                <button class="btn btn-outline-success me-2">쪽지</button>
+              </form>
               <button class="btn btn-outline-primary">채팅</button>
             {% else %}
               <button class="btn btn-outline-success disabled me-2">쪽지</button>
