@@ -26,7 +26,7 @@
         {% else %}
         <img class="circle-image" src="{% static 'image/default_profile_img.jpg' %}" alt="">
         {% endif %}
-        <p class="text-center text-muted">{{ hobby.host }}</p>
+        <p class="text-center text-muted">{{ hobby.host.nickname }}</p>
       </div></a>
       <p class="circle-title">{{hobby.title}}</p>
     </div>
@@ -55,13 +55,13 @@
           <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
           {% endif %}
           <p class="m-3">
-            <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
+            <span style="font-size:20px; font-weight:600;">{{ member.user.nickname }}</span><br>
             <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
           </p>
         </div>
         <div>
           {% if request.user == hobby.host %}
-          {% if request.user.pk != member.pk %}
+          {% if request.user.pk != member.user.pk %}
             <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">강퇴하기</a>
           {% endif %}
           {% endif %}
@@ -106,7 +106,7 @@
                   <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
                   {% endif %}
                   <p class="m-3">
-                    <span style="font-size:20px; font-weight:600;">{{ member.user }}</span><br>
+                    <span style="font-size:20px; font-weight:600;">{{ member.user.nickname }}</span><br>
                     <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
                   </p></a>
                   <div>
@@ -191,8 +191,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-              
-              
           </div>
           <div class="modal-footer">
             <button id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 close_btn slide_button" type="button">창 닫기</button>
@@ -206,13 +204,14 @@
         <hr>
         <div class="d-flex justify-content-between">
           <div class="comment-elem" >
+            <a href="{% url 'accounts:detail' comment.user.pk %}">
             {% if comment.user.image %}
               <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
             {% else %}
               <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-            {% endif %}
+            {% endif %}</a>
             <div>
-              <p>{{ comment.user }}</p>
+              <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
                 <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> 
@@ -245,13 +244,14 @@
             <hr>
             <div class="d-flex justify-content-between">
               <div class="comment-elem" >
+                <a href="{% url 'accounts:detail' comment.user.pk %}">
                 {% if comment.user.image %}
                   <img class="comment-image" src="{{ comment.user.image.url }}" alt="">
                 {% else %}
                   <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-                {% endif %}
+                {% endif %}</a>
                 <div>
-                  <p>{{ comment.user }}</p>
+                  <p>{{ comment.user.nickname }}</p>
                   <p>{{ comment.content }}</p>
                   <div>
                     <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span> 
@@ -300,7 +300,7 @@
                   <img class="member-image" src="https://dummyimage.com/80x80/000/fff" alt="">
                   {% endif %}
                   <p class="m-3">
-                    <span style="font-size:20px; font-weight:600;">{{ member }}</span><br>
+                    <span style="font-size:20px; font-weight:600;">{{ member.nickname }}</span><br>
                     <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
                   </p>
                 </div>
