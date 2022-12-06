@@ -18,21 +18,26 @@
         <div class="slide_item">
           <div class="form_list">
             {% if messages %}
-            <div class="messages">
-                {% for msg in messages %}       
-                <div>
+              <div class="messages">
+                {% for msg in messages %}
+                  <div>
                     <div class="alert alert-danger" role="alert">
                       {{msg.message}}
                     </div>
-                </div>
+                  </div>
                 {% endfor %}
-            </div>
+              </div>
             {% endif %}
             <!-- input : 아이디, -->
             <div class="form_field">
               {% render_field form.username id="id" class="user_input" placeholder="아이디" %}
               <div class="error_next_box"></div>
             </div>
+            <!-- input : 닉네임 -->
+            <div class="form_field">
+              {% render_field form.nickname id="nickname" class="user_input" placeholder="닉네임"%}
+              <div class="error_next_box"></div>
+            </div>            
             <!-- input : 비밀번호 -->
             <div class="form_field">
               {% render_field form.password1 id="pswd1" class="user_input" placeholder="비밀번호"%}
@@ -42,9 +47,6 @@
             <div class="form_field">
               {% render_field form.password2 id="pswd2" class="user_input" placeholder="비밀번호 재확인"%}
               <div class="error_next_box"></div>
-            </div>
-            <div class="form_field">
-              {% render_field form.nickname class="user_input" placeholder="닉네임 (필수)"%}
             </div>
           </div>
         </div>
@@ -67,7 +69,7 @@
             <div class="form_field">
               <div class="address_box">
                 <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
-                <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
+                <input type="button" id="search_address" value="주소 찾기" class="address_btn">
               </div>
             </div>
             <!-- input : 도로명 주소 -->
@@ -91,7 +93,8 @@
                 <div>
                   {% render_field form.image id="imgInput" class="image_input" placeholder="프로필 이미지" %}
                   <label class="input-file-button" for="imgInput">
-                    프로필 사진 지정 <small>(선택)</small>
+                    프로필 사진 지정
+                    <small>(선택)</small>
                   </label>
                 </div>
               </div>
@@ -103,7 +106,9 @@
           <div class="category_form">
             <div class="category_list">
               <div>
-                <label class="birth_label">취미 <small>(선택)</small></label>
+                <label class="birth_label">취미
+                  <small>(선택)</small>
+                </label>
               </div>
               <label class="form-label">Sports</label>
               <div id="id_sports">
@@ -177,58 +182,26 @@
 {% endblock %}
 
 {% block js %}
+  <!-- sweetalert -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- 폼 페이지 -->
   <script src="{% static 'js/signup_form.js' %}"></script>
+  <!-- 주소 찾기 -->
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <script>
-    // 주소 검색 기능
-    function execDaumPostcode() {
-      new daum
-        .Postcode({
-          oncomplete: function (data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-            // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var roadAddr = data.roadAddress; // 도로명 주소 변수
-            var extraRoadAddr = ''; // 참고 항목 변수
-
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-              extraRoadAddr += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== '' && data.apartment === 'Y') {
-              extraRoadAddr += (
-                extraRoadAddr !== ''
-                ? ', ' + data.buildingName
-                : data.buildingName);
-            }
-            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (extraRoadAddr !== '') {
-              extraRoadAddr = ' (' + extraRoadAddr + ')';
-            }
-
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document
-              .getElementById("postcode")
-              .value = data.zonecode;
-            document
-              .getElementById("roadAddress")
-              .value = roadAddr;
-          }
-        })
-        .open();
-    }
-  </script>
+  <script src="{% static 'js/search_address.js' %}"></script>
+  <!-- 제이쿼리 -->
   <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <!-- ID, 닉네임 중복, 빈칸 체크 -->
   <script>
     var id = document.querySelector('#id');
+    var nickname = document.querySelector('#nickname');
     var pw1 = document.querySelector('#pswd1');
     var pw2 = document.querySelector('#pswd2');
+
     var error = document.querySelectorAll('.error_next_box');
 
     id.addEventListener("focusout", checkId);
+    nickname.addEventListener("focusout", checknickname);
     pw1.addEventListener("focusout", checkPw);
     pw2.addEventListener("focusout", comparePw);
 
@@ -278,46 +251,93 @@
       }
     }
 
+    // 닉네임 중복 체크
+    function checknickname() {
+      // input 빈 칸이면 실행
+      if (nickname.value === "") {
+        error[1].innerHTML = "필수 정보입니다.";
+        error[1].style.color = "red";
+        error[1].style.display = "block";
+        error[1].style.fontSize = "12px";
+      } else {
+        // input 입력된 후 실행
+        $.ajax({
+          // get으로 DB를 가져온다
+          type: "get",
+          // json 파일 가져올 url 설정
+          url: "{% url 'accounts:nickname_check' %}",
+          // 받아오는 데이터 유형 설정
+          dataType: "json",
+          // 성공
+          success: function (data) {
+            // DB에 저장된 유저들의 username을 배열에 저장
+            var arr = [];
+            for (let i in data.accounts) {
+              arr[i] = data.accounts[i]
+            }
+            // 배열 안에 input으로 입력한 값이 있다면 실행
+            if (arr.includes(id.value)) {
+              error[1].innerHTML = "중복된 아이디입니다.";
+              error[1].style.color = "red";
+              error[1].style.display = "block";
+              error[1].style.fontSize = "12px";
+            } else {
+              // 배열 안에 input으로 입력한 값이 없다면
+              error[1].innerHTML = "사용 가능합니다.";
+              error[1].style.color = "#08A600";;
+              error[1].style.display = "block";
+              error[1].style.fontSize = "12px";
+            }
+          },
+          // 실패 (대부분 url 문제)
+          error: function () {
+            console.log("error");
+          }
+        })
+      }
+    }
+
     // 비밀번호 체크
     function checkPw() {
       var pwPattern = /[a-zA-Z0-9~!@#$%^&*()_+|<>?:{}]{8,16}/;
       if (pw1.value === "") {
-        error[1].innerHTML = "필수 정보입니다.";
-        error[1].style.display = "block";
-        error[1].style.color = "red";
-        error[1].style.fontSize = "12px";
+        error[2].innerHTML = "필수 정보입니다.";
+        error[2].style.display = "block";
+        error[2].style.color = "red";
+        error[2].style.fontSize = "12px";
       } else if (!pwPattern.test(pw1.value)) {
-        error[1].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
-        error[1].style.display = "block";
-        error[1].style.color = "red";
-        error[1].style.fontSize = "12px";
+        error[2].innerHTML = "8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+        error[2].style.display = "block";
+        error[2].style.color = "red";
+        error[2].style.fontSize = "12px";
       } else {
-        error[1].style.display = "block";
-        error[1].innerHTML = "사용 가능합니다.";
-        error[1].style.color = "#08A600";
-        error[1].style.fontSize = "12px";
+        error[2].style.display = "block";
+        error[2].innerHTML = "사용 가능합니다.";
+        error[2].style.color = "#08A600";
+        error[2].style.fontSize = "12px";
       }
     }
 
     // 비밀번호 재입력 체크
     function comparePw() {
       if (pw2.value === pw1.value && pw2.value != "") {
-        error[2].style.display = "none";
+        error[3].style.display = "none";
       } else if (pw2.value !== pw1.value) {
-        error[2].innerHTML = "비밀번호가 일치하지 않습니다.";
-        error[2].style.display = "block";
-        error[2].style.color = "red";
-        error[2].style.fontSize = "12px";
+        error[3].innerHTML = "비밀번호가 일치하지 않습니다.";
+        error[3].style.display = "block";
+        error[3].style.color = "red";
+        error[3].style.fontSize = "12px";
       }
 
       if (pw2.value === "") {
-        error[2].innerHTML = "필수 정보입니다.";
-        error[2].style.display = "block";
-        error[2].style.color = "red";
-        error[2].style.fontSize = "12px";
+        error[3].innerHTML = "필수 정보입니다.";
+        error[3].style.display = "block";
+        error[3].style.color = "red";
+        error[3].style.fontSize = "12px";
       }
     }
   </script>
+  <!-- 이미지 미리보기 -->
   <script>
     function readURL(input) {
       // 파일이 들어오면 실행
@@ -337,4 +357,5 @@
       readURL(this);
     });
   </script>
+  
 {% endblock js %}
