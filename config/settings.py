@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +42,10 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "notes",
+
+    # 장고 채널스
+    "daphne",
+
     # 숫자 천 단위 콤마 포맷
     "django.contrib.humanize",
     # Allauth를 위한 Apps
@@ -52,6 +57,11 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.kakao",
     "allauth.socialaccount.providers.google",
+    # 설치한 라이브러리
+    "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
     "accounts",
     "hobby",
     "community",
@@ -75,7 +85,6 @@ INSTALLED_APPS = [
 # 소셜
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 SITE_ID = 1
 
@@ -211,7 +220,6 @@ else:
 
 # Message Framework
 # https://docs.djangoproject.com/en/4.1/ref/contrib/messages/
-
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -249,3 +257,13 @@ SUMMERNOTE_CONFIG = {
 LOGIN_REDIRECT_URL = "/"  # 로그인 후 리디렉션할 페이지
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃
+
+ASGI_APPLICATION = "config.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

@@ -2,8 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Community, Comment, Photo
 from .forms import CommunityForm, CommentForm, ReCommentForm
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from datetime import date, datetime, timedelta
+import json
+from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
+
 
 # Create your views here.
 def index(request):
@@ -35,6 +39,9 @@ def create(request):
 
 def detail(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
+    comment_form = CommentForm()
+    recomment_form = ReCommentForm()
+
 
     expire_date, now = datetime.now(), datetime.now()
     expire_date += timedelta(days=1)
@@ -45,8 +52,11 @@ def detail(request, community_pk):
 
     context = {
         "post": post,
+        "comment_form": comment_form,
+        "comments": post.comment_set.all(),
+        "recomment_form": recomment_form,
     }
-    response = render(request, "communuty/detail.html", context)
+    response = render(request, "community/detail.html", context)
     if f"_{community_pk}_" not in cookie_value:
         cookie_value += f"{community_pk}_"
         response.set_cookie(
@@ -103,5 +113,77 @@ def delete(request, community_pk):
             post.delete()
             return redirect("community:index")
 
+    else:
+        return HttpResponseForbidden()
+
+def comments_create(request, community_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+    if request.user.is_authenticated:
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.posting = post
+            comment.user = request.user
+            comment.save()
+        return redirect("community:detail", post.pk)
+def comments_update(request, community_pk, comment_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+    comment = Comment.objects.get(pk=comment_pk)
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST, instance=comment)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.posting = post
+            comment.user = request.user
+            comment.save()
+        return redirect("community:detail", community_pk)
+    else:
+        comment_form = CommentForm(instance=comment)
+        return redirect("community:detail", community_pk)
+
+def comments_delete(request, community_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if request.user == comment.user:
+        comment.delete()
+        return redirect("community:detail", community_pk)
+    else:
+        return HttpResponseForbidden()        
+
+def recomments_create(request, community_pk, comment_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+    if request.user.is_authenticated:
+        recomment_form = ReCommentForm(request.POST)
+        if recomment_form.is_valid():
+            recomment = recomment_form.save(commit=False)
+            recomment.posting = post
+            recomment.user = request.user
+            recomment.parent_comment_id = comment_pk
+            recomment.save()
+
+        return redirect("community:detail", post.pk)
+
+def recomments_update(request, community_pk, comment_pk, recomment_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+    recomment = Comment.objects.get(pk=recomment_pk)
+    if request.method == "POST":
+        recomment_form = ReCommentForm(request.POST, instance=recomment)
+        if recomment_form.is_valid():
+            recomment = recomment_form.save(commit=False)
+            recomment.posting = post
+            recomment.user = request.user
+            recomment.parent_comment_id = comment_pk
+            recomment.save()
+        return redirect("community:detail", community_pk)
+    else:
+        recomment_form = ReCommentForm(instance=recomment)
+        return redirect("community:detail", community_pk)
+
+def recomments_delete(request, community_pk, recomment_pk):
+    recomment = get_object_or_404(Comment, pk=recomment_pk)
+
+    if request.user == recomment.user:
+        recomment.delete()
+        return redirect("community:detail", community_pk)
     else:
         return HttpResponseForbidden()

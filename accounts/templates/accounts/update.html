@@ -15,11 +15,68 @@
         <i class="bi bi-chevron-left"></i>
       </button>
     </div>
-    <!-- <div class="side_bar"> <h4 class="side_bar_title">회원 정보 관리</h4> <div class="side_bar_menu"> <a href="#" id="side_bar_item1" class="side_bar_item active"> <i class="bi bi-person-gear"></i>회원 정보 수정 </a> </div> <div class="side_bar_menu"> <a href="#category" id="side_bar_item2" class="side_bar_item"> <i class="bi bi-suit-heart"></i>관심 분야 </a> </div> </div> -->
-    <form action="{% url 'accounts:update' user.pk %}" method="POST" autocomplete="off" onsubmit="return mySubmit()">
+    <form action="{% url 'accounts:update' user.pk %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
       <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
       <div class="container d-flex">
+        <div class="update_wrapper">
+          <div class="form_field">
+            <div>
+              <h6 style="color:#888888;">프로필 사진 변경</h6>
+              <hr>
+              <div class="profile">
+                {% if request.user.image %}
+                  <div>
+                    <img id="image_section" src="{{ request.user.image.url }}" alt="">
+                  </div>
+                {% else %}
+                  <div>
+                    <img id="image_section" src="{% static 'image/default_profile_img.jpg' %}">
+                  </div>
+                {% endif %}
+                <div>
+                  <input type="file" name="image" accept="image/*" placeholder="프로필 이미지" class="image_input" id="imgInput">
+                  <label class="input-file-button" for="imgInput">
+                    사진 업로드
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form_field">
+            <div>
+              <h6 style="color:#888888;">비밀번호 변경</h6>
+              <hr>
+              <div>
+                <a class="input-file-button" href="{% url 'accounts:password_change' request.user.pk %}">비밀번호 변경</a>
+              </div>
+            </div>
+          </div>
+          <div class="form_field">
+            <div>
+              <h6 style="color:#888888;">주소 수정</h6>
+              <hr>
+              <!-- input : 우편번호, 검색 기능 -->
+              <div class="form_field">
+                <div class="address_box">
+                  <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
+                  <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
+                </div>
+              </div>
+              <!-- input : 도로명 주소 -->
+              <div class="form_field">
+                <input type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input" value="{{ user_info.address }}">
+              </div>
+              <!-- input : 상세 주소 -->
+              <div class="form_field">
+                <input type="text" name="address_detail" class="user_input" placeholder="상세주소" {% if user_info.address_detail %} value="{{ user_info.address_detail }}" {% endif %}>
+              </div>
+            </div>
+          </div>
+          <div class="form_field text-center">
+            <button class="signup_btn" type="submit">수정</button>
+          </div>
+        </div>
         <div class="update_wrapper">
           <div class="form_list">
             <div class="form_field">
@@ -75,41 +132,6 @@
             </div>
           </div>
         </div>
-        <div class="update_wrapper">
-          <div class="form_field">
-            <div>
-              <h6 style="color:#888888;">비밀번호 변경</h6>
-              <hr>
-              <div>
-                <a class="input-file-button" href="{% url 'accounts:password_change' %}">비밀번호 변경</a>
-              </div>
-            </div>
-          </div>
-          <div class="form_field">
-            <div>
-              <h6 style="color:#888888;">주소 수정</h6>
-              <hr>
-              <!-- input : 우편번호, 검색 기능 -->
-              <div class="form_field">
-                <div class="address_box">
-                  <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
-                  <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
-                </div>
-              </div>
-              <!-- input : 도로명 주소 -->
-              <div class="form_field">
-                <input type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input" value="{{ user_info.address }}">
-              </div>
-              <!-- input : 상세 주소 -->
-              <div class="form_field">
-                <input type="text" name="address_detail" class="user_input" placeholder="상세주소" {% if user_info.address_detail %} value="{{ user_info.address_detail }}" {% endif %}>
-              </div>
-            </div>
-          </div>
-          <div class="form_field text-center">
-            <button class="signup_btn" type="submit">수정</button>
-          </div>
-        </div>
       </div>
     </form>
   </div>
@@ -117,6 +139,7 @@
 {% endblock content %}
 
 {% block js %}
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
   // 주소 검색 기능
@@ -175,11 +198,24 @@
         .add('active')
     })
   })
+</script>
+<script>
+  function readURL(input) {
 
-  // .each(function(){
-  //   $(this).on('click', function(){
-  //     $(this).removeClass('active');
-  //   });
-  // });
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      // 이벤트 결과를 src에 집어넣음
+      reader.onload = function (e) {
+        $('#image_section').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $("#imgInput").change(function () {
+    readURL(this);
+  });
 </script>
 {% endblock js %}

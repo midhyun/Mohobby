@@ -14,22 +14,28 @@
         </div>
       </a>
     </div>
-    {% for post in posts%}
-      <div class='feed my-5 py-3'>
+    {% for post in posts %}
+      <div class='feeds my-5 py-3'>
         <div class='d-flex justify-content-center'>
           <div class='d-flex justify-content-between' style='width:800px;'>
-            <!-- detail 페이지 링크 달기 -->
-            <h3 class='main_title '>{{post.title}}</h3>
+            <h3 class='align-self-center'>
+              <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">{{post.title}}</a>
+            </h3>
             <!-- 프로필 이미지 설정 -->
-            <div class='text-muted fw-bold'>{{post.user.username}}</div>
+            <div class='d-flex'>
+              <img class=' user_img' id="profile_img" style="width:55px; height:55px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}">
+              <div class='text-muted fw-bold align-self-center'>{{post.user.username}}</div>
+            </div>
           </div>
         </div>
-        <div id='slideShow'>
+        <!-- 이미지 캐러셀 -->
+        <div class='slideShow' id='slides-{{forloop.counter0}}'>
           <ul class='slides list-unstyled'>
             {% for photo in post.photo_set.all %}
               <!-- 이미지 설정 -->
-              <li><img class='feed_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;
-              "></li>
+              <li>
+                <img class='feeds_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;">
+              </li>
             {% endfor %}
           </ul>
           <p class="controller">
@@ -39,14 +45,16 @@
           </p>
         </div>
         <div class='d-flex flex-column align-items-center'>
-          <div class='feed_content' style='width:800px; background-color: white;'>
+          <div class='feeds_content' style='width:800px; background-color: white;'>
             <div class=' d-flex justify-content-center'>
               <div class='d-flex justify-content-between mx-2' style='width:800px;'>
                 <div class='d-flex'>
                   <p class='px-1'>
                     <i class="bi bi-eye"></i>{{post.hits}}</p>
-                  <p>
+                  <p class='px-1'>
                     <i class="bi bi-hand-thumbs-up"></i>0</p>
+                  <p class='px-1'>
+                    <i id='modal_comment' class="bi bi-chat"></i>0</p>
                 </div>
                 <div>
                   <small class='text-muted'>
@@ -63,43 +71,54 @@
           </div>
         </div>
       </div>
-
+      <div>
+        <form action="{%url 'community:delete' post.pk%}" method='POST'>
+          {% csrf_token %}
+          <input type="submit" value='삭제'>
+        </form>
+      </div>
     {% endfor %}
   </div>
+  <!-- 피드 추가 버튼 -->
   <a href="{% url 'community:create' %}" class='plus-btn'>
     <div>
       <i class="bi bi-plus"></i>
     </div>
   </a>
 
+  <!-- 이미지 캐러셀 설정 -->
   <script>
-    const slides = document.querySelector('.slides'); //전체 이미지 슬라이드 컨테이너
-    const slideImg = document.querySelectorAll('.slides li'); //모든 슬라이드들
-    let currentIdx = 0; //현재 슬라이드 index 초기값 0
-    const slideCount = slideImg.length; // 슬라이드 개수
-    const prev = document.querySelector('.prev'); //이전 버튼
-    const next = document.querySelector('.next'); //다음 버튼
-    const slideWidth = 800; //한개의 슬라이드 넓이
-    const slideMargin = 100; //슬라이드간의 margin 값
-    //전체 슬라이드 컨테이너 넓이 설정
-    slides.style.width = (slideWidth + slideMargin) * slideCount + 'px';
+    const feeds = document.querySelectorAll('.feeds')
+    feeds.forEach(function (feed, Idx) {
+      console.log(feed, Idx)
+      const slides = document.querySelector(`#slides-${Idx} ul.slides`)
+      const slideImg = document.querySelectorAll(`#slides-${Idx} .slides li`); //모든 슬라이드들
+      const prev = document.querySelector(`#slides-${Idx} .prev`); //이전 버튼
+      const next = document.querySelector(`#slides-${Idx} .next`); //다음 버튼
+      const slideCount = slideImg.length; // 슬라이드 개수
+      const slideWidth = 800; //한개의 슬라이드 넓이
+      const slideMargin = 100; //슬라이드간의 margin 값
 
-    console.log(slides)
-    console.log(slideImg)
+      let currentIdx = 0; //현재 슬라이드 index 초기값 0
 
-    function moveSlide(num) {
-      slides.style.left = -num * 900 + 'px';
-      currentIdx = num;
-    }
-    prev.addEventListener('click', function () {
-      if (currentIdx !== 0) 
-        moveSlide(currentIdx - 1);
+      //전체 슬라이드 컨테이너 넓이 설정
+      slides.style.width = (slideWidth + slideMargin) * slideCount + 'px';
+
+      function moveSlide(num) {
+        slides.style.left = -num * 900 + 'px';
+        currentIdx = num;
       }
-    );
-    next.addEventListener('click', function () {
-      if (currentIdx !== slideCount - 1) {
-        moveSlide(currentIdx + 1);
-      }
+      prev.addEventListener('click', function () {
+        if (currentIdx !== 0) 
+          moveSlide(currentIdx - 1);
+        }
+      );
+      next.addEventListener('click', function () {
+        if (currentIdx !== slideCount - 1) {
+          moveSlide(currentIdx + 1);
+        }
+      });
     });
   </script>
+
 {% endblock content %}
