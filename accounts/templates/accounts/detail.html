@@ -184,14 +184,15 @@
     </div>
       <main>
         <br>
-        <section id="tab-section-1" class="tab-section">
+        <section id="tab-section-1" class="tab-section" hidden>
           <div class="row row-cols-1 row-cols-md-4 g-4">
             {% for community in user.community_set.all %}
+              <a class="btn" href="{% url 'community:detail' community.pk %}">
                 <div class="card">
                   {% if community.image %}
-                  <img src="{{ community.image.url }}" class="img-feed" alt="community">
+                  <img src="{{ photo.image.url }}" class="img-feed" alt="community">
                   {% else %}
-                  <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                  <img src="{% static 'images/noimage.png' %}" class="img-feed" alt="">
                   {% endif %}
                   <div class="card-body">
                     <h5 class="card-title">{{ community.title }}</h5>
@@ -199,15 +200,17 @@
                     <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
                   </div>
                 </div>
+              </a>
             {% endfor %}
             </div>
         </section>
         <section id="tab-section-2" class="tab-section" hidden>
           <div class="row row-cols-1 row-cols-md-4 g-4">
             {% for community in user.community_like.all %}
+              <a class="btn" href="{% url 'community:detail' community.pk %}">
                 <div class="card">
                   {% if community.image %}
-                  <img src="{{ community.image.url }}" class="img-feed" alt="community">
+                  <img src="{{ photo.image.url }}" class="img-feed" alt="community">
                   {% else %}
                   <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
                   {% endif %}
@@ -217,6 +220,7 @@
                     <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
                   </div>
                 </div>
+              </a>
             {% endfor %}
             </div>
         </section>
@@ -232,10 +236,7 @@
                     {% endif %}
                     <div class="card-body">
                       <p class="card-title">제목 : {{ hobby.hobby.title }}</p>
-                      <p class="card-text">내용 : {{ hobby.hobby.content }}</p>
-                      <p class="card-text">주소 : {{ hobby.hobby.address }}</p>
                       <p class="card-text">활동 : {{ hobby.hobby.tags }}</p>
-                      <p class="card-text">시간 : {{ hobby.hobby.meeting_day }}</p>
                       <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
                     </div>
                   </div>
@@ -255,10 +256,7 @@
                     {% endif %}
                     <div class="card-body">
                       <p class="card-title">제목 : {{ hobby.hobby.title }}</p>
-                      <p class="card-text">내용 : {{ hobby.hobby.content }}</p>
-                      <p class="card-text">주소 : {{ hobby.hobby.address }}</p>
                       <p class="card-text">활동 : {{ hobby.hobby.tags }}</p>
-                      <p class="card-text">시간 : {{ hobby.hobby.meeting_day }}</p>
                       <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
                     </div>
                   </div>
