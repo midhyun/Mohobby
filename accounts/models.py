@@ -22,7 +22,7 @@ class User(AbstractUser):
     address = models.CharField(max_length=50)  # 주소
     address_detail = models.CharField(max_length=40, null=True, blank=True)  # 상세주소
     birth = models.DateTimeField(default=timezone.now)  # 나이
-    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")
+    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")    
 
     image = ProcessedImageField(
         upload_to="image/",

@@ -40,6 +40,7 @@ a:hover {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    margin-right: 30px;
 }
 
 .side_bar {
@@ -181,7 +182,7 @@ background-color: transparent;
 
 .login_banner {
     margin-bottom: 20px;
-    font-size: 48px;
+    font-size: 36px;
     color: #e45454;
     font-weight: bold;
 }
@@ -194,9 +195,20 @@ background-color: transparent;
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px;
+    margin-bottom: 20px;
 }
 
+.kakao_login_button {
+    background-color: #FEE500;
+    width: 600px;
+    height: 55px;
+    border-radius: 30px;
+    color: #000000, 90%;
+    border: 0px;
+    outline: 0px;
+    margin-bottom: 20px;
+    
+}
 .login_text {
     font-weight: bolder;
     font-size: 16px;
@@ -450,3 +462,11 @@ background-color: transparent;
 .accounts-height{
     height: 200px;
 }
+
+.tab_menu{position:relative;}
+.tab_menu .list{overflow:hidden;}
+.tab_menu .list li{float:left;}
+.tab_menu .list .btn{font-size:13px; margin-right:14px;}
+.tab_menu .list .cont{display:none; position:absolute; background:#555; color:#fff; text-align:center; width:250px; height:100px; line-height:100px;}
+.tab_menu .list li.is_on .btn{font-weight:bold; color:green;}
+.tab_menu .list li.is_on .cont{display:block;}

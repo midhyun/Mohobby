@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load socialaccount %}
 {% load django_bootstrap5 %}
 {% load widget_tweaks %}
 {% load static %}
@@ -37,16 +36,12 @@
     </div>
     <button class="login_button" type="submit">로그인</button>
   </form>
-  <div class="text-center">
-    <a href="{% provider_login_url 'kakao' %}">
-      <div class="social_button position-relative">
-        <span class="kakao-logintext position-absolute">
-          <i class="bi bi-chat-fill"></i> &nbsp;카카오톡 로그인
-        </span>
-      </div>
-    </a>
+
+    <a href="{% url 'accounts:kakao_login' %}">
+    <button class="kakao_login_button" type="button"><i class="bi bi-chat-fill"></i> 카카오 로그인</button>
+    </a> 
     
-  </div>
+
   <!-- 회원가입 URL -->
   <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
 </div>
@@ -56,4 +51,5 @@
 
 {% endblock %}
 
-{% block js %}{% endblock js %}
+{% block js %}
+{% endblock js %}
