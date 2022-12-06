@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_safe, require_http_methods
 from django.db.models import Prefetch, Q
@@ -23,6 +22,7 @@ def index(request):
     return render(request, "products/index.html", context)
 
 
+@require_safe
 def search(request):
     products = None
     query = None
@@ -46,16 +46,16 @@ def search(request):
     return render(request, "products/search.html", context)
 
 
+@login_required
 @require_http_methods(["GET", "POST"])
 def product_create(request):
-    if not request.user.is_authenticated:
-        return redirect("accounts:login")
-
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.user = request.user
+            if product.location == "":
+                product.location = "전국"
             product.contentStripTag = strip_tags(product.content)
             product.save()
             return redirect("products:product_detail", product.pk)
@@ -97,12 +97,10 @@ def product_detail(request, product_pk):
     return response
 
 
+@login_required
 @require_http_methods(["GET", "POST"])
 def product_update(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
-
-    if not request.user.is_authenticated:
-        return redirect("accounts:login")
 
     if product.user != request.user:
         return redirect("products:product_detail", product_pk)

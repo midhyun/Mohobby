@@ -12,13 +12,7 @@
           <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.username }}</a>
           <p id="comment-{{ comment.pk }}-content" class="fs-5 my-2">{{ comment.content }}</p>
           <div class="d-flex justify-content-between align-items-center">
-            <p class="mb-0">
-              {% if comment.updated_at_string %}
-                {{ comment.updated_at_string }}
-              {% else %}
-                {{ comment.updated_at|date:'Y-m-d H:i' }}
-              {% endif %}
-            </p>
+            <p class="mb-0">{{ comment.updated_at_string }}</p>
             {% if request.user.is_authenticated %}
               <button class="btn btn-outline-secondary border-0 reply-btn" data-comment-id="{{ comment.pk }}">답글쓰기</button>
             {% endif %}

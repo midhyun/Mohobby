@@ -75,20 +75,19 @@
             <div class="rounded-circle bg-white"></div>
           <!--프사-->
           <div class="pf-right">
-            <div class='pf-detail d-flex justify-content-around'>
+            <div class='pf-detail'>
 
-            <div class="profile-m">
-                <h3 class="">{{user}}님의 프로필</h3>
+            <div>
+                <h3 class="mx-3">{{user}}님의 프로필</h3>
                 {% if user.image %}
-                <img class="id-img rounded-4" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
+                <img class="id-img rounded-5" style="width:280px; height:280px;" src="{{ user.image.url }}" alt="{{ user.profile.image }}" class='mb-2'>
                 {% endif %}
               <p class="small mb-1 lh-lg">
             </div>
             <!--프사 옆-->
-            <div class="acoounts-all">
-                <h4 class="mt-5">Hobbys</h4>
-                <div class="accounts-height">
-                <div class="accounts-hoddys">
+            <div>
+                <h4 class="mt-3">Hobbys</h4>
+                <div class="accounts-hoddys mb-2">
                 {% for sports in user.sports %}
                 <p class="all-tag">#{{ sports }}&nbsp</p>
                 {% endfor %}
@@ -105,7 +104,7 @@
                 <p class="all-tag">#{{ develop }}&nbsp</p>
                 {% endfor %}
               </div>
-              </div>
+
   
             <!-- 팔로우 표시 -->
             <div class="counts d-flex">
@@ -174,22 +173,44 @@
         </div>
       </div>
       <br>
-      <div class='mt-5 text-center'>
       <nav id="tab-button-nav">
-      <button class="tab-button" data-tab-section="tab-section-1">Community</button>
-      <button class="tab-button" data-tab-section="tab-section-2">Hobby</button>
-      <button class="tab-button" data-tab-section="tab-section-3">product</button>
+      <button class="tab-button" data-tab-section="tab-section-1">내가 쓴 글</button>
+      <button class="tab-button" data-tab-section="tab-section-2">좋아요</button>
+      <button class="tab-button" data-tab-section="tab-section-3">참여중</button>
+      <button class="tab-button" data-tab-section="tab-section-4">참여 대기</button>
+      <button class="tab-button" data-tab-section="tab-section-5">판매중</button>
+      <button class="tab-button" data-tab-section="tab-section-6">찜</button>
       </nav>
     </div>
       <main>
         <br>
         <section id="tab-section-1" class="tab-section" hidden>
-          <h3 class="text-center mb-5">Community</h3>
           <div class="row row-cols-1 row-cols-md-4 g-4">
             {% for community in user.community_set.all %}
+              <a class="btn" href="{% url 'community:detail' community.pk %}">
                 <div class="card">
                   {% if community.image %}
-                  <img src="{{ community.image.url }}" class="img-feed" alt="community">
+                  <img src="{{ photo.image.url }}" class="img-feed" alt="community">
+                  {% else %}
+                  <img src="{% static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ community.title }}</h5>
+                    <p class="card-text">{{ community.content }}</p>
+                    <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+            </div>
+        </section>
+        <section id="tab-section-2" class="tab-section" hidden>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for community in user.community_like.all %}
+              <a class="btn" href="{% url 'community:detail' community.pk %}">
+                <div class="card">
+                  {% if community.image %}
+                  <img src="{{ photo.image.url }}" class="img-feed" alt="community">
                   {% else %}
                   <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
                   {% endif %}
@@ -199,36 +220,75 @@
                     <p class="card-text"><small class="text-muted">댓글 : {{ user.comment_set.count }}  좋아요 : {{ user.like_community.count }}</small></p>
                   </div>
                 </div>
+              </a>
             {% endfor %}
             </div>
         </section>
-        <section id="tab-section-2" class="tab-section" hidden>
-          <h3 class="text-center mb-5">Hobby</h3>
+        <section id="tab-section-3" class="tab-section" hidden>
           <div class="row row-cols-1 row-cols-md-4 g-4">
-            {% for hobby in user.hobby_set.all %}
+            {% for hobby in accepted %}
+            <a class="btn" href="{% url 'hobby:detail' hobby.hobby.pk %}">
                   <div class="card">
-                    {% if hobby.image %}
-                    <img src="{{ hobby.image.url }}" class="img-feed" alt="hobby">
+                    {% if hobby.hobby.image %}
+                    <img src="{{ hobby.hobby.image.url }}" class="img-feed" alt="hobby">
                     {% else %}
                     <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
                     {% endif %}
                     <div class="card-body">
-                      <p class="card-title">제목 : {{ hobby.title }}</p>
-                      <p class="card-text">내용 : {{ hobby.content }}</p>
-                      <p class="card-text">주소 : {{ hobby.address }}</p>
-                      <p class="card-text">활동 : {{ hobby.tags }}</p>
-                      <p class="card-text">시간 : {{ hobby.meeting_day }}</p>
+                      <p class="card-title">제목 : {{ hobby.hobby.title }}</p>
+                      <p class="card-text">활동 : {{ hobby.hobby.tags }}</p>
                       <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
                     </div>
                   </div>
+                </a>
+              {% endfor %}
+            </div>
+        </section>
+        <section id="tab-section-4" class="tab-section" hidden>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for hobby in waiting %}
+            <a class="btn" href="{% url 'hobby:detail' hobby.hobby.pk %}">
+                  <div class="card">
+                    {% if hobby.hobby.image %}
+                    <img src="{{ hobby.hobby.image.url }}" class="img-feed" alt="hobby">
+                    {% else %}
+                    <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
+                    {% endif %}
+                    <div class="card-body">
+                      <p class="card-title">제목 : {{ hobby.hobby.title }}</p>
+                      <p class="card-text">활동 : {{ hobby.hobby.tags }}</p>
+                      <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                    </div>
+                  </div>
+                </a>
               {% endfor %}
             </div>
         </section>
         
-        <section id="tab-section-3" class="tab-section" hidden>
-          <h3 class="text-center mb-5">product</h3>
+        <section id="tab-section-5" class="tab-section" hidden>
           <div class="row row-cols-1 row-cols-md-4 g-4">
           {% for product in user.product_set.all %}
+                <a class="btn" href="{% url 'products:product_detail' product.pk %}">
+                  <div class="card">
+                  {% if product.image %}
+                  <img src="{{ product.image.url }}" class="img-feed" alt="product">
+                  {% else %}
+                  <img src="{% static 'images/noimage.png' %}" class="img-feed" alt="">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">제목 : {{ product.title }}</h5>
+                    <p class="card-text">가격 : {{ product.price|safe }}원</p>
+                    <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+        <section id="tab-section-6" class="tab-section" hidden>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+          {% for product in user.like_product.all %}
+          <a class="btn" href="{% url 'products:product_detail' product.pk %}">
                 <div class="card">
                   {% if product.image %}
                   <img src="{{ product.image.url }}" class="img-feed" alt="product">
@@ -236,18 +296,17 @@
                   <img src="{%static 'images/noimage.png' %}" class="img-feed" alt="">
                   {% endif %}
                   <div class="card-body">
-                    <h5 class="card-title">{{ product.title }}</h5>
-                    <p class="card-text">{{ product.content|safe }}</p>
+                    <h5 class="card-title">제목 : {{ product.title }}</h5>
+                    <p class="card-text">가격 : {{ product.price|safe }}원</p>
                     <p class="card-text"><small class="text-muted">작성자 : {{ user }}</small></p>
                   </div>
                 </div>
+              </a>
             {% endfor %}
           </div>
         </section>
       </main>
-    </section>
-    
-    
+    </section>   
 {% endblock content %}
 
 {% block js %}
@@ -291,6 +350,8 @@
       }
     });
   });
+</script>
+<script>
 </script>
 {% endblock js %}
 

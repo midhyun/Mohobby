@@ -5,7 +5,7 @@
 
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -27,6 +27,7 @@
   <!-- form -->
   <form action="{% url 'accounts:login' %}" method="POST">
     {% csrf_token %}
+    <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
     <div class="login_box">
       <!-- input : 아이디 -->
       {% render_field form.username class="user_input" placeholder="아이디"%}
@@ -45,7 +46,6 @@
   <!-- 회원가입 URL -->
   <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
 </div>
-
 {% endblock %}
 
 {% block js %}

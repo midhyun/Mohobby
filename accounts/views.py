@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_safe, require_http_methods
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
+from hobby.models import Accepted
 
 # Create your views here.
 
@@ -35,7 +36,10 @@ def signup(request):
 # User.username json 데이터
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
-    data = {"accounts": accounts}
+    data = {
+        "accounts": accounts,
+    }
+
     return JsonResponse(data)
 
 # User.nickname json 데이터
@@ -50,9 +54,8 @@ def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            auth_login(request, form.get_user()) # 로그인
-            # 리다이렉트 URL
-            return redirect("main")
+            auth_login(request, form.get_user())
+            return redirect((request.GET.get("next") or request.POST.get("next")) or "main")
         else:
             # 에러 발생
             messages.warning(request, '아이디 또는 비밀번호를 잘못 입력했습니다.')
@@ -60,12 +63,11 @@ def login(request):
         form = AuthenticationForm()
 
     context = {
-        "form": form
+        "form": form,
     }
     return render(request, "accounts/login.html", context)
 
 
-@login_required
 def logout(request):
     auth_logout(request)
     # 로그아웃 메시지
@@ -75,12 +77,17 @@ def logout(request):
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
+    accepted = Accepted.objects.filter(user=user, joined=True)
+    waiting = Accepted.objects.filter(user=user, joined=False)
     context = {
         "user": user,
+        "accepted":accepted,
+        "waiting" : waiting,
     }
     return render(request, "accounts/detail.html", context)
 
 
+@login_required
 def follow(request, pk):
     accounts = get_user_model().objects.get(pk=pk)
     if request.user == accounts:
@@ -121,6 +128,7 @@ def update(request, pk):
     return render(request, "accounts/update.html", context)
 
 
+@login_required
 def password_change(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
 
@@ -130,15 +138,15 @@ def password_change(request, pk):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+
             return redirect("accounts:detail", user_info.pk)
     else:
         form = CustomPasswordChangeForm(request.user)
 
     context = {
-        "form" : form
+        "form": form,
     }
     return render(request, 'accounts/password.html', context)
-
 
 def kakao_login(request):
     # API KEY 
@@ -217,4 +225,3 @@ def social_signup(request, pk):
         "user_info": user_info,
     }
     return render(request, 'accounts/social_signup.html', context)
-

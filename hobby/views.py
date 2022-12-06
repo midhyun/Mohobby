@@ -142,7 +142,7 @@ def comment_create(request, hobby_pk):
         else: image = 'https://dummyimage.com/80x80/000/fff'
         comments_data.append({
             "pk": comment.pk,
-            "user": comment.user.username,
+            "user": comment.user.nickname,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,
@@ -173,7 +173,8 @@ def comment_delete(request, comment_pk):
         else: image = 'https://dummyimage.com/80x80/000/fff'
         comments_data.append({
             "pk": comment.pk,
-            "user": comment.user.username,
+            "user": comment.user.nickname,
+            "user_pk": comment.user.pk,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,

@@ -1,8 +1,9 @@
+from django import forms
 from django.forms import ModelForm
 from .models import Community, Comment
 
 
-class CommunityForm(ModelForm):
+class CommunityForm(forms.ModelForm):
     class Meta:
         model = Community
         fields = ("title", "content")
@@ -12,16 +13,13 @@ class CommunityForm(ModelForm):
         }
 
 
-class CommentForm(ModelForm):
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ("content",)
-        labels = {
-            "content": "댓글 내용",
-        }
 
 
-class ReCommentForm(ModelForm):
+class ReCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ("content",)
