@@ -10,12 +10,14 @@
 
 {% block content %}
   <div class="container d-flex justify-content-center">
+    <!-- 뒤로가기 버튼 -->
     <div>
       <button class="prev_button" type="submit" onclick="history.go(-1)">
         <i class="bi bi-chevron-left"></i>
       </button>
     </div>
-    <form action="{% url 'accounts:update' user.pk %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
+    <!-- 수정 폼 -->
+    <form action="{% url 'accounts:update' user.pk %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
       <div class="container d-flex">
@@ -43,15 +45,18 @@
               </div>
             </div>
           </div>
-          <div class="form_field">
-            <div>
-              <h6 style="color:#888888;">비밀번호 변경</h6>
-              <hr>
+          <!-- 소셜 로그인 사용자에겐 가린다. 값이 많아진다면 소셜과 일반 회원가입의 구분짓는 boolean필드 추가 예정-->
+          {% if user_info.kakao_id == None %}
+            <div class="form_field">
               <div>
-                <a class="input-file-button" href="{% url 'accounts:password_change' request.user.pk %}">비밀번호 변경</a>
+                <h6 style="color:#888888;">비밀번호 변경</h6>
+                <hr>
+                <div>
+                  <a class="input-file-button" href="{% url 'accounts:password_change' request.user.pk %}">비밀번호 변경</a>
+                </div>
               </div>
             </div>
-          </div>
+          {% endif %}
           <div class="form_field">
             <div>
               <h6 style="color:#888888;">주소 수정</h6>
@@ -60,7 +65,7 @@
               <div class="form_field">
                 <div class="address_box">
                   <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
-                  <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="address_btn">
+                  <input type="button" id="search_address" value="주소 찾기" class="address_btn">
                 </div>
               </div>
               <!-- input : 도로명 주소 -->
@@ -86,6 +91,7 @@
               </div>
               <label class="form-label">Sports</label>
               <div id="id_sports">
+                <!-- Sports 카테고리-->
                 {% for value, text in user_form.sports.field.choices %}
                   <span class="category_select">
                     <input id="id_sports_{{ forloop.counter0 }}" name="{{ user_form.sports.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.sports  %} checked="checked" {% endif %}>
@@ -95,6 +101,7 @@
               </div>
               <label class="form-label">Art</label>
               <div id="id_art">
+                <!-- Art 카테고리-->
                 {% for value, text in user_form.art.field.choices %}
                   <span class="category_select">
                     <input id="id_art_{{ forloop.counter0 }}" name="{{ user_form.art.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.art  %} checked="checked" {% endif %}>
@@ -104,6 +111,7 @@
               </div>
               <label class="form-label">Food</label>
               <div id="id_food">
+                <!-- Food 카테고리-->
                 {% for value, text in user_form.food.field.choices %}
                   <span class="category_select">
                     <input id="id_food_{{ forloop.counter0 }}" name="{{ user_form.food.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.food  %} checked="checked" {% endif %}>
@@ -113,6 +121,7 @@
               </div>
               <label class="form-label">Travel</label>
               <div id="id_travel">
+                <!-- Travel 카테고리-->
                 {% for value, text in user_form.travel.field.choices %}
                   <span class="category_select">
                     <input id="id_travel_{{ forloop.counter0 }}" name="{{ user_form.travel.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.travel  %} checked="checked" {% endif %}>
@@ -122,6 +131,7 @@
               </div>
               <label class="form-label">Develop</label>
               <div id="id_develop">
+                <!-- Develop 카테고리-->
                 {% for value, text in user_form.develop.field.choices %}
                   <span class="category_select">
                     <input id="id_develop_{{ forloop.counter0 }}" name="{{ user_form.develop.name }}" type="checkbox" value="{{ value }}" {% if value in user_info.develop  %} checked="checked" {% endif %}>
@@ -139,66 +149,13 @@
 {% endblock content %}
 
 {% block js %}
+<!-- 제이쿼리 -->
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<!-- 주소 검색 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script>
-  // 주소 검색 기능
-  function execDaumPostcode() {
-    new daum
-      .Postcode({
-        oncomplete: function (data) {
-          // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+<script src="{% static 'js/search_address.js' %}"></script>
 
-          // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-          // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-          var roadAddr = data.roadAddress; // 도로명 주소 변수
-          var extraRoadAddr = ''; // 참고 항목 변수
-
-          // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-          // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-          if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-            extraRoadAddr += data.bname;
-          }
-          // 건물명이 있고, 공동주택일 경우 추가한다.
-          if (data.buildingName !== '' && data.apartment === 'Y') {
-            extraRoadAddr += (
-              extraRoadAddr !== ''
-              ? ', ' + data.buildingName
-              : data.buildingName);
-          }
-          // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-          if (extraRoadAddr !== '') {
-            extraRoadAddr = ' (' + extraRoadAddr + ')';
-          }
-
-          // 우편번호와 주소 정보를 해당 필드에 넣는다.
-          document
-            .getElementById("postcode")
-            .value = data.zonecode;
-          document
-            .getElementById("roadAddress")
-            .value = roadAddr;
-        }
-      })
-      .open();
-  }
-</script>
-<script>
-  const items = document.querySelectorAll(".side_bar_item")
-
-  items.forEach((tab, idx) => {
-    tab.addEventListener('click', function () {
-      items.forEach((item) => {
-        item
-          .classList
-          .remove('active')
-      })
-      items[idx]
-        .classList
-        .add('active')
-    })
-  })
-</script>
+<!-- 이미지 미리보기-->
 <script>
   function readURL(input) {
 

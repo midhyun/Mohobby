@@ -92,7 +92,7 @@ class User(AbstractUser):
     )
 
     art = MultiSelectField(  # 관심 문화*예술 선택
-        max_length=4,
+        max_length=100,
         choices=ART_CHOICES,
         blank=True,
     )
