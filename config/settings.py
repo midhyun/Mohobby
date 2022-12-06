@@ -50,12 +50,11 @@ INSTALLED_APPS = [
     # ... 소셜로그인을 할 제공자 리스트를 아래에 포함
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.kakao",
+
     "allauth.socialaccount.providers.google",
     # 설치한 라이브러리
     'rest_framework',
     'rest_framework.authtoken',
-    # 'rest_framework_simplejwt',
-
     'dj_rest_auth',
     'dj_rest_auth.registration',
     "accounts",
@@ -81,7 +80,6 @@ INSTALLED_APPS = [
 # 소셜
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 SITE_ID = 1
 
@@ -256,8 +254,4 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 버튼 클릭 시 자동 로그아웃
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     )
-# }
+
