@@ -13,7 +13,7 @@ urlpatterns = [
     path('<int:hobby_pk>/<int:user_pk>/reject', views.reject, name='reject'),
     path('<int:hobby_pk>/comment_create', views.comment_create, name='comment_create'),
     path("index/<str:category_name>/", views.index, name="index"),
-    path("index/<str:tag_name>/", views.tag, name="tag"),
+    path("index/tag/<str:tag_name>/", views.tag, name="tag"),
     path('<int:hobby_pk>/like_hobby', views.like_hobby, name='like_hobby'),
     path('<int:comment_pk>/like_comment', views.like_comment, name='like_comment'),
 ]

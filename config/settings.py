@@ -50,15 +50,9 @@ INSTALLED_APPS = [
     # ... 소셜로그인을 할 제공자 리스트를 아래에 포함
     "allauth.socialaccount.providers.naver",
     "allauth.socialaccount.providers.kakao",
-    "allauth.socialaccount.providers.google",
-    # 설치한 라이브러리
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
-
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
+    "allauth.socialaccount.providers.google", 
     "accounts",
+    
     "hobby",
     "community",
     "chat",
@@ -261,3 +255,4 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
