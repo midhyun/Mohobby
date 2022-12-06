@@ -40,6 +40,7 @@ a:hover {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    margin-right: 30px;
 }
 
 .side_bar {
@@ -181,7 +182,7 @@ background-color: transparent;
 
 .login_banner {
     margin-bottom: 20px;
-    font-size: 48px;
+    font-size: 36px;
     color: #e45454;
     font-weight: bold;
 }
@@ -194,9 +195,20 @@ background-color: transparent;
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px;
+    margin-bottom: 20px;
 }
 
+.kakao_login_button {
+    background-color: #FEE500;
+    width: 600px;
+    height: 55px;
+    border-radius: 30px;
+    color: #000000, 90%;
+    border: 0px;
+    outline: 0px;
+    margin-bottom: 20px;
+    
+}
 .login_text {
     font-weight: bolder;
     font-size: 16px;

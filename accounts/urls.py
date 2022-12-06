@@ -11,7 +11,13 @@ urlpatterns = [
     path("<int:pk>/follow/", views.follow, name="follow"),
     path("delete/", views.delete, name="delete"),
     path("update/<int:pk>/", views.update, name="update"),
-    path("idcheck/", views.id_check, name="id_check"),
-    path('password_change/', views.password_change, name="password_change"),
-     # 구글 소셜로그인
+    path("id_check/", views.id_check, name="id_check"),
+    path("password_change/<int:pk>/", views.password_change, name="password_change"),
+    
+    # 카카오 로그인
+    path("login/kakao/", views.kakao_login, name="kakao_login"),
+    path("login/kakao/callback/", views.KakaoCallBack),
+
+    # 소셜 로그인 폼
+    path("social_signup/<int:pk>", views.social_signup, name="social_signup"),
 ]

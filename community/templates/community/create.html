@@ -20,6 +20,7 @@
     <form action="" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="image_container"></div>
+
       <input type="file" name="images" multiple="multiple" id="image" accept="image/*" onchange="setThumbnail(event);">
       {% bootstrap_form post_form %}
 
