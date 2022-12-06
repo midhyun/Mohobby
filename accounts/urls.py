@@ -11,7 +11,12 @@ urlpatterns = [
     path("<int:pk>/follow/", views.follow, name="follow"),
     path("delete/", views.delete, name="delete"),
     path("update/<int:pk>/", views.update, name="update"),
+    
+    # unique값 체크 url
     path("id_check/", views.id_check, name="id_check"),
+    path("nickname_check/", views.nickname_check, name="nickname_check"),
+    
+    # 비밀번호 변경
     path("password_change/<int:pk>/", views.password_change, name="password_change"),
     
     # 카카오 로그인

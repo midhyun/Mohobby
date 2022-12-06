@@ -1,33 +1,29 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.views.decorators.http import require_safe, require_http_methods
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_safe, require_http_methods
+from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
 
-
-
-
 # Create your views here.
-
 
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
+            auth_login(request, user)  # 로그인
+            # 리다이렉트 URL
             return redirect("main")
         else:
+            # 에러 발생
             messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
@@ -36,9 +32,15 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
-
+# User.username json 데이터
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
+    data = {"accounts": accounts}
+    return JsonResponse(data)
+
+# User.nickname json 데이터
+def nickname_check(request):
+    accounts = [i.nickname for i in get_user_model().objects.all()]
     data = {"accounts": accounts}
     return JsonResponse(data)
 
@@ -48,20 +50,25 @@ def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            auth_login(request, form.get_user())
+            auth_login(request, form.get_user()) # 로그인
+            # 리다이렉트 URL
             return redirect("main")
         else:
-            messages.warning(request, '비밀번호나 아이디가 틀립니다.')
+            # 에러 발생
+            messages.warning(request, '아이디 또는 비밀번호를 잘못 입력했습니다.')
     else:
         form = AuthenticationForm()
 
-    context = {"form": form}
+    context = {
+        "form": form
+    }
     return render(request, "accounts/login.html", context)
 
 
 @login_required
 def logout(request):
     auth_logout(request)
+    # 로그아웃 메시지
     messages.warning(request, '로그아웃 하였습니다.')
     return redirect("accounts:login")
 
@@ -118,6 +125,7 @@ def password_change(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
 
     if request.method == 'POST':
+        # django에서 지원하는 패스워드 체인지폼
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
@@ -133,8 +141,11 @@ def password_change(request, pk):
 
 
 def kakao_login(request):
+    # API KEY 
     app_key = os.getenv("KAKAO_REST_API_KEY")
+    # callback 받을 url  
     redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
+    # 카카오 로그인 URL
     kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
 
     return redirect(
@@ -145,17 +156,21 @@ def kakao_login(request):
 
 
 def KakaoCallBack(request):
+    # 카카오에서 callback 받음 
     auth_code = request.GET.get('code')
     kakao_token_api = 'https://kauth.kakao.com/oauth/token'
     data = {
+        # OAuth 인증
         'grant_type': 'authorization_code',
+        # 카카오 API KEY
         'client_id': os.getenv("KAKAO_REST_API_KEY"),
         'redirection_uri': 'http://localhost:8000/accounts/login/kakao/callback',
         'code': auth_code,
     }
+    # 토큰 발급받기
     token_response = requests.post(kakao_token_api, data=data)
     
-    # 발급받은 토큰
+    # 발급받은 토큰 가공
     access_token = token_response.json().get('access_token')
     user_info_response = requests.get('https://kapi.kakao.com/v2/user/me', headers={"Authorization": f'Bearer ${access_token}'})
 
@@ -166,26 +181,6 @@ def KakaoCallBack(request):
     kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
-
-    # 1.
-    
-    # # filter 활용 username(id)에 카카오 user_nickname 존재하는지 확인 (problem.1 : 카카오 닉네임이 같은 경우는?)
-    # if get_user_model().objects.filter(username=kakao_user_nickname).exists():
-    #     # 존재하는 경우 유저의 오브젝트를 가져오고 로그인 후 메인페이지로 리다이렉트
-    #     kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
-    #     auth_login(request, kakao_user)
-    #     return redirect(request.GET.get("next") or "main")
-    # # 서버 DB에 존재하지 않는 경우
-    # else:
-    #     # username을 DB에 저장하고 로그인 후 소셜 로그인 전용 회원가입 페이지로 넘겨줌.
-    #     kakao_login_user = get_user_model()()
-    #     kakao_login_user.username = kakao_user_nickname
-    #     kakao_login_user.save()
-    #     kakao_user = get_user_model().objects.get(username=kakao_user_nickname)
-    
-    #     auth_login(request, kakao_user)
-    #     return redirect("accounts:social_signup", kakao_user.pk)
-
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
@@ -200,13 +195,13 @@ def KakaoCallBack(request):
         auth_login(request, kakao_user)
         return redirect("accounts:social_signup", kakao_user.pk)
 
-@login_required
+@login_required 
 def social_signup(request, pk):
     user_info = get_user_model().objects.get(pk=pk)
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
-            # 소셜 회원가입이지만 커스텀폼 재활용. 따로 만들어도 문제없음
+            # 소셜 폼 사용
             form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 form.save()
@@ -217,11 +212,9 @@ def social_signup(request, pk):
         else:
             form = CustomSocialForm(instance=request.user)
     
-
     context = {
         "form": form,
         "user_info": user_info,
     }
-
     return render(request, 'accounts/social_signup.html', context)
 
