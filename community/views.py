@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Community, Comment, Photo
 from .forms import CommunityForm, CommentForm, ReCommentForm
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from datetime import date, datetime, timedelta
 import json
 from django.core import serializers
@@ -187,3 +187,15 @@ def recomments_delete(request, community_pk, recomment_pk):
         return redirect("community:detail", community_pk)
     else:
         return HttpResponseForbidden()
+
+def like(request, community_pk):
+    post = get_object_or_404(Community, pk=community_pk)
+
+    if post.like.filter(pk=request.user.pk).exists():
+        post.like.remove(request.user)
+        is_likes = False
+    else:
+        post.like.add(request.user)
+        is_likes = True
+    data = {"is_likes": is_likes, "likes_count": post.like.count()}
+    return JsonResponse(data)
