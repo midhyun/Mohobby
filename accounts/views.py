@@ -13,12 +13,13 @@ from django.contrib import messages
 
 # Create your views here.
 
+
 def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # 로그인
+            auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")  # 로그인
             return redirect("main")
     else:
         form = CustomUserCreationForm()
@@ -27,10 +28,11 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def id_check(request):
     accounts = [i.username for i in get_user_model().objects.all()]
     data = {
-        'accounts' : accounts
+        "accounts": accounts,
     }
     return JsonResponse(data)
 
@@ -41,14 +43,15 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("main")
+            return redirect((request.GET.get("next") or request.POST.get("next")) or "main")
     else:
         form = AuthenticationForm()
-    context = {"form": form}
+    context = {
+        "form": form,
+    }
     return render(request, "accounts/login.html", context)
 
 
-@login_required
 def logout(request):
     auth_logout(request)
     return redirect("accounts:login")
@@ -62,6 +65,7 @@ def detail(request, pk):
     return render(request, "accounts/detail.html", context)
 
 
+@login_required
 def follow(request, pk):
     accounts = get_user_model().objects.get(pk=pk)
     if request.user == accounts:
@@ -101,21 +105,21 @@ def update(request, pk):
     }
     return render(request, "accounts/update.html", context)
 
+
+@login_required
 def password_change(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, "비밀번호를 변경하였습니다.")
-            return redirect('main')
+            return redirect("main")
     else:
         form = CustomPasswordChangeForm(request.user)
 
     context = {
-        "form" : form
+        "form": form,
     }
 
-
-
-    return render(request, 'accounts/password.html', context)
+    return render(request, "accounts/password.html", context)

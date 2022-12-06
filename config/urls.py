@@ -30,6 +30,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("products/", include("products.urls")),
     path("summernote/", include("django_summernote.urls")),
+    path("notes/", include("notes.urls")),
 ]
 
 if settings.DEBUG:

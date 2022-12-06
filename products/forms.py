@@ -4,6 +4,10 @@ from django_summernote.widgets import SummernoteWidget
 
 
 class ProductForm(forms.ModelForm):
+    image = forms.ImageField(
+        required=True,
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -27,6 +31,7 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "location": forms.TextInput(
                 attrs={
+                    "placeholder": "직거래 시 필수 항목, 기본값은 전국",
                     "readonly": "True",
                 }
             ),

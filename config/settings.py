@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "notes",
     # 숫자 천 단위 콤마 포맷
     "django.contrib.humanize",
     # Allauth를 위한 Apps

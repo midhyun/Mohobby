@@ -18,6 +18,7 @@
     <!-- <div class="side_bar"> <h4 class="side_bar_title">회원 정보 관리</h4> <div class="side_bar_menu"> <a href="#" id="side_bar_item1" class="side_bar_item active"> <i class="bi bi-person-gear"></i>회원 정보 수정 </a> </div> <div class="side_bar_menu"> <a href="#category" id="side_bar_item2" class="side_bar_item"> <i class="bi bi-suit-heart"></i>관심 분야 </a> </div> </div> -->
     <form action="{% url 'accounts:update' user.pk %}" method="POST" autocomplete="off" onsubmit="return mySubmit()">
       {% csrf_token %}
+      <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
       <div class="container d-flex">
         <div class="update_wrapper">
           <div class="form_list">

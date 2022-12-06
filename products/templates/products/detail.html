@@ -7,160 +7,156 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
-    <h1 class="my-2">상세 페이지</h1>
-  </div>
-  <div class="p-4">
-    <div class="row justify-content-center g-5 mb-3">
-      <div class="col-12 col-sm-10 col-md-4 col-lg-3">
-        {% if product.image %}
-          <img src="{{ product.image.url }}" class="img-fluid" alt="image">
-        {% else %}
-          <img src="https://dummyimage.com/800/000/fff" class="img-fluid" alt="dummyimage">
-        {% endif %}
-      </div>
-      <div class="col-12 col-sm-10 col-md-6 col-lg-4 position-relative">
-        <h4 class="mb-4">{{ product.title }}</h4>
-        <h3 class="mb-4 fw-bold">{{ product.price|intcomma }}원</h3>
-        <h6 class="mb-4">상품 상태 {{ product.productType }}</h6>
-        <h6 class="mb-4">배송 방법 {{ product.tradeType }}</h6>
-        <h6 class="mb-4">거래 위치 {{ product.location }}</h6>
-        <div class="d-flex">
-          <button class="btn btn-outline-secondary disabled me-2"><i class="bi bi-eye me-2"></i><span>{{ product.hits }}</span></button>
-          {% if request.user.is_authenticated %}
-            <form action="{% url 'products:product_like' product.pk %}" method="POST">
-              {% csrf_token %}
-              {% if request.user in product.like_users.all %}
-                <button class="btn btn-outline-danger active me-2" type="submit"><i class="bi bi-heart-fill me-2"></i><span>{{ product.like_users.count }}</span></button>
-              {% else %}
-                <button class="btn btn-outline-danger me-2" type="submit"><i class="bi bi-heart me-2"></i><span>{{ product.like_users.count }}</span></button>
-              {% endif %}
-            </form>
+  <div class="container">
+    <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
+      <h1 class="my-2">상세 페이지</h1>
+    </div>
+    <div class="p-4">
+      <div class="row justify-content-center g-5 mb-3">
+        <div class="col-12 col-sm-10 col-md-4 col-lg-3">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid" alt="image">
           {% else %}
-            <button class="btn btn-outline-danger disabled me-2" type="submit"><i class="bi bi-heart me-2"></i><span>{{ product.like_users.count }}</span></button>
+            <img src="https://dummyimage.com/800/000/fff" class="img-fluid" alt="dummyimage">
           {% endif %}
-          {% if request.user.is_authenticated %}
-            <button class="btn btn-outline-success me-2">쪽지</button>
-            <button class="btn btn-outline-primary">채팅</button>
-          {% else %}
-            <button class="btn btn-outline-success disabled me-2">쪽지</button>
-            <button class="btn btn-outline-primary disabled">채팅</button>
-          {% endif %}
-          
         </div>
-        {% if request.user == product.user %}
-          <div class="position-absolute top-0 end-0">
-            <div class="dropdown">
-              <button class="btn btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="{% url 'products:product_update' product.pk %}">수정</a>
-                </li>
-                <li>
-                  <form action="{% url 'products:product_delete' product.pk %}" method="POST">
-                    {% csrf_token %}
-                    <button class="dropdown-item" type="submit">삭제</button>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-    <div class="row justify-content-center mb-3">
-      <div class="col-12 col-sm-10 col-md-10 col-lg-7">
-        <hr>
-        {{ product.content|safe }}
-        <hr>
-      </div>
-    </div>
-    <div class="row justify-content-center mb-3">
-      <div class="col-12 col-sm-10 col-md-10 col-lg-7">
-        <hr>
-        {% for comment in comments %}
-          <div id="comment-{{ comment.pk }}-block" class="d-flex d-block">
-            {% if comment.user.image %}
-              <img class="img-thumbnail rounded" src="{{ comment.user.image.url }}" alt="image" style="max-width: 100px; max-height: 100px;">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4 position-relative">
+          <h4 class="mb-4">{{ product.title }}</h4>
+          <h3 class="mb-4 fw-bold">{{ product.price|intcomma }}원</h3>
+          <h6 class="mb-4">상품 상태 {{ product.productType }}</h6>
+          <h6 class="mb-4">배송 방법 {{ product.tradeType }}</h6>
+          <h6 class="mb-4">거래 위치 {{ product.location }}</h6>
+          <div class="d-flex">
+            <button class="btn btn-outline-secondary disabled me-2"><i class="bi bi-eye me-2"></i><span>{{ product.hits }}</span></button>
+            {% if request.user.is_authenticated %}
+              <form action="{% url 'products:product_like' product.pk %}" method="POST">
+                {% csrf_token %}
+                {% if request.user in product.like_users.all %}
+                  <button class="btn btn-outline-danger active me-2" type="submit"><i class="bi bi-heart-fill me-2"></i><span>{{ product.like_users.count }}</span></button>
+                {% else %}
+                  <button class="btn btn-outline-danger me-2" type="submit"><i class="bi bi-heart me-2"></i><span>{{ product.like_users.count }}</span></button>
+                {% endif %}
+              </form>
             {% else %}
-              <img class="img-thumbnail rounded" src="https://dummyimage.com/100/000/fff" alt="dummyimage" style="max-width: 100px; max-height: 100px;">
+              <button class="btn btn-outline-danger disabled me-2" type="submit"><i class="bi bi-heart me-2"></i><span>{{ product.like_users.count }}</span></button>
             {% endif %}
-            <div class="ms-4 align-items-center flex-fill position-relative">
-              <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.username }}</a>
-              <p id="comment-{{ comment.pk }}-content" class="fs-5 my-2">{{ comment.content }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <p class="mb-0">
-                  {% if comment.updated_at_string %}
-                    {{ comment.updated_at_string }}
-                  {% else %}
-                    {{ comment.updated_at|date:'Y-m-d H:i' }}
+            {% if request.user.is_authenticated %}
+              <button class="btn btn-outline-success me-2">쪽지</button>
+              <button class="btn btn-outline-primary">채팅</button>
+            {% else %}
+              <button class="btn btn-outline-success disabled me-2">쪽지</button>
+              <button class="btn btn-outline-primary disabled">채팅</button>
+            {% endif %}
+            
+          </div>
+          {% if request.user == product.user %}
+            <div class="position-absolute top-0 end-0">
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'products:product_update' product.pk %}">수정</a>
+                  </li>
+                  <li>
+                    <form action="{% url 'products:product_delete' product.pk %}" method="POST">
+                      {% csrf_token %}
+                      <button class="dropdown-item" type="submit">삭제</button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <div class="col-12 col-sm-10 col-md-10 col-lg-7">
+          <hr>
+          {{ product.content|safe }}
+          <hr>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <div class="col-12 col-sm-10 col-md-10 col-lg-7">
+          <hr>
+          {% for comment in comments %}
+            <div id="comment-{{ comment.pk }}-block" class="d-flex d-block">
+              {% if comment.user.image %}
+                <img class="img-thumbnail rounded" src="{{ comment.user.image.url }}" alt="image" style="max-width: 100px; max-height: 100px;">
+              {% else %}
+                <img class="img-thumbnail rounded" src="https://dummyimage.com/100/000/fff" alt="dummyimage" style="max-width: 100px; max-height: 100px;">
+              {% endif %}
+              <div class="ms-4 align-items-center flex-fill position-relative">
+                <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.username }}</a>
+                <p id="comment-{{ comment.pk }}-content" class="fs-5 my-2">{{ comment.content }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="mb-0">{{ comment.updated_at_string }}</p>
+                  {% if request.user.is_authenticated %}
+                    <button class="btn btn-outline-secondary border-0 reply-btn" data-comment-id="{{ comment.pk }}">답글쓰기</button>
                   {% endif %}
-                </p>
+                </div>
                 {% if request.user.is_authenticated %}
-                  <button class="btn btn-outline-secondary border-0 reply-btn" data-comment-id="{{ comment.pk }}">답글쓰기</button>
+                  <div id="reply-form-{{ comment.pk }}" class="d-none">
+                    <form action="{% url 'products:reply_create' product.pk comment.pk %}" method="POST" class="reply-create-form" data-product-id="{{ product.pk }}">
+                      {% csrf_token %}
+                      <div class="d-flex">
+                        <input type="text" name="content" placeholder="답글을 남겨보세요 💬" class="form-control" required="true">
+                        <button class="btn btn-primary" type="submit" style="min-width: 60px;">등록</button>
+                      </div>
+                    </form>
+                  </div>
+                {% endif %}
+                {% if request.user == comment.user %}
+                  <div class="position-absolute top-0 end-0">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <button class="dropdown-item comment-update-btn" data-comment-id="{{ comment.pk }}">수정</button>
+                        </li>
+                        <li>
+                          <form action="{% url 'products:comment_delete' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
+                            {% csrf_token %}
+                            <button class="dropdown-item comment-delete-btn" type="submit">삭제</button>
+                          </form>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 {% endif %}
               </div>
-              {% if request.user.is_authenticated %}
-                <div id="reply-form-{{ comment.pk }}" class="d-none">
-                  <form action="{% url 'products:reply_create' product.pk comment.pk %}" method="POST" class="reply-create-form" data-product-id="{{ product.pk }}">
-                    {% csrf_token %}
-                    <div class="d-flex">
-                      <input type="text" name="content" placeholder="답글을 남겨보세요 💬" class="form-control" required="true">
-                      <button class="btn btn-primary" type="submit" style="min-width: 60px;">등록</button>
-                    </div>
-                  </form>
-                </div>
-              {% endif %}
-              {% if request.user == comment.user %}
-                <div class="position-absolute top-0 end-0">
-                  <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <button class="dropdown-item comment-update-btn" data-comment-id="{{ comment.pk }}">수정</button>
-                      </li>
-                      <li>
-                        <form action="{% url 'products:comment_delete' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
-                          {% csrf_token %}
-                          <button class="dropdown-item comment-delete-btn" type="submit">삭제</button>
-                        </form>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              {% endif %}
             </div>
-          </div>
-          <div id="comment-{{ comment.pk }}-update" class="flex-fill d-none">
-            <form action="{% url 'products:comment_update' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
-              {% csrf_token %}
-              <div class="d-flex">
-                <input type="text" name="content" placeholder="댓글을 남겨보세요 💬" class="form-control" required="true" value="{{ comment.content }}">
-                <button class="btn btn-primary" type="submit" style="min-width: 60px;">수정</button>
-                <button class="btn btn-secondary update-cancel-btn" type="button" data-comment-id="{{ comment.pk }}" style="min-width: 60px;">취소</button>
-              </div>
-            </form>
-          </div>
-          {% with parent=comment reply_list=comment.reply_set.all %}
-            {% include 'products/reply.html' %}
-          {% endwith %}
-          <hr>
-        {% endfor %}
-      </div>
-    </div>
-    {% if request.user.is_authenticated %}
-      <form action="{% url 'products:comment_create' product.pk %}" method="POST">
-        {% csrf_token %}
-        <div class="row justify-content-center mb-3 g-0">
-          <div class="col-12 col-sm-10 col-md-10 col-lg-7">
-            <div class="d-flex">
-              <input type="text" name="content" placeholder="댓글을 남겨보세요 💬" class="form-control" required="true">
-              <button class="btn btn-primary" type="submit" style="min-width: 60px;">등록</button>
+            <div id="comment-{{ comment.pk }}-update" class="flex-fill d-none">
+              <form action="{% url 'products:comment_update' product.pk comment.pk %}" method="POST" data-product-id="{{ product.pk }}" data-comment-id="{{ comment.pk }}">
+                {% csrf_token %}
+                <div class="d-flex">
+                  <input type="text" name="content" placeholder="댓글을 남겨보세요 💬" class="form-control" required="true" value="{{ comment.content }}">
+                  <button class="btn btn-primary" type="submit" style="min-width: 60px;">수정</button>
+                  <button class="btn btn-secondary update-cancel-btn" type="button" data-comment-id="{{ comment.pk }}" style="min-width: 60px;">취소</button>
+                </div>
+              </form>
             </div>
-          </div>
+            {% with parent=comment reply_list=comment.reply_set.all %}
+              {% include 'products/reply.html' %}
+            {% endwith %}
+            <hr>
+          {% endfor %}
         </div>
-      </form>
-    {% endif %}
+      </div>
+      {% if request.user.is_authenticated %}
+        <form action="{% url 'products:comment_create' product.pk %}" method="POST">
+          {% csrf_token %}
+          <div class="row justify-content-center mb-3 g-0">
+            <div class="col-12 col-sm-10 col-md-10 col-lg-7">
+              <div class="d-flex">
+                <input type="text" name="content" placeholder="댓글을 남겨보세요 💬" class="form-control" required="true">
+                <button class="btn btn-primary" type="submit" style="min-width: 60px;">등록</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      {% endif %}
+    </div>
   </div>
 {% endblock content %}
 
