@@ -15,6 +15,8 @@ from django.contrib import messages
 import requests, os
 
 
+
+
 # Create your views here.
 
 
@@ -216,9 +218,11 @@ def social_signup(request, pk):
         else:
             form = CustomUserChangeForm(instance=request.user)
     
+
     context = {
         "form": form,
         "user_info": user_info,
     }
 
     return render(request, 'accounts/social_signup.html', context)
+

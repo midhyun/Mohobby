@@ -3,6 +3,7 @@
 {% load widget_tweaks %}
 {% load static %}
 
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
@@ -35,13 +36,19 @@
     </div>
     <button class="login_button" type="submit">로그인</button>
   </form>
+
     <a href="{% url 'accounts:kakao_login' %}">
     <button class="kakao_login_button" type="button"><i class="bi bi-chat-fill"></i> 카카오 로그인</button>
     </a> 
     
+
   <!-- 회원가입 URL -->
   <a class="login_text mb-3" href="{% url 'accounts:signup'%}">회원가입</a>
 </div>
+
+
+
+
 {% endblock %}
 
 {% block js %}
