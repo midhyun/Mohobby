@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
 # Create your views here.
 
-
+@login_required
 def create(request):
     print(request.method)
     if request.method == "POST":
@@ -36,7 +36,7 @@ def create(request):
 def test(request):
     return render(request, "hobby/test.html")
 
-
+@login_required
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
     comments = HobbyComment.objects.filter(hobby=hobby).order_by('-pk')
@@ -85,7 +85,7 @@ def tag(request, tag_name):
 
     return render(request, "hobby/tag.html", context)
 
-
+@login_required
 def call(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     accepted = Accepted.objects.filter(hobby=hobby, user=request.user)
@@ -100,7 +100,7 @@ def call(request, hobby_pk):
         print("이미 신청한 소셜링입니다.")
     return redirect("hobby:detail", hobby_pk)
 
-
+@login_required
 def approve(request, hobby_pk, user_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     if request.user == hobby.host:
@@ -112,16 +112,17 @@ def approve(request, hobby_pk, user_pk):
         print("권한이 없습니다.")
     return redirect("hobby:detail", hobby_pk)
 
-
+@login_required
 def reject(request, hobby_pk, user_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
-    if request.user == hobby.host and user_pk != hobby.host.pk:
+    if (request.user == hobby.host and user_pk != hobby.host.pk) or request.user.pk == user_pk:
         accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
         accepted.delete()
     else:
         print('권한이 없습니다.')
     return redirect('hobby:detail', hobby_pk)
 
+@login_required
 def comment_create(request, hobby_pk):
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
@@ -143,6 +144,7 @@ def comment_create(request, hobby_pk):
         comments_data.append({
             "pk": comment.pk,
             "user": comment.user.nickname,
+            "user_pk": comment.user.pk,
             "content": comment.content,
             "created_at": created_at,
             "is_like": is_like,
@@ -154,6 +156,7 @@ def comment_create(request, hobby_pk):
     }
     return JsonResponse(context)
 
+@login_required
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
     hobby_pk = comment.hobby.pk
@@ -194,6 +197,7 @@ def comment_like(request, comment_pk):
     else:
         comment.like_user.remove(request.user)
         is_like = False
+    
     data = {
         'is_like': is_like,
         'likeCount': comment.like_user.count(),
@@ -300,7 +304,8 @@ def save(request):
         tag.save()
 
     return redirect("main")
-    
+
+@login_required    
 def like_hobby(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     if request.user not in hobby.like_user.all():
@@ -309,12 +314,23 @@ def like_hobby(request, hobby_pk):
     else:
         hobby.like_user.remove(request.user)
         is_like = False
+    if request.user.image:
+        image = request.user.image.url
+    else:
+        image = 'https://dummyimage.com/80x80/000/fff'
+    nickname = request.user.nickname
+    user_pk = request.user.pk
+
     data = {
         'is_like': is_like,
-        'likeCount': hobby.like_user.count()
+        'likeCount': hobby.like_user.count(),
+        'image': image,
+        'nickname': nickname,
+        'user_pk': user_pk,
     }
     return JsonResponse(data)
 
+@login_required
 def like_comment(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
     if request.user not in comment.like_user.all():
