@@ -47,7 +47,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
                   <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
-                  <ion-icon onclick="getDeleteComment(this)" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user }" name="ellipsis-horizontal"></ion-icon>
+                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
               </div>
@@ -79,7 +79,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
                   <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
-                  <ion-icon onclick="getDeleteComment(this)" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
               </div>
@@ -150,12 +150,16 @@ function getDeleteComment(e) {
   console.log(requestUserId)
   if (e.target.dataset.action == 'getDelete') {
     const btnDiv = document.querySelector('.modal-body')
-    if (requestUserId === e.target.dataset.user) {
+    if (requestUserId == e.target.dataset.user) {
       btnDiv.innerHTML = `<button onclick="deleteComment(this)" data-bs-dismiss="modal" data-comment-id="${e.target.dataset.commentId}" id="comment-delete-btn" class="mt-3 submit_btn slide_button" type="button">댓글 삭제하기</button>`
     } else {
-      btnDiv.innerHTML = `<button id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 submit_btn slide_button" type="button">댓글 신고하기</button>`
+      btnDiv.innerHTML = `<button onclick="commentReport()" id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 submit_btn slide_button" type="button">댓글 신고하기</button>`
     }};
 };
+
+function commentReport() {
+  swal("신고가 완료되었습니다.", `감사합니다.`, "success");
+}
 
 function deleteComment(e) {
   const comment_pk = e.dataset.commentId;
