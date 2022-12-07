@@ -143,7 +143,8 @@ var places = new kakao.maps.services.Places();
 var callback = function(result, status, pagination) {
     console.log(result.length)
     
-    if (status === kakao.maps.services.Status.OK) {
+    if (status === kakao.maps.services.Status.OK && pagination.current == 1) {
+      console.log(pagination.current)
       arr = []
       for (let i = 0; i < (result.length); i++) {
         arr += `<li class="m-3 addrelem" data-bs-dismiss="offcanvas" aria-label="Close"><p class="addr_title">${result[i].place_name}</p><p class="addr_addr">${result[i].address_name}</p></li><hr>`
@@ -157,22 +158,40 @@ var callback = function(result, status, pagination) {
           address.value = elem.firstChild.innerText
         })
       });
-      function testfunction() {
-        console.log('특수한값')
+      testBtn.onclick = function () {
         // 속성 값으로 다음 페이지가 있는지 확인하고
         if (pagination.hasNextPage) {
             pagination.nextPage()
             console.log('nextpage')
-        } else { }
+        }
       }
-      // testBtn.addEventListener('click', testfunction);
-      // testBtn.removeEventListener('click', testfunction);
-      testBtn.onclick = testfunction()
-    };
+    } else if (status === kakao.maps.services.Status.OK) {
+      console.log(pagination.current)
+      arr = []
+      for (let i = 0; i < (result.length); i++) {
+        arr += `<li class="m-3 addrelem" data-bs-dismiss="offcanvas" aria-label="Close"><p class="addr_title">${result[i].place_name}</p><p class="addr_addr">${result[i].address_name}</p></li><hr>`
+      };
+      addrdiv.insertAdjacentHTML('beforeend', arr)
+      const addrelems = document.querySelectorAll('.addrelem');
+
+      [].forEach.call(addrelems, function(elem) {
+        elem.addEventListener('click', () => {
+          offbuttonaddr.innerText = elem.firstChild.innerText
+          address.value = elem.firstChild.innerText
+        })
+      });
+      testBtn.onclick = function () {
+        // 속성 값으로 다음 페이지가 있는지 확인하고
+        if (pagination.hasNextPage) {
+            pagination.nextPage()
+            console.log('nextpage')
+        }
+      }
+    }
 
 };
 keysearch.addEventListener('keyup', () => {
-  places.keywordSearch(`${keysearch.value}`, callback, {size: 15});
+  places.keywordSearch(`${keysearch.value}`, callback, {size: 10});
 })
 
 // 제한인원 설정하기
