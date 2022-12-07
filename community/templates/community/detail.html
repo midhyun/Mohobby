@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %}
   <div class='container' style="margin-top: 5%; width:1000px">
+
     <div class='d-flex justify-content-between'>
       <h3 class='main_title align-self-center'>
         {{post.title}}
@@ -66,7 +67,7 @@
       {% endif %}
       <span id='fav-count' class="text-center">{{ post.like.count }}</span>
     {% endif %}
-
+    {{comment_count}}
     <!-- 댓글 작성 -->
     <form data-post-id="{{ post.pk }}" action="{% url 'community:comments_create' post.pk %}" method="POST">
       {% csrf_token %}
@@ -87,7 +88,7 @@
     <!-- 댓글 목록 -->
     <div>
       {% for comment in comments %}
-        {% if comment.patrent_comment == NULL %}
+        {% if comment.parent_comment == NULL %}
           <div id='comment' class='d-flex'>
             <div>
               {% if comment.user.image %}
@@ -154,12 +155,12 @@
               </form>
             </div>
           {% endif %}
-          <!-- 대댓글 목록 -->
+          <!-- 답글 목록 -->
           <div class='recomment_list'>
             {% for recom in comment.recomment.all %}
               <div class='d-flex'>
                 <div>
-                  {% if comment.user.image %}
+                  {% if recom.user.image %}
                     <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
                   {% else %}
                     <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
@@ -186,7 +187,7 @@
                   <div>{{ recom.content}}</div>
                 </div>
               </div>
-              <!-- 대댓글 수정 -->
+              <!-- 답글 수정 -->
               {% if request.user == recom.user %}
                 <div class="collapse recomment_list" id="recomment{{recom.pk}}">
                   <form action="{% url 'community:recomments_update' post.pk comment.pk recom.pk%}" method="POST">
@@ -203,21 +204,21 @@
               {% endif %}
             {% endfor %}
           </div>
-
+          <!-- 답글 작성 form -->
+          <div class="collapse recomment_list" id="collapse{{comment.pk}}">
+            <form action="{% url 'community:recomments_create' post.pk comment.pk %}" method="POST">
+              {% csrf_token %}
+              {% if request.user.image %}
+                <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+              {% else %}
+                <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+              {% endif %}
+              <input name="content" class='comment_input' type="text" placeholder="답글 달기...">
+              <input type="submit" class='comment_sbmit mx-2' value="등록">
+            </form>
+          </div>
         {% endif %}
-        <!-- 답글 작성 form -->
-        <div class="collapse recomment_list" id="collapse{{comment.pk}}">
-          <form action="{% url 'community:recomments_create' post.pk comment.pk %}" method="POST">
-            {% csrf_token %}
-            {% if request.user.image %}
-              <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
-            {% else %}
-              <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
-            {% endif %}
-            <input name="content" class='comment_input' type="text" placeholder="답글 달기...">
-            <input type="submit" class='comment_sbmit mx-2' value="등록">
-          </form>
-        </div>
+
       {% endfor %}
     </div>
 
