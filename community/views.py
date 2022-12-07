@@ -42,7 +42,6 @@ def detail(request, community_pk):
     comment_form = CommentForm()
     recomment_form = ReCommentForm()
 
-
     expire_date, now = datetime.now(), datetime.now()
     expire_date += timedelta(days=1)
     expire_date = expire_date.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -59,9 +58,7 @@ def detail(request, community_pk):
     response = render(request, "community/detail.html", context)
     if f"_{community_pk}_" not in cookie_value:
         cookie_value += f"{community_pk}_"
-        response.set_cookie(
-            "hitboard", value=cookie_value, max_age=max_age, httponly=True
-        )
+        response.set_cookie("hitboard", value=cookie_value, max_age=max_age, httponly=True)
         post.hits += 1
         post.save()
 
@@ -80,14 +77,15 @@ def update(request, community_pk):
                 post.save()
 
                 if request.FILES.getlist("images"):
-                    for img in photo_list:
-                        img.delete()
+                    for image in photo_list:
+                        image.delete()
                     # 이미지 삭제(초기화)하고 난뒤 이미지 저장
                     for image in request.FILES.getlist("images"):
                         photo = Photo()
                         photo.post = post
                         photo.image = image
                         photo.save()
+
                     return redirect("community:detail", post.pk)
                 else:
                     if request.POST.getlist("image-clear"):
@@ -116,6 +114,7 @@ def delete(request, community_pk):
     else:
         return HttpResponseForbidden()
 
+
 def comments_create(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
     if request.user.is_authenticated:
@@ -126,6 +125,8 @@ def comments_create(request, community_pk):
             comment.user = request.user
             comment.save()
         return redirect("community:detail", post.pk)
+
+
 def comments_update(request, community_pk, comment_pk):
     post = get_object_or_404(Community, pk=community_pk)
     comment = Comment.objects.get(pk=comment_pk)
@@ -141,6 +142,7 @@ def comments_update(request, community_pk, comment_pk):
         comment_form = CommentForm(instance=comment)
         return redirect("community:detail", community_pk)
 
+
 def comments_delete(request, community_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
 
@@ -148,7 +150,8 @@ def comments_delete(request, community_pk, comment_pk):
         comment.delete()
         return redirect("community:detail", community_pk)
     else:
-        return HttpResponseForbidden()        
+        return HttpResponseForbidden()
+
 
 def recomments_create(request, community_pk, comment_pk):
     post = get_object_or_404(Community, pk=community_pk)
@@ -162,6 +165,7 @@ def recomments_create(request, community_pk, comment_pk):
             recomment.save()
 
         return redirect("community:detail", post.pk)
+
 
 def recomments_update(request, community_pk, comment_pk, recomment_pk):
     post = get_object_or_404(Community, pk=community_pk)
@@ -179,6 +183,7 @@ def recomments_update(request, community_pk, comment_pk, recomment_pk):
         recomment_form = ReCommentForm(instance=recomment)
         return redirect("community:detail", community_pk)
 
+
 def recomments_delete(request, community_pk, recomment_pk):
     recomment = get_object_or_404(Comment, pk=recomment_pk)
 
@@ -187,6 +192,7 @@ def recomments_delete(request, community_pk, recomment_pk):
         return redirect("community:detail", community_pk)
     else:
         return HttpResponseForbidden()
+
 
 def like(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)

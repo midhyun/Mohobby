@@ -48,6 +48,14 @@
       {% endif %}
       <span id='fav-count' class="text-center">{{ post.like.count }}</span>
     {% endif %}
+    {% if request.user == post.user %}
+      <div>
+        <a href="{% url 'community:update' post.pk %}">
+          <button class="btn">수정
+          </button>
+        </a>
+      </div>
+    {% endif %}
     <!-- 댓글 작성 -->
     <form data-post-id="{{ post.pk }}" action="{% url 'community:comments_create' post.pk %}" method="POST">
       {% csrf_token %}

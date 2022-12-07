@@ -7,7 +7,7 @@
     {% csrf_token %}
     {% bootstrap_form post_form %}
     <label class="form-label" for="id_image">사진</label>
-    <input type="file" name="imgs" multiple="multiple" accept="image/*" class="form-control" id="id_image">
+    <input type="file" name="images" multiple="multiple" accept="image/*" class="form-control" id="id_image">
     {% if photo_list %}
       {% for photo in photo_list %}
         <a href="{{ photo.image.url }}">{{ photo.image }}</a>
