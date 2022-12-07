@@ -134,15 +134,26 @@ onlinebtn.addEventListener('click', () => {
 });
 
 // 키워드로 검색하기
-const keysearch = document.querySelector('#keysearch')
-const addrdiv = document.querySelector('#addrlist')
-const offbuttonaddr = document.querySelector('#offbuttonaddr')
+const keysearch = document.querySelector('#keysearch');
+const addrdiv = document.querySelector('#addrlist');
+const offbuttonaddr = document.querySelector('#offbuttonaddr');
 const testBtn = document.querySelector('#testbtn');
+const addrBody = document.querySelector('#addrbody');
 var places = new kakao.maps.services.Places();
-
+function addrInsert(elem) {
+  offbuttonaddr.innerText = elem.firstChild.innerText
+  address.value = elem.firstChild.innerText
+}
 var callback = function(result, status, pagination) {
     console.log(result.length)
-    
+    const nextPagination = function () {
+      // 속성 값으로 다음 페이지가 있는지 확인하고
+      if (pagination.hasNextPage) {
+          pagination.nextPage()
+          console.log('nextpage')
+      }
+    }
+    testBtn.onclick = nextPagination
     if (status === kakao.maps.services.Status.OK && pagination.current == 1) {
       console.log(pagination.current)
       arr = []
@@ -153,18 +164,9 @@ var callback = function(result, status, pagination) {
       const addrelems = document.querySelectorAll('.addrelem');
 
       [].forEach.call(addrelems, function(elem) {
-        elem.addEventListener('click', () => {
-          offbuttonaddr.innerText = elem.firstChild.innerText
-          address.value = elem.firstChild.innerText
-        })
+        console.log(elem)
+        elem.addEventListener('click', addrInsert(elem))
       });
-      testBtn.onclick = function () {
-        // 속성 값으로 다음 페이지가 있는지 확인하고
-        if (pagination.hasNextPage) {
-            pagination.nextPage()
-            console.log('nextpage')
-        }
-      }
     } else if (status === kakao.maps.services.Status.OK) {
       console.log(pagination.current)
       arr = []
@@ -175,18 +177,9 @@ var callback = function(result, status, pagination) {
       const addrelems = document.querySelectorAll('.addrelem');
 
       [].forEach.call(addrelems, function(elem) {
-        elem.addEventListener('click', () => {
-          offbuttonaddr.innerText = elem.firstChild.innerText
-          address.value = elem.firstChild.innerText
-        })
+        console.log(elem)
+        elem.addEventListener('click', addrInsert(elem))
       });
-      testBtn.onclick = function () {
-        // 속성 값으로 다음 페이지가 있는지 확인하고
-        if (pagination.hasNextPage) {
-            pagination.nextPage()
-            console.log('nextpage')
-        }
-      }
     }
 
 };
