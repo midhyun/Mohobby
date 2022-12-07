@@ -236,8 +236,7 @@
                 <label class="image-control mt-3" for="image">
                     <ion-icon name="image-outline" style="font-size:32px;"></ion-icon><br>사진 추가
                 </label>
-                <input class="d-none" id="image" accept="image/*" name="image"
-                    type="file">
+                <input class="d-none" id="image" accept="image/*" name="image" type="file">
                 <textarea class="area-control mt-3" rows="10" name="content" id="content"
                     placeholder="내용을 입력해 주세요.(선택)"></textarea>
                 <p class="text-muted mb-5">
@@ -289,6 +288,7 @@
                             </p>
                             <h5>장소 또는 지역을 검색해보세요</h5>
                             <p class="text-muted">예시)마포구, 합정동, 강남역, 한가람미술관 등</p>
+                            <input type="button" id="testbtn" value="NEXT">
                         </div>
                     </div>
                 </div>
@@ -353,7 +353,8 @@
 {% endblock content %}
 {% block js %}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
+<script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script src="{% static 'js/form.js' %}"></script>
 <script>
