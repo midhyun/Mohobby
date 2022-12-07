@@ -29,7 +29,8 @@ urlpatterns = [
     # 소셜
     path("products/", include("products.urls")),
     path("summernote/", include("django_summernote.urls")),
-    
+    path("notes/", include("notes.urls")),
+
 ]
 
 if settings.DEBUG:

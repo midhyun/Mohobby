@@ -64,17 +64,22 @@ margin: 0;
 }
 
 .next_btn {
-background-color: #E84545;
+background-color: #ffffff;
 font-weight: 400;
 font-size: 16px;
 line-height: 15px;
 width: 90%;
 height: 40px;
 border-radius: 30px;
-color: #ffffff;
-border: 0px;
+border: solid 1px #E84545;
+color: #E84545;
 outline: 0px;
 margin:auto;
+}
+.next_btn:hover{
+  background-color: #E84545;
+  color: #ffffff;
+  transition: 0.15s
 }
 .submit_btn {
 background-color: white;
@@ -142,7 +147,12 @@ margin: auto;
   background-color: white;
   color: #BBBBBB;
 }
-
+.social-btn:hover{
+  border-color: #E84545;
+  background-color:#E84545;
+  color: white;
+  transition: 0.15s;
+}
 .radio-active{
   border-color: #E84545;
   background-color:#E84545;
@@ -237,6 +247,7 @@ textarea:focus {
 
 /* image 인풋라벨 */
 .image-control{
+  text-shadow: 1px 1px 1px white;
   overflow: hidden;
   background-repeat: no-repeat;
   background-size: cover;
@@ -568,4 +579,10 @@ margin: auto;
   color: rgb(232, 69, 69);
   font-size: 12px;
   font-weight: bolder !important;
+}
+.error-message{
+  color:#E84545;
+  font-size: 16px;
+  text-align: center;
+  
 }

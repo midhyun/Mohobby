@@ -16,18 +16,7 @@
     </div>
     {% for post in posts %}
       <div class='feeds my-5 py-3'>
-        <div class='d-flex justify-content-center'>
-          <div class='d-flex justify-content-between' style='width:800px;'>
-            <h3 class='align-self-center'>
-              <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">{{post.title}}</a>
-            </h3>
-            <!-- 프로필 이미지 설정 -->
-            <div class='d-flex'>
-              <img class=' user_img' id="profile_img" style="width:55px; height:55px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}">
-              <div class='text-muted fw-bold align-self-center'>{{post.user.username}}</div>
-            </div>
-          </div>
-        </div>
+
         <!-- 이미지 캐러셀 -->
         <div class='slideShow' id='slides-{{forloop.counter0}}'>
           <ul class='slides list-unstyled'>
@@ -52,7 +41,7 @@
                   <p class='px-1'>
                     <i class="bi bi-eye"></i>{{post.hits}}</p>
                   <p class='px-1'>
-                    <i class="bi bi-hand-thumbs-up"></i>0</p>
+                    <i class="bi bi-heart"></i>{{post.like.count}}</p>
                   <p class='px-1'>
                     <i id='modal_comment' class="bi bi-chat"></i>0</p>
                 </div>
@@ -65,9 +54,21 @@
             <hr class='mx-2'>
             <div class='d-flex justify-content-center mt-3'>
               <div style='width:800px;'>
-                <p class='m-2'>{{post.content}}</p>
+                <div class='d-flex justify-content-center'>
+                  <div class='d-flex justify-content-between' style='width:800px;'>
+                    <h3 class='align-self-center'>
+                      <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">{{post.title}}</a>
+                    </h3>
+                    <!-- 프로필 이미지 설정 -->
+                    <div class='d-flex'>
+                      <img class=' user_img' id="profile_img" style="width:55px; height:55px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}">
+                      <div class='text-muted fw-bold align-self-center'>{{post.user.username}}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -75,6 +76,10 @@
         <form action="{%url 'community:delete' post.pk%}" method='POST'>
           {% csrf_token %}
           <input type="submit" value='삭제'>
+        </form>
+        <form action="{%url 'community:update' post.pk%}" method='POST'>
+          {% csrf_token %}
+          <input type="submit" value='수정'>
         </form>
       </div>
     {% endfor %}

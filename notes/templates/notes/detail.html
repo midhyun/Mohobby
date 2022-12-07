@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block css %}{% endblock css %}
+
+{% block content %}
+  <div class="container" style="margin-top: 6rem">
+    <div class="p-4">
+      <div class="row">
+        <div class="col-8 col-md-2">
+          <div class="list-group">
+            <a href="{% url 'notes:send' %}" class="list-group-item list-group-item-action">쪽지 쓰기</a>
+            <a href="{% url 'notes:sent_box' %}" class="list-group-item list-group-item-action">보낸 쪽지함</a>
+            <a href="{% url 'notes:received_box' %}" class="list-group-item list-group-item-action">받은 쪽지함</a>
+            <a href="{% url 'notes:important_box' %}" class="list-group-item list-group-item-action">중요 쪽지함</a>
+            <a href="{% url 'notes:trash_box' %}" class="list-group-item list-group-item-action">휴지통</a>
+          </div>
+        </div>
+        <div class="col-12 col-md-10">
+          <h5 class="mb-4">보낸 시간 :
+            {{ note.sent_at_string }}</h5>
+          <h5 class="mb-4">받은 시간 :
+            {{ note.received_at_string }}</h5>
+          <h5 class="mb-4">제목 :
+            {{ note.title }}</h5>
+          <h5 class="mb-4">내용 :
+            {{ note.content }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}{% endblock js %}

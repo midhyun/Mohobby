@@ -21,8 +21,8 @@ class Product(models.Model):
         ("직거래", "직거래"),
         ("택배거래", "택배거래"),
     )
-    tradeType = MultiSelectField(max_length=10, choices=trade_category, max_choices=3)
-    location = models.CharField(max_length=80)
+    tradeType = MultiSelectField(max_length=10, choices=trade_category, min_choices=1, max_choices=2)
+    location = models.CharField(max_length=80, blank=True)
     image = ProcessedImageField(
         upload_to="images/product",
         blank=False,
@@ -58,7 +58,7 @@ class Product(models.Model):
             time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
             return str(time.days) + "일 전"
         else:
-            return False
+            return self.created_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
 
     @property
     def updated_at_string(self):
@@ -74,7 +74,7 @@ class Product(models.Model):
             time = datetime.now(tz=timezone.utc).date() - self.updated_at.date()
             return str(time.days) + "일 전"
         else:
-            return False
+            return self.updated_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
 
 
 class Product_Comment(models.Model):
@@ -105,7 +105,7 @@ class Product_Comment(models.Model):
             time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
             return str(time.days) + "일 전"
         else:
-            return False
+            return self.created_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
 
     @property
     def updated_at_string(self):
@@ -121,4 +121,4 @@ class Product_Comment(models.Model):
             time = datetime.now(tz=timezone.utc).date() - self.updated_at.date()
             return str(time.days) + "일 전"
         else:
-            return False
+            return self.updated_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
