@@ -20,7 +20,7 @@
     <form action="{% url 'accounts:update' user.pk %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
-      <div class="container d-flex">
+      <div class="container update_wrap">
         <div class="update_wrapper">
           <div class="form_field">
             <div>
@@ -79,7 +79,7 @@
             </div>
           </div>
           <div class="form_field text-center">
-            <button class="signup_btn" type="submit">수정</button>
+            <button class="update_botton" type="submit">수정</button>
           </div>
         </div>
         <div class="update_wrapper">
@@ -139,6 +139,9 @@
                   </span>
                 {% endfor %}
               </div>
+            </div>
+            <div class="form_field">
+              <button class="mobile_update_botton" type="submit">수정</button>
             </div>
           </div>
         </div>
