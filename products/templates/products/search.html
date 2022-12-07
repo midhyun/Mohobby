@@ -27,12 +27,12 @@
                 <div class="card-body">
                   <h5 class="card-title text-black">{{ product.title }}</h5>
                   <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                  <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.username }}</a>
+                  <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.nickname }}</a>
                 </div>
               </div>
             </a>
           </div>
-        {% empty %}
+          {% empty %}
           <h5 class="fw-bold flex-fill text-center">검색 결과가 없습니다.</h5>
         {% endfor %}
       </div>
@@ -48,7 +48,7 @@
           </li>
         {% endif %}
         {% for page_number in page_list.paginator.page_range %}
-          {% if page_number >= page_list.number | add : -5 and page_number <= page_list.number | add : 5 %}
+          {% if page_number >= page_list.number|add:-5 and page_number <= page_list.number|add:5 %}
             {% if page_number == page_list.number %}
               <li class="page-item active">
                 <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>

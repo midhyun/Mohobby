@@ -9,7 +9,7 @@
           <img class="img-thumbnail rounded" src="https://dummyimage.com/100/000/fff" alt="dummyimage" style="max-width: 100px; max-height: 100px;">
         {% endif %}
         <div class="ms-4 align-items-center flex-fill position-relative">
-          <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.username }}</a>
+          <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-decoration-none">{{ comment.user.nickname }}</a>
           <p id="comment-{{ comment.pk }}-content" class="fs-5 my-2">{{ comment.content }}</p>
           <div class="d-flex justify-content-between align-items-center">
             <p class="mb-0">{{ comment.updated_at_string }}</p>

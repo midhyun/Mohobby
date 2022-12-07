@@ -27,20 +27,20 @@
                 <div class="card-body">
                   <h5 class="card-title text-black">{{ product.title }}</h5>
                   <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                  <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.username }}</a>
+                  <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.nickname }}</a>
                 </div>
               </div>
             </a>
           </div>
-        {% empty %}
+          {% empty %}
           <h5 class="fw-bold flex-fill text-center">데이터가 없습니다.</h5>
         {% endfor %}
       </div>
-  
+
       <div class="d-flex justify-content-end mb-4">
         <a class="btn btn-primary" href="{% url 'products:product_create' %}">글쓰기</a>
       </div>
-  
+
       <ul class="pagination justify-content-center mb-4">
         {% if page_list.has_previous %}
           <li class="page-item">
@@ -74,14 +74,16 @@
           </li>
         {% endif %}
       </ul>
-  
+
       <div class="mx-auto mb-4">
         <form action="{% url 'products:search' %}" method="GET">
           <div class="row justify-content-center">
             <div class="col-9 col-sm-7 col-md-5 col-lg-3">
               <div class="d-flex">
                 <input type="search" class="form-control" name="q" required="true">
-                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                <button class="btn btn-primary" type="submit">
+                  <i class="bi bi-search"></i>
+                </button>
               </div>
             </div>
           </div>
