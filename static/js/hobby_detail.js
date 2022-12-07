@@ -30,10 +30,11 @@ function submitComment(event) {
         commentList.textContent = ""
         for (let i=0; i < response.data.comments_data.length; i++){
             let isLike = ""
+            if (i == 7){
+              break;
+            }
             if (response.data.comments_data[i].is_like === true) {
               isLike = "heart"
-            } else if (i == 7) {
-              break;
             } else {
               isLike = "heart-outline"
             }
@@ -170,10 +171,11 @@ function deleteComment(e) {
       commentList.textContent = ""
       for (let i=0; i < response.data.comments_data.length; i++){
           let isLike = ""
+          if (i == 7){
+            break;
+          }
           if (response.data.comments_data[i].is_like === true) {
             isLike = "heart"
-          } else if (i == 7) {
-            break;
           } else {
             isLike = "heart-outline"
           }

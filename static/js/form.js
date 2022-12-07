@@ -167,8 +167,9 @@ var callback = function(result, status, pagination) {
       }
       // testBtn.addEventListener('click', testfunction);
       // testBtn.removeEventListener('click', testfunction);
-      testBtn.onclick = testfunction
+      testBtn.onclick = testfunction()
     };
+
 };
 keysearch.addEventListener('keyup', () => {
   places.keywordSearch(`${keysearch.value}`, callback, {size: 15});
