@@ -22,9 +22,13 @@
           <ul class='slides list-unstyled'>
             {% for photo in post.photo_set.all %}
               <!-- 이미지 설정 -->
-              <li>
-                <img class='feeds_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;">
-              </li>
+              {% if photo %}
+                <li>
+                  <img class='feeds_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;">
+                </li>
+              {% else %}
+                <img src="{% static 'image/noimg.png' %}">
+              {% endif %}
             {% endfor %}
           </ul>
           <p class="controller">
@@ -72,16 +76,7 @@
           </div>
         </div>
       </div>
-      <div>
-        <form action="{%url 'community:delete' post.pk%}" method='POST'>
-          {% csrf_token %}
-          <input type="submit" value='삭제'>
-        </form>
-        <form action="{%url 'community:update' post.pk%}" method='POST'>
-          {% csrf_token %}
-          <input type="submit" value='수정'>
-        </form>
-      </div>
+
     {% endfor %}
   </div>
   <!-- 피드 추가 버튼 -->

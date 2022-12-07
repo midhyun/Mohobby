@@ -21,7 +21,7 @@
       {% csrf_token %}
       <div class="image_container"></div>
 
-      <input type="file" name="images" multiple="multiple" id="image" accept="image/*" onchange="setThumbnail(event);">
+      <input type="file" name="images" multiple="multiple" id="images" accept="image/*" onchange="setThumbnail(event);">
       {% bootstrap_form post_form %}
 
       <div style=" text-align: center;">
