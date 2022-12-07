@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import HobbyForm, AcceptedForm, CommentForm
 from .models import Hobby, Accepted, Tag, HobbyComment
+from datetime import date, datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
+
 # Create your views here.
 
-
+@login_required
 def create(request):
     print(request.method)
     if request.method == "POST":
@@ -36,51 +38,90 @@ def create(request):
 def test(request):
     return render(request, "hobby/test.html")
 
-
+@login_required
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
-    comments = HobbyComment.objects.filter(hobby=hobby).order_by('-pk')
+    comments = HobbyComment.objects.filter(hobby=hobby).order_by("-pk")
     accepted = Accepted.objects.filter(hobby=hobby, joined=True)
     waiting = Accepted.objects.filter(hobby=hobby, joined=False)
+    expire_date, now = datetime.now(), datetime.now()
+    expire_date += timedelta(days=1)
+    expire_date = expire_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    expire_date -= now
+    max_age = expire_date.total_seconds()
+    cookie_value = request.COOKIES.get("hitboard", "_")
     context = {
-        'hobby':hobby,
-        'accepted': accepted,
-        'waiting': waiting,
-        'comments':comments,        
+        "hobby": hobby,
+        "accepted": accepted,
+        "waiting": waiting,
+        "comments": comments,
     }
-    return render(request, "hobby/detail.html", context)
+    response = render(request, "hobby/detail.html", context)
+    if f"_{hobby_pk}_" not in cookie_value:
+        cookie_value += f"{hobby_pk}_"
+        response.set_cookie("hitboard", value=cookie_value, max_age=max_age, httponly=True)
+        hobby.hits += 1
+        hobby.save()
+
+    return response
+    
 
 
 # 카테고리별 인기글 , 최신글, 전체 글
+@login_required
 def index(request, category_name):
-    category_posts = Hobby.objects.filter(category=category_name).annotate(joinmembers = Count('accepted', filter=Q(accepted__joined=True)))
+    category_posts = (
+        Hobby.objects.filter(category=category_name).order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+    )
     category_posts_hit = category_posts.order_by("-hits")[:3]
-    category_posts_new = category_posts.order_by("-pk")[:3]
+
     tags = Tag.objects.filter(category=category_name)
     context = {
         "category_name": category_name,
         "category_posts": category_posts,
         "category_posts_hit": category_posts_hit,
-        "category_posts_new": category_posts_new,
         "tags": tags,
     }
     return render(request, "hobby/index.html", context)
 
 
 # 전체 인기글, 최신글, 태그글 모음
+@login_required
 def tag(request, tag_name):
-    if tag_name == "hits":
-        tag_posts = Hobby.objects.all().order_by("-hits")
-    if tag_name == "news":
-        tag_posts = (
-            Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-        )
+    # 로그인한 유저
+    user = request.user
+    # 유저 태그 모두 저장
+    my_tags = []
+    for i in user.sports:
+        my_tags.append(i)
+    for i in user.travel:
+        my_tags.append(i)
+    for i in user.art:
+        my_tags.append(i)
+    for i in user.food:
+        my_tags.append(i)
+    for i in user.develop:
+        my_tags.append(i)
+    print(my_tags)
+    # 내가 저장한 태그별 허비 보여주기
+    if tag_name == "likes":
+        tag_posts = Hobby.objects.filter(tags__in=my_tags).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        print(tag_posts)
+    # 조회수 별 허비 보여주기
+    elif tag_name == "hits":
+        tag_posts = Hobby.objects.all().order_by("-hits").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+    # 새로 생긴 허비 보여주기
+    elif tag_name == "news":
+        tag_posts = Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        print(tag_posts)
+
     else:
-        tag_posts = Hobby.objects.filter(tags=tag_name)
+        tag_posts = Hobby.objects.filter(tags=tag_name).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
 
     context = {
         "tag_posts": tag_posts,
         "tag_name": tag_name,
+        "user": user,
     }
 
     return render(request, "hobby/tag.html", context)
@@ -95,7 +136,7 @@ def call(request, hobby_pk):
         temp.hobby = hobby
         temp.user = request.user
         temp.save()
-        print('호스트의 승인을 기다려주세요.')
+        print("호스트의 승인을 기다려주세요.")
     else:
         print("이미 신청한 소셜링입니다.")
     return redirect("hobby:detail", hobby_pk)
@@ -107,7 +148,7 @@ def approve(request, hobby_pk, user_pk):
         accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
         accepted.joined = True
         accepted.save()
-        print(f'{request.user}님의 가입을 승인했습니다.')
+        print(f"{request.user}님의 가입을 승인했습니다.")
     else:
         print("권한이 없습니다.")
     return redirect("hobby:detail", hobby_pk)
@@ -119,40 +160,46 @@ def reject(request, hobby_pk, user_pk):
         accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
         accepted.delete()
     else:
-        print('권한이 없습니다.')
-    return redirect('hobby:detail', hobby_pk)
+        print("권한이 없습니다.")
+    return redirect("hobby:detail", hobby_pk)
+
 
 def comment_create(request, hobby_pk):
-    if request.method == 'POST':
+    if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             temp = comment_form.save(commit=False)
             temp.user = request.user
             temp.hobby_id = hobby_pk
             temp.save()
-    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by("-pk")
     comments_data = []
     for comment in comments:
         if request.user in comment.like_user.all():
             is_like = True
-        else: is_like = False
-        created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        else:
+            is_like = False
+        created_at = comment.created_at.strftime("%Y-%m-%d %H:%M")
         if comment.user.image:
             image = comment.user.image.url
-        else: image = 'https://dummyimage.com/80x80/000/fff'
-        comments_data.append({
-            "pk": comment.pk,
-            "user": comment.user.nickname,
-            "content": comment.content,
-            "created_at": created_at,
-            "is_like": is_like,
-            "image": image,
-            'likeCount': comment.like_user.count(),
-        })
+        else:
+            image = "https://dummyimage.com/80x80/000/fff"
+        comments_data.append(
+            {
+                "pk": comment.pk,
+                "user": comment.user.nickname,
+                "content": comment.content,
+                "created_at": created_at,
+                "is_like": is_like,
+                "image": image,
+                "likeCount": comment.like_user.count(),
+            }
+        )
     context = {
         "comments_data": comments_data,
     }
     return JsonResponse(context)
+
 
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
@@ -160,31 +207,36 @@ def comment_delete(request, comment_pk):
     if comment.user == request.user:
         comment.delete()
     else:
-        print('권한이 없습니다.')
-    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+        print("권한이 없습니다.")
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by("-pk")
     comments_data = []
     for comment in comments:
         if request.user in comment.like_user.all():
             is_like = True
-        else: is_like = False
-        created_at = comment.created_at.strftime('%Y-%m-%d %H:%M')
+        else:
+            is_like = False
+        created_at = comment.created_at.strftime("%Y-%m-%d %H:%M")
         if comment.user.image:
             image = comment.user.image.url
-        else: image = 'https://dummyimage.com/80x80/000/fff'
-        comments_data.append({
-            "pk": comment.pk,
-            "user": comment.user.nickname,
-            "user_pk": comment.user.pk,
-            "content": comment.content,
-            "created_at": created_at,
-            "is_like": is_like,
-            "image": image,
-            'likeCount': comment.like_user.count(),
-        })
+        else:
+            image = "https://dummyimage.com/80x80/000/fff"
+        comments_data.append(
+            {
+                "pk": comment.pk,
+                "user": comment.user.nickname,
+                "user_pk": comment.user.pk,
+                "content": comment.content,
+                "created_at": created_at,
+                "is_like": is_like,
+                "image": image,
+                "likeCount": comment.like_user.count(),
+            }
+        )
     context = {
         "comments_data": comments_data,
     }
     return JsonResponse(context)
+
 
 def comment_like(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
@@ -195,8 +247,8 @@ def comment_like(request, comment_pk):
         comment.like_user.remove(request.user)
         is_like = False
     data = {
-        'is_like': is_like,
-        'likeCount': comment.like_user.count(),
+        "is_like": is_like,
+        "likeCount": comment.like_user.count(),
     }
     return JsonResponse(data)
 
@@ -300,7 +352,8 @@ def save(request):
         tag.save()
 
     return redirect("main")
-    
+
+
 def like_hobby(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     if request.user not in hobby.like_user.all():
@@ -309,11 +362,9 @@ def like_hobby(request, hobby_pk):
     else:
         hobby.like_user.remove(request.user)
         is_like = False
-    data = {
-        'is_like': is_like,
-        'likeCount': hobby.like_user.count()
-    }
+    data = {"is_like": is_like, "likeCount": hobby.like_user.count()}
     return JsonResponse(data)
+
 
 def like_comment(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
@@ -323,9 +374,5 @@ def like_comment(request, comment_pk):
     else:
         comment.like_user.remove(request.user)
         is_like = False
-    data = {
-        'is_like': is_like,
-        'likeCount': comment.like_user.count()
-    }
+    data = {"is_like": is_like, "likeCount": comment.like_user.count()}
     return JsonResponse(data)
-
