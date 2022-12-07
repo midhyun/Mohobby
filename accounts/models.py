@@ -31,6 +31,7 @@ class User(AbstractUser):
         format="JPEG",
         options={"quality": 30},
         blank=True,
+        null=True,
     )
 
     STORTS_CHOICES = (
