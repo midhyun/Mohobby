@@ -60,13 +60,13 @@ def send(request):
         form = NoteForm(request.POST)
         if form.is_valid():
             received_note = form.save(commit=False)
-            received_note.received_user = get_user_model().objects.get(username=received_note.received_username)
-            received_note.sent_username = request.user.username
+            received_note.received_user = get_user_model().objects.get(nickname=received_note.received_username)
+            received_note.sent_username = request.user.nickname
             received_note.save()
 
             sent_note = Sent_Note()
             sent_note.sent_user = request.user
-            sent_note.sent_username = request.user.username
+            sent_note.sent_username = request.user.nickname
             sent_note.received_username = received_note.received_username
             sent_note.title = received_note.title
             sent_note.content = received_note.content
@@ -75,8 +75,8 @@ def send(request):
             return redirect("notes:sent_box")
     else:
         if "to" in request.GET:
-            username = request.GET.get("to").split("&")[0]
-            form = NoteForm(initial={"received_username": username})
+            nickname = request.GET.get("to").split("&")[0]
+            form = NoteForm(initial={"received_username": nickname})
         else:
             form = NoteForm()
     context = {
