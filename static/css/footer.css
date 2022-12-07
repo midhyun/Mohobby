@@ -11,6 +11,7 @@
     position: fixed;
     bottom: 50px;
     right: 23px;
+    z-index: 4;
 }
 
 .top-btn div {

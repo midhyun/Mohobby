@@ -47,7 +47,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
                   <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
-                  <ion-icon onclick="getDeleteComment(this)" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user }" name="ellipsis-horizontal"></ion-icon>
+                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
               </div>
@@ -79,7 +79,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
                   <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
-                  <ion-icon onclick="getDeleteComment(this)" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
               </div>
@@ -97,6 +97,8 @@ function submitComment(event) {
 
 
 const likeBtn = document.querySelector('.hobby-like-btn');
+const likeList = document.querySelector('#like-list-off');
+const likeBox = document.querySelector('#no-like-box');
 function likeHobby(e) {
   const hobbyPk = e.dataset.hobbyId
   axios({
@@ -104,14 +106,42 @@ function likeHobby(e) {
     url: `/hobby/${hobbyPk}/like_hobby`,
   })
   .then(response => {
-    console.log(response.data)
-    if (response.data.is_like === true ) {
-      likeBtn.setAttribute('name', 'heart')
-    } else {
-      likeBtn.setAttribute('name', 'heart-outline')
-    }
     const likeCount = document.querySelector('#like-count')
     likeCount.innerText = response.data.likeCount
+    console.log(response.data.likeCount)
+    if (response.data.is_like === true ) {
+      if (response.data.likeCount === 1){
+        likeList.textContent = ""
+      }
+      likeBtn.setAttribute('name', 'heart')
+      likeList.insertAdjacentHTML('afterbegin', `<a id="like-user-${response.data.user_pk}" href="/accounts/detail/${response.data.user_pk}">
+      <li class="d-flex justify-content-between">
+        <div class="d-flex">
+          <img class="member-image" src="${response.data.image}" alt="">
+          <p class="m-3">
+            <span style="font-size:20px; font-weight:600;">${response.data.nickname}</span><br>
+            <span class="text-muted" style="overflow:hidden">멤버 소개글</span>
+          </p>
+        </div>
+      </li>
+    </a>`)
+    } else {
+      likeBtn.setAttribute('name', 'heart-outline')
+      const likeUserElem = document.querySelector(`#like-user-${response.data.user_pk}`)
+      likeUserElem.remove()
+      console.log(response.data.likeCount)
+      if (response.data.likeCount === 0) {
+        console.log(response.data.likeCount)
+        likeList.insertAdjacentHTML('afterbegin', `<div id="no-like-box" class="text-center mt-5">
+        <p>
+          <ion-icon name="people" size="large"></ion-icon>
+        </p>
+        <h5>아직 좋아요가 없습니다.</h5>
+        <p class="text-muted">소셜링을 홍보해 보세요!</p>
+      </div>`)
+      }
+    }
+
   })
 };
 
@@ -150,12 +180,16 @@ function getDeleteComment(e) {
   console.log(requestUserId)
   if (e.target.dataset.action == 'getDelete') {
     const btnDiv = document.querySelector('.modal-body')
-    if (requestUserId === e.target.dataset.user) {
+    if (requestUserId == e.target.dataset.user) {
       btnDiv.innerHTML = `<button onclick="deleteComment(this)" data-bs-dismiss="modal" data-comment-id="${e.target.dataset.commentId}" id="comment-delete-btn" class="mt-3 submit_btn slide_button" type="button">댓글 삭제하기</button>`
     } else {
-      btnDiv.innerHTML = `<button id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 submit_btn slide_button" type="button">댓글 신고하기</button>`
+      btnDiv.innerHTML = `<button onclick="commentReport()" id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 submit_btn slide_button" type="button">댓글 신고하기</button>`
     }};
 };
+
+function commentReport() {
+  swal("신고가 완료되었습니다.", `감사합니다.`, "success");
+}
 
 function deleteComment(e) {
   const comment_pk = e.dataset.commentId;

@@ -42,7 +42,7 @@
             {% endif %}
             {% if request.user.is_authenticated %}
               <form action="{% url 'notes:send' %}" method="GET">
-                <input type="hidden" class="form-control" value="{{ product.user.username }}" name="to">
+                <input type="hidden" class="form-control" value="{{ product.user.nickname }}" name="to">
                 <button class="btn btn-outline-success me-2">쪽지</button>
               </form>
               <button class="btn btn-outline-primary">채팅</button>

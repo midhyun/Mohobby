@@ -4,6 +4,7 @@ from .forms import CommunityForm, CommentForm, ReCommentForm
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden, JsonResponse
 from datetime import date, datetime, timedelta
+from django.contrib.auth.decorators import login_required
 import json
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
@@ -41,6 +42,7 @@ def detail(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
     comment_form = CommentForm()
     recomment_form = ReCommentForm()
+    comment_count = post.comment_set.all().count()
 
     expire_date, now = datetime.now(), datetime.now()
     expire_date += timedelta(days=1)
@@ -53,6 +55,7 @@ def detail(request, community_pk):
         "post": post,
         "comment_form": comment_form,
         "comments": post.comment_set.all(),
+        "comment_count": comment_count,
         "recomment_form": recomment_form,
     }
     response = render(request, "community/detail.html", context)
@@ -115,6 +118,7 @@ def delete(request, community_pk):
         return HttpResponseForbidden()
 
 
+@login_required
 def comments_create(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
     if request.user.is_authenticated:
@@ -153,6 +157,7 @@ def comments_delete(request, community_pk, comment_pk):
         return HttpResponseForbidden()
 
 
+@login_required
 def recomments_create(request, community_pk, comment_pk):
     post = get_object_or_404(Community, pk=community_pk)
     if request.user.is_authenticated:
@@ -204,4 +209,17 @@ def like(request, community_pk):
         post.like.add(request.user)
         is_likes = True
     data = {"is_likes": is_likes, "likes_count": post.like.count()}
+    return JsonResponse(data)
+
+
+def comment_like(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if comment.like.filter(pk=request.user.pk).exists():
+        comment.like.remove(request.user)
+        is_likes = False
+    else:
+        comment.like.add(request.user)
+        is_likes = True
+    data = {"is_likes": is_likes, "likes_count": comment.like.count()}
     return JsonResponse(data)
