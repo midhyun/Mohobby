@@ -205,3 +205,16 @@ def like(request, community_pk):
         is_likes = True
     data = {"is_likes": is_likes, "likes_count": post.like.count()}
     return JsonResponse(data)
+
+
+def comment_like(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+
+    if comment.like.filter(pk=request.user.pk).exists():
+        comment.like.remove(request.user)
+        is_likes = False
+    else:
+        comment.like.add(request.user)
+        is_likes = True
+    data = {"is_likes": is_likes, "likes_count": comment.like.count()}
+    return JsonResponse(data)
