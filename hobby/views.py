@@ -3,6 +3,7 @@ from .forms import HobbyForm, AcceptedForm, CommentForm
 from .models import Hobby, Accepted, Tag, HobbyComment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import date, datetime, timedelta
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
@@ -42,45 +43,83 @@ def detail(request, hobby_pk):
     comments = HobbyComment.objects.filter(hobby=hobby).order_by('-pk')
     accepted = Accepted.objects.filter(hobby=hobby, joined=True)
     waiting = Accepted.objects.filter(hobby=hobby, joined=False)
+    expire_date, now = datetime.now(), datetime.now()
+    expire_date += timedelta(days=1)
+    expire_date = expire_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    expire_date -= now
+    max_age = expire_date.total_seconds()
+    cookie_value = request.COOKIES.get("hitboard", "_")
     context = {
         'hobby':hobby,
         'accepted': accepted,
         'waiting': waiting,
         'comments':comments,        
     }
-    return render(request, "hobby/detail.html", context)
+    response = render(request, "hobby/detail.html", context)
+    if f"_{hobby_pk}_" not in cookie_value:
+        cookie_value += f"{hobby_pk}_"
+        response.set_cookie("hitboard", value=cookie_value, max_age=max_age, httponly=True)
+        hobby.hits += 1
+        hobby.save()
+
+    return response
 
 
 # 카테고리별 인기글 , 최신글, 전체 글
+@login_required
 def index(request, category_name):
-    category_posts = Hobby.objects.filter(category=category_name).annotate(joinmembers = Count('accepted', filter=Q(accepted__joined=True)))
+    category_posts = (
+        Hobby.objects.filter(category=category_name).order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+    )
     category_posts_hit = category_posts.order_by("-hits")[:3]
-    category_posts_new = category_posts.order_by("-pk")[:3]
+
     tags = Tag.objects.filter(category=category_name)
     context = {
         "category_name": category_name,
         "category_posts": category_posts,
         "category_posts_hit": category_posts_hit,
-        "category_posts_new": category_posts_new,
         "tags": tags,
     }
     return render(request, "hobby/index.html", context)
 
 
 # 전체 인기글, 최신글, 태그글 모음
+@login_required
 def tag(request, tag_name):
-    if tag_name == "hits":
-        tag_posts = Hobby.objects.all().order_by("-hits")
-    if tag_name == "news":
-        tag_posts = (
-            Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-        )
+    # 로그인한 유저
+    user = request.user
+    # 유저 태그 모두 저장
+    my_tags = []
+    for i in user.sports:
+        my_tags.append(i)
+    for i in user.travel:
+        my_tags.append(i)
+    for i in user.art:
+        my_tags.append(i)
+    for i in user.food:
+        my_tags.append(i)
+    for i in user.develop:
+        my_tags.append(i)
+    print(my_tags)
+    # 내가 저장한 태그별 허비 보여주기
+    if tag_name == "likes":
+        tag_posts = Hobby.objects.filter(tags__in=my_tags).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        print(tag_posts)
+    # 조회수 별 허비 보여주기
+    elif tag_name == "hits":
+        tag_posts = Hobby.objects.all().order_by("-hits").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+    # 새로 생긴 허비 보여주기
+    elif tag_name == "news":
+        tag_posts = Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        print(tag_posts)
+
     else:
-        tag_posts = Hobby.objects.filter(tags=tag_name)
+        tag_posts = Hobby.objects.filter(tags=tag_name).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
 
     context = {
         "tag_posts": tag_posts,
         "tag_name": tag_name,
+        "user": user,
     }
 
     return render(request, "hobby/tag.html", context)
