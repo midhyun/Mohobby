@@ -21,8 +21,8 @@
     <!-- 본문 -->
     <div class="transup">
       <div class="card py-0">
-        <a href="{% url 'accounts:detail' hobby.host.pk %}">
-          <div class="circle-box">
+        <a class="circle-box" href="{% url 'accounts:detail' hobby.host.pk %}">
+          <div >
             {% if hobby.host.image %}
             <img class="circle-image" src="{{ hobby.host.image.url }}" alt="">
             {% else %}
@@ -65,10 +65,15 @@
           </div>
           <div>
             {% if request.user == hobby.host %}
-            {% if request.user.pk != member.user.pk %}
-            <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">강퇴하기</a>
+              {% if request.user.pk != member.user.pk %}
+                <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">강퇴하기</a>
+              {% endif %}
+            {% else %}
+              {% if request.user == member.user %}
+                <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">탈퇴하기</a>
+              {% endif %}
             {% endif %}
-            {% endif %}
+            
           </div>
         </li>
       </a>
@@ -117,6 +122,9 @@
                 </p>
               </a>
               <div>
+                {% if request.user == member.user %}
+                <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">신청취소</a>
+                {% endif %}
                 {% if request.user == hobby.host %}
                 <a style="color:forestgreen" href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
                 <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">거절하기</a>
@@ -274,8 +282,7 @@
                   <p>{{ comment.content }}</p>
                   <div>
                     <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span>
-                      <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count
-                          }}</span>개</span> <span>답글달기</span>
+                      <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                         data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -314,10 +321,10 @@
         </div>
         <hr>
         <div class="offcanvas-body small">
-          {% if hobby.like_user %}
           <ul class="" id="like-list-off">
+          {% if hobby.like_user.all %}
             {% for member in hobby.like_user.all %}
-            <a href="{% url 'accounts:detail' member.pk %}">
+            <a id="like-user-{{ member.pk }}" href="{% url 'accounts:detail' member.pk %}">
               <li class="d-flex justify-content-between">
                 <div class="d-flex">
                   {% if member.image %}
@@ -333,16 +340,16 @@
               </li>
             </a>
             {% endfor %}
-          </ul>
-          {% else %}
-          <div class="text-center mt-5">
-            <p>
-              <ion-icon name="people" size="large"></ion-icon>
-            </p>
-            <h5>아직 댓글이 없습니다.</h5>
-            <p class="text-muted">다양한 의견을 공유해보세요!</p>
-          </div>
+            {% else %}
+            <div id="no-like-box" class="text-center mt-5">
+              <p>
+                <ion-icon name="people" size="large"></ion-icon>
+              </p>
+              <h5>아직 좋아요가 없습니다.</h5>
+              <p class="text-muted">소셜링을 홍보해 보세요!</p>
+            </div>
           {% endif %}
+          </ul>
         </div>
       </div>
     </ul>

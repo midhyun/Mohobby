@@ -563,6 +563,7 @@ margin: auto;
   position: fixed;
   bottom: 120px;
   right: 23px;
+  z-index: 4;
 }
 .accept-btn div {
   display: flex;

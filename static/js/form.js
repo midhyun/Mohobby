@@ -140,10 +140,7 @@ const offbuttonaddr = document.querySelector('#offbuttonaddr');
 const testBtn = document.querySelector('#testbtn');
 const addrBody = document.querySelector('#addrbody');
 var places = new kakao.maps.services.Places();
-function addrInsert(elem) {
-  offbuttonaddr.innerText = elem.firstChild.innerText
-  address.value = elem.firstChild.innerText
-}
+
 var callback = function(result, status, pagination) {
     console.log(result.length)
     const nextPagination = function () {
@@ -164,8 +161,10 @@ var callback = function(result, status, pagination) {
       const addrelems = document.querySelectorAll('.addrelem');
 
       [].forEach.call(addrelems, function(elem) {
-        console.log(elem)
-        elem.addEventListener('click', addrInsert(elem))
+        elem.addEventListener('click', () => {
+          offbuttonaddr.innerText = elem.firstChild.innerText
+          address.value = elem.firstChild.innerText
+        })
       });
     } else if (status === kakao.maps.services.Status.OK) {
       console.log(pagination.current)
@@ -177,8 +176,10 @@ var callback = function(result, status, pagination) {
       const addrelems = document.querySelectorAll('.addrelem');
 
       [].forEach.call(addrelems, function(elem) {
-        console.log(elem)
-        elem.addEventListener('click', addrInsert(elem))
+        elem.addEventListener('click', () => {
+          offbuttonaddr.innerText = elem.firstChild.innerText
+          address.value = elem.firstChild.innerText
+        })
       });
     }
 
