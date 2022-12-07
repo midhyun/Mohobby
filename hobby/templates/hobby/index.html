@@ -22,7 +22,6 @@
   </div>
   <!-- 카테고리별 태그 버튼 -->
 
-
   <div class='container justify-content-center post_page'>
     <div style='width:100%'>
       <!-- 인기 모임 글 -->
@@ -30,139 +29,50 @@
         <h3 class="main_color fw-bold">인기 소셜링</h3>
         <div class="d-flex justify-content-center">
           <div class='d-flex flex-column post_size'>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
+            {% for tag_post in category_posts_hit %}
+            <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
+              <div class='d-flex my-2 post'>
+                <div class="col-4">
+                  {% if tag_post.image %}
+                  <img class='post_img' src="{{ tag_post.image.url }}" style='width:100%; height: 250px;'>
+                  {% else %}
+                  <img class='post_img' src="{% static 'images/더미이미지.png' %}" alt="...">
+                  {% endif %}
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class='mx-5'>
+                    <div class='my-3'>
+                      <small class="tag p-1"> {{ tag_post.tags }}</small>
+                    </div>
+                    <p class="post_title">{{ tag_post.title }}</p>
+                    <small class='text-muted post_detail'>
+                      <span class="detail">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        {{ tag_post.address }}&nbsp;
+                      </span>
+                      <span class="detail">
+                        <i class="bi bi-calendar-check-fill"></i>
+                        {{ tag_post.meeting_day|date:'m.d(D) af' }}&nbsp;
+                      </span>
+                      <span class="detail">
+                        <i class="bi bi-people-fill"></i>
+                        {{ tag_post.joinmembers }}/{{ tag_post.limit }}</small>
+                    </span>
+                    <div class="profil_box d-flex">
+                      {% for member in tag_post.accepted.all %}
+                      {% if forloop.counter <= 6 %}
+                      {% if member.joined == 1 %}
+                      <img class="tag_profil" src="{{ member.user.image.url }}">
+                      {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                      <i class="bi bi-plus-circle"></i>
+                    </div>
                   </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
                 </div>
               </div>
-            </div>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                  </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
-                </div>
-              </div>
-            </div>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                  </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 신규 모임 글 -->
-      <div class='my-5'>
-        <h3 class="main_color fw-bold">새로 열린 소셜링</h3>
-        <div class="d-flex justify-content-center">
-          <div class='d-flex flex-column post_size'>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                  </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
-                </div>
-              </div>
-            </div>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                  </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
-                </div>
-              </div>
-            </div>
+            </a>
+            {% endfor %}
             <div class='d-flex my-2 post'>
               <div class="col-4">
                 <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
@@ -191,62 +101,55 @@
           </div>
         </div>
       </div>
-
-      <!-- 카테고리 전체 글 -->
+      <!-- 카데고리 전체 글 -->
       <div class='my-5'>
         <h3 class="main_color fw-bold">전체 소셜링</h3>
         <div class="d-flex justify-content-center">
           <div class='d-flex flex-column post_size'>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
+            {% for tag_post in category_posts %}
+            <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
+              <div class='d-flex my-2 post'>
+                <div class="col-4">
+                  {% if tag_post.image %}
+                  <img class='post_img' src="{{ tag_post.image.url }}" style='width:100%; height: 250px;'>
+                  {% else %}
+                  <img class='post_img' src="{% static 'images/더미이미지.png' %}" alt="...">
+                  {% endif %}
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class='mx-5'>
+                    <div class='my-3'>
+                      <small class="tag p-1"> {{ tag_post.tags }}</small>
+                    </div>
+                    <p class="post_title">{{ tag_post.title }}</p>
+                    <small class='text-muted post_detail'>
+                      <span class="detail">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        {{ tag_post.address }}&nbsp;
+                      </span>
+                      <span class="detail">
+                        <i class="bi bi-calendar-check-fill"></i>
+                        {{ tag_post.meeting_day|date:'m.d(D) af' }}&nbsp;
+                      </span>
+                      <span class="detail">
+                        <i class="bi bi-people-fill"></i>
+                        {{ tag_post.joinmembers }}/{{ tag_post.limit }}</small>
+                    </span>
+                    <div class="profil_box d-flex">
+                      {% for member in tag_post.accepted.all %}
+                      {% if forloop.counter <= 6 %}
+                      {% if member.joined == 1 %}
+                      <img class="tag_profil" src="{{ member.user.image.url }}">
+                      {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                      <i class="bi bi-plus-circle"></i>
+                    </div>
                   </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
                 </div>
               </div>
-            </div>
-            <div class='d-flex my-2 post'>
-              <div class="col-4">
-                <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."
-                  style='width:100%; height: 250px;'>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class='mx-5'>
-                  <div class='my-3'>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                    <small class="tag p-1">#태그</small>
-                  </div>
-                  <h3>본문에 제목이 들어갈 곳입니다.
-                  </h3>
-                  <small class='text-muted'>
-                    해당 글의
-                    <i class="bi bi-calendar-check-fill"></i>
-                    날짜
-                    <i class="bi bi-geo-alt-fill"></i>
-                    장소
-                    <i class="bi bi-person-fill"></i>
-                    인원수 가 들어갈 곳입니다.</small>
-                </div>
-              </div>
-            </div>
+            </a>
+            {% endfor %}
             <div class='d-flex my-2 post'>
               <div class="col-4">
                 <img class='post_img' src="https://dummyimage.com/500x200/000/fff" alt="..."

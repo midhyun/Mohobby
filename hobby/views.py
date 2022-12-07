@@ -344,4 +344,3 @@ def like_comment(request, comment_pk):
         'likeCount': comment.like_user.count()
     }
     return JsonResponse(data)
-
