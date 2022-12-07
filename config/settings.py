@@ -42,10 +42,8 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     "notes",
-
     # 장고 채널스
     "daphne",
-
     # 숫자 천 단위 콤마 포맷
     "django.contrib.humanize",
     # Allauth를 위한 Apps
@@ -263,7 +261,8 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            # "hosts": [("127.0.0.1", 6379)],
+            "hosts": [os.getenv("CHANNEL_LAYER_HOST")],
         },
     },
 }
