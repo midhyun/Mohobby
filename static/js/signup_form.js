@@ -1,14 +1,23 @@
 const slide = document.querySelector(".slide");
-let slideWidth = slide.clientWidth;
 const prevBtn = document.querySelector(".slide_prev_button");
 const nextBtn = document.querySelector(".slide_next_button");
 const slideItems = document.querySelectorAll(".slide_item");
 const maxSlide = slideItems.length;
+const submit_Btn = document.querySelector("#submit_btn")
 
 let currSlide = 1;
 
 nextBtn.addEventListener("click", () => {
   currSlide++;
+  let slideWidth = slide.clientWidth;
+
+  if (currSlide >= maxSlide) {
+    nextBtn.style.display = "none";
+    submit_Btn.style.display = "block";
+  } else {
+    nextBtn.style.display = "block";
+  }
+
   if (currSlide <= maxSlide) {
     const offset = slideWidth * (currSlide - 1);
     slideItems.forEach((i) => {
@@ -23,6 +32,12 @@ nextBtn.addEventListener("click", () => {
 prevBtn.addEventListener("click", () => {
   // 이전 버튼 누를 경우 현재 슬라이드를 변경
   currSlide--;
+  let slideWidth = slide.clientWidth;
+
+  if (currSlide <= maxSlide) {
+    nextBtn.style.display = "block";
+    submit_Btn.style.display = "none";
+  }
   // 1번째 슬라이드 이하로 넘어가지 않게 하기 위해서
   if (currSlide > 0) {
     // 슬라이드를 이동시키기 위한 offset 계산
@@ -35,3 +50,4 @@ prevBtn.addEventListener("click", () => {
     currSlide++;
   }
 });
+

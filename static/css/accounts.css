@@ -27,21 +27,164 @@ a:hover {
     flex-shrink: 0;
     transition: left 0.9s;
 } */
+
+.update_botton {
+    background-color: #E84545;
+    width: 500px;
+    height: 55px;
+    border-radius: 30px;
+    color: #ffffff;
+    border: 0px;
+    outline: 0px;
+    margin: 20px 0px 20px 0px; 
+}
+
+
 .update_wrap {
     display: flex;
 }
 
-.update_wrapper {
-    width: 600px;
-    max-width: 100%;
-    padding: 50px 0px 50px 0px;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 30px;
+/* 768px 이하에서 작동 (Mobile) */ 
+@media screen and (max-width: 768px) {
+	.update_wrap {
+        min-height: 1950px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .update_wrapper {
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 30px;
+    }
+
+    .update_botton {
+        display: none;
+    }
+
+    .mobile_update_botton {
+        background-color: #E84545;
+        width: 250px;
+        height: 55px;
+        border-radius: 30px;
+        color: #ffffff;
+        border: 0px;
+        outline: 0px;
+        margin: 20px 0px 20px 0px; 
+    }
+    
+    .form_field {
+        max-width: 250px;
+    }
+    
+    .address_btn {
+        max-width: 100px;
+    }
+
+    .user_input {
+        max-width: 300px;
+    }
+    
+    .login_button {
+        width: 300px;
+    }
+
+    .login_button {
+        background-color: #E84545;
+        width: 350px;
+        height: 55px;
+        border-radius: 30px;
+        color: #ffffff;
+        border: 0px;
+        outline: 0px;
+        margin-bottom: 20px;
+    }
+
+    .kakao_login_button {
+        background-color: #FEE500;
+        width: 350px;
+        height: 55px;
+        border-radius: 30px;
+        color: #000000, 90%;
+        border: 0px;
+        outline: 0px;
+        margin-bottom: 20px;
+    }
+
+    .category_select input[type=checkbox]+label{
+        border-radius: 7px;
+        height: 33px;
+        line-height: 31px;
+        border: 1px solid #c5c5c5;
+        font-weight:bold;
+        font-size: 11px;
+        padding: 0 10px;
+        outline: none;
+        background: none;
+        text-align: center;
+        margin-bottom: 5px;
+    }
 }
+
+/* 769px 이상에서 작동 (PC) */ 
+@media screen and (min-width: 769px) {
+    .mobile_update_botton {
+        display: none;
+    }
+
+    .update_wrapper {
+        width: 600px;
+        max-width: 100%;
+        padding: 50px 0px 50px 0px;
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-right: 30px;
+    }
+
+    .login_button {
+        background-color: #E84545;
+        width: 600px;
+        height: 55px;
+        border-radius: 30px;
+        color: #ffffff;
+        border: 0px;
+        outline: 0px;
+        margin-bottom: 20px;
+    }
+
+    .kakao_login_button {
+        background-color: #FEE500;
+        width: 600px;
+        height: 55px;
+        border-radius: 30px;
+        color: #000000, 90%;
+        border: 0px;
+        outline: 0px;
+        margin-bottom: 20px;
+    }
+
+    .category_select input[type=checkbox]+label{
+        border-radius: 7px;
+        height: 40px;
+        line-height: 38px;
+        border: 1px solid #c5c5c5;
+        font-weight:bold;
+        font-size: 14px;
+        padding: 0 10px;
+        outline: none;
+        background: none;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+}
+
 
 .side_bar {
     width: 300px;
@@ -147,15 +290,22 @@ background-color: transparent;
     transition: left 0.6s;
 }
 
+.page_btn_group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 30px;
+    justify-items: center;
+    padding: 0px 50px 0 50px;
+}
+
 .page_btn {
     background-color: #E84545;
-    width: 200px;
+    width: 100%;
     height: 55px;
     border-radius: 30px;
     color: #ffffff;
     border: 0px;
     outline: 0px;
-    margin: 20px;
 }
 
 .error_msg {
@@ -187,28 +337,6 @@ background-color: transparent;
     font-weight: bold;
 }
 
-.login_button {
-    background-color: #E84545;
-    width: 600px;
-    height: 55px;
-    border-radius: 30px;
-    color: #ffffff;
-    border: 0px;
-    outline: 0px;
-    margin-bottom: 20px;
-}
-
-.kakao_login_button {
-    background-color: #FEE500;
-    width: 600px;
-    height: 55px;
-    border-radius: 30px;
-    color: #000000, 90%;
-    border: 0px;
-    outline: 0px;
-    margin-bottom: 20px;
-    
-}
 .login_text {
     font-weight: bolder;
     font-size: 16px;
@@ -238,19 +366,23 @@ background-color: transparent;
 
 /* 성별 선택 버튼 그룹 */
 .select {
-    width: 520px;
+    width: 100%;
     margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
 }
 
 .select input[type=radio]{
     display: none;
 }
+
 .select input[type=radio]+label{
     border-radius: 7px;
     height: 56px;
-    width: 250px;
+    width: 100%;
     border: 1px solid #a6a8ae;
     line-height: 55px;
     font-weight:bold;
@@ -260,10 +392,12 @@ background-color: transparent;
     background: none;
     text-align: center;
 }
+
 .select input[type=radio]+label{
     color: #aaaaaa;
     transition: 0.2s;
 }
+
 .select input[type=radio]:checked+label{
     background-color: #e45454;
     color: #fff;
@@ -278,19 +412,7 @@ background-color: transparent;
 .category_select input[type=checkbox]{
     display: none;
 }
-.category_select input[type=checkbox]+label{
-    border-radius: 7px;
-    height: 40px;
-    line-height: 38px;
-    border: 1px solid #c5c5c5;
-    font-weight:bold;
-    font-size: 14px;
-    padding: 0 10px;
-    outline: none;
-    background: none;
-    text-align: center;
-    margin-bottom: 5px;
-}
+
 .category_select input[type=checkbox]+label{
     color: 	#888888;
     transition: 0.4s;
@@ -370,14 +492,14 @@ background-color: transparent;
 
 
 .signup_btn {
-    background-color: #E84545;
-    width: 500px;
+    background-color:  #2DB400;
+    width: 100%;
     height: 55px;
     border-radius: 30px;
     color: #ffffff;
     border: 0px;
-    outline: 0px;
-    margin: 20px 0px 20px 0px; 
+    outline: 0px; 
+    display: none;
 }
 
 .social_button {
