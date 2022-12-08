@@ -84,7 +84,7 @@
 }
 .create_button {
   background-color: #E84545;
-  width: 600px;
+  width: 60%;
   height: 55px;
   border-radius: 30px;
   color: #ffffff;
@@ -228,7 +228,7 @@
   color: #fff;
   text-align: center;
   padding: 10px 0;
-  width: 600px;
+  width: 60%;
   border-radius: 30px;
   cursor: pointer;
 }
