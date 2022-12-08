@@ -103,6 +103,7 @@ def update(request, community_pk):
         else:
             post_form = CommunityForm(instance=post)
         context = {
+            'post':post,
             "post_form": post_form,
             "photo_list": photo_list,
         }
