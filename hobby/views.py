@@ -7,6 +7,9 @@ from datetime import date, datetime, timedelta
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
+import requests
+import json
+import os
 # Create your views here.
 
 @login_required
@@ -35,6 +38,21 @@ def create(request):
 
 
 def test(request):
+    if request.method == 'POST':
+        secret = os.getenv('RECAPTCHA_SECRET_KEY')
+        print(request.POST)
+        response = request.POST['captchatoken']
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        data = {
+            'secret': secret,
+            'response': response,
+        }
+        res = requests.post(url, data=data)
+        print(res.json()['success'])
+        context = {
+            'result': res.json()['success']
+        }
+        return JsonResponse(context)
     return render(request, "hobby/test.html")
 
 @login_required
