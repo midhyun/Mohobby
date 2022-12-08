@@ -6,12 +6,13 @@
   color: #E84545;
 }
 .write{
- 
   border: 3px solid #E84545;
+  height:60px;
   border-radius: 30px;
+  font-size: 20px;
 }
 .slideShow{
-  width: 1000px;
+  width: 800px;
   height: 500px;
   position: relative;
   margin: 0px auto;
@@ -20,7 +21,7 @@
 
 .slides{
   position: absolute;
-  left: 0;
+  left: 0px;
   top: 0;
   transition: left 0.5s ease-out; 
   /*ease-out: 처음에는 느렸다가 점점 빨라짐*/
@@ -29,13 +30,13 @@
 /* 첫 번째 슬라이드 가운데에 정렬하기위해
 첫번째 슬라이드만 margin-left조정 */
 .slides li:first-child{
-  margin-left: 100px;
+  margin-left: 0px;
 }
 
 /* 슬라이드들 옆으로 정렬 */
 .slides li:not(:last-child){
   float: left;
-  margin-right: 100px;
+  margin-right: 0px;
 }
 
 .slides li{
@@ -60,7 +61,7 @@
 }
 
 .prev{
-  left: 10px;
+  left: 0px;
 }
 
 /* 이전 화살표에 마우스 커서가 올라가 있을때 
@@ -70,7 +71,7 @@
 }
 
 .next{
-  right: 10px;
+  right: 0px;
 }
 
 /* 다음 화살표에 마우스 커서가 올라가 있을때 
@@ -79,8 +80,8 @@
   transform: translateX(0px);
 }
 .feeds{
-  background-color: #f1f3f5;
-  border-radius: 30px;
+
+  border-radius: 0px;
 }
 .create_button {
   background-color: #E84545;
@@ -93,8 +94,8 @@
   margin: 20px;
 }
 .feeds_img{
-  border-top-left-radius:20px;
-  border-top-right-radius:20px;
+  border-top-left-radius:0px;
+  border-top-right-radius:0px;
 }
 
 .feeds_content{

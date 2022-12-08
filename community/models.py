@@ -9,6 +9,8 @@ class Community(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_community")
     hits = models.PositiveBigIntegerField(default=1, verbose_name="조회수")
+    def summary(self):
+        return self.content[:80]
 
 
 # 댓글 부분

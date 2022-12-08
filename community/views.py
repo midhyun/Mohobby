@@ -15,7 +15,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 def index(request):
     posts = Community.objects.order_by("-pk")
-    context = {"posts": posts}
+    context = {"posts": posts,}
     return render(request, "community/index.html", context)
 
 
@@ -120,7 +120,6 @@ def delete(request, community_pk):
         if request.method == "POST":
             post.delete()
             return redirect("community:index")
-
     else:
         return HttpResponseForbidden()
 
