@@ -594,3 +594,10 @@ background-color: transparent;
 
 
 
+.block{
+    margin-top: 10rem;
+}
+
+.block-text{
+    margin-bottom: 3rem;
+}

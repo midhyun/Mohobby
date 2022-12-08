@@ -225,3 +225,37 @@ def social_signup(request, pk):
         "user_info": user_info,
     }
     return render(request, 'accounts/social_signup.html', context)
+
+# 차단
+@login_required
+def block(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    if user != request.user:
+        if user.blockers.filter(pk=request.user.pk).exists():
+            user.blockers.remove(request.user)
+            user.save()
+        else:
+            user.blockers.add(request.user)
+            user.save()
+    return redirect("accounts:detail", pk)
+
+@login_required
+def block_user(request):
+    blockers = request.user.blocking.all()
+    context = {
+        "blockers": blockers,
+    }
+    return render(request, "accounts/block_user.html", context)
+
+
+@login_required
+def block_user_block(request, pk):
+    user = get_user_model().objects.get(pk=pk)
+    if user != request.user:
+        if user.blockers.filter(pk=request.user.pk).exists():
+            user.blockers.remove(request.user)
+            user.save()
+        else:
+            user.blockers.add(request.user)
+            user.save()
+    return redirect("accounts:block_user")

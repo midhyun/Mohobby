@@ -24,7 +24,10 @@ class User(AbstractUser):
     birth = models.DateTimeField(default=timezone.now)  # 나이
     nickname = models.CharField(null=True, unique=True, max_length=20)
     kakao_id = models.CharField(null=True, unique=True, max_length=100)
-    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")    
+    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")
+    blocking = models.ManyToManyField(
+        "self", symmetrical=False, related_name="blockers"
+    )
 
     image = ProcessedImageField(
         upload_to="image/",
