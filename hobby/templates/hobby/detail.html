@@ -12,8 +12,7 @@
   {% if hobby.image %}
   <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
     {% else %}
-    <div class="image-banner p-5"
-      style="background-image: url('https://dummyimage.com/750x300/000/fff'); height:300px; ">
+    <div class="image-banner p-5" style="background-image: url('https://dummyimage.com/750x300/000/fff'); height:300px; ">
       {% endif %}
       <span class="badge bg-danger mx-1" style="height:20px">{{ accepted|length }}명 참여중</span>
       <span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
@@ -231,13 +230,12 @@
               {% else %}
               <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
               {% endif %}</a>
-            <div>
+            <div> 
               <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
                 <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
                     <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span>
-                  <span>답글달기</span>
                   <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                     data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                     data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -282,7 +280,7 @@
                   <p>{{ comment.content }}</p>
                   <div>
                     <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span>
-                      <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span>답글달기</span>
+                      <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                         data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>

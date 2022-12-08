@@ -185,7 +185,7 @@ var callback = function(result, status, pagination) {
 
 };
 keysearch.addEventListener('keyup', () => {
-  places.keywordSearch(`${keysearch.value}`, callback, {size: 10});
+  places.keywordSearch(`${keysearch.value}`, callback, {size: 6});
 })
 
 // 제한인원 설정하기

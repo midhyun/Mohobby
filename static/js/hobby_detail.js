@@ -46,7 +46,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].user }</p>
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
-                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
+                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span>
                   <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
@@ -78,7 +78,7 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].user }</p>
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
-                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
+                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> 
                   <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
@@ -221,7 +221,7 @@ function deleteComment(e) {
               <p>${ response.data.comments_data[i].user }</p>
               <p>${ response.data.comments_data[i].content }</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
+                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span>
                 <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                 </p>
               </div>
@@ -251,7 +251,7 @@ function deleteComment(e) {
               <p>${ response.data.comments_data[i].user }</p>
               <p>${ response.data.comments_data[i].content }</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> <span>답글달기</span> 
+                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span>
                 <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                 </p>
               </div>
