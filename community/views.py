@@ -11,12 +11,15 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 
 # Create your views here.
+
+
 def index(request):
     posts = Community.objects.order_by("-pk")
     context = {"posts": posts}
     return render(request, "community/index.html", context)
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         post_form = CommunityForm(request.POST)
@@ -38,6 +41,7 @@ def create(request):
     return render(request, "community/create.html", context)
 
 
+@login_required
 def detail(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
     comment_form = CommentForm()
@@ -68,6 +72,7 @@ def detail(request, community_pk):
     return response
 
 
+@login_required
 def update(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
     # 커뮤니티의 해당 글의 사진이미지 전체 받아온다.
@@ -106,6 +111,7 @@ def update(request, community_pk):
         return HttpResponseForbidden()
 
 
+@login_required
 def delete(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
 
@@ -131,6 +137,7 @@ def comments_create(request, community_pk):
         return redirect("community:detail", post.pk)
 
 
+@login_required
 def comments_update(request, community_pk, comment_pk):
     post = get_object_or_404(Community, pk=community_pk)
     comment = Comment.objects.get(pk=comment_pk)
@@ -147,6 +154,7 @@ def comments_update(request, community_pk, comment_pk):
         return redirect("community:detail", community_pk)
 
 
+@login_required
 def comments_delete(request, community_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
 
@@ -172,6 +180,7 @@ def recomments_create(request, community_pk, comment_pk):
         return redirect("community:detail", post.pk)
 
 
+@login_required
 def recomments_update(request, community_pk, comment_pk, recomment_pk):
     post = get_object_or_404(Community, pk=community_pk)
     recomment = Comment.objects.get(pk=recomment_pk)
@@ -189,6 +198,7 @@ def recomments_update(request, community_pk, comment_pk, recomment_pk):
         return redirect("community:detail", community_pk)
 
 
+@login_required
 def recomments_delete(request, community_pk, recomment_pk):
     recomment = get_object_or_404(Comment, pk=recomment_pk)
 
@@ -199,6 +209,7 @@ def recomments_delete(request, community_pk, recomment_pk):
         return HttpResponseForbidden()
 
 
+@login_required
 def like(request, community_pk):
     post = get_object_or_404(Community, pk=community_pk)
 
@@ -212,6 +223,7 @@ def like(request, community_pk):
     return JsonResponse(data)
 
 
+@login_required
 def comment_like(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
 

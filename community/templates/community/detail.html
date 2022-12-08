@@ -59,14 +59,13 @@
     <!-- 좋아요 -->
     {% if user.is_authenticated %}
       {% if request.user in post.like.all %}
-
         <button type="button" style="color:red;" data-post-id='{{ post.pk }}' id='fav-btn' class="btn bi bi-heart-fill"></button>
       {% else %}
-
         <button type="button" id='fav-btn' data-post-id='{{ post.pk }}' style="color:red;" class="btn bi bi-heart"></button>
       {% endif %}
-      <span id='fav-count' class="text-center">{{ post.like.count }}</span>
+      <span id='fav-count' class="text-center" style='margin-right:10px;'>{{ post.like.count }}</span>
     {% endif %}
+    <i class="bi bi-chat" style='margin-right:10px;'></i>
     {{comment_count}}
     <!-- 댓글 작성 -->
     <form data-post-id="{{ post.pk }}" action="{% url 'community:comments_create' post.pk %}" method="POST">
