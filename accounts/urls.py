@@ -25,4 +25,9 @@ urlpatterns = [
 
     # 소셜 로그인 폼
     path("social_signup/<int:pk>", views.social_signup, name="social_signup"),
+    
+    # 회원 차단
+    path("<int:pk>/block", views.block, name="block"),
+    path("block_user/", views.block_user, name="block_user"),
+    path("<int:pk>/block_user_block", views.block_user_block, name="block_user_block"),
 ]

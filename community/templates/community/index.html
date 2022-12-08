@@ -15,6 +15,7 @@
       </a>
     </div>
     {% for post in posts %}
+    {% if post.user not in request.user.blocking.all %}
       <div class='feeds my-5 py-3'>
 
         <!-- 이미지 캐러셀 -->
@@ -29,7 +30,8 @@
               {% else %}
                 <img src="{% static 'image/noimg.png' %}">
               {% endif %}
-            {% endfor %}
+            
+          {% endfor %}
           </ul>
           <p class="controller">
             <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
@@ -76,7 +78,7 @@
           </div>
         </div>
       </div>
-
+      {% endif %}
     {% endfor %}
   </div>
   <!-- 피드 추가 버튼 -->
