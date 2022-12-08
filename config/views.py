@@ -20,9 +20,10 @@ def main(request):
             my_tags.append(i)
         for i in user.develop:
             my_tags.append(i)
-        posts_new = Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-        posts_hit = Hobby.objects.all().order_by("-hits").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-        posts_like = Hobby.objects.filter(tags__in=my_tags).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        
+        posts_new = Hobby.objects.all().order_by("-pk")[:3].annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        posts_hit = Hobby.objects.all().order_by("-hits")[:3].annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+        posts_like = Hobby.objects.filter(tags__in=my_tags)[:3].annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
 
         context = {
             'posts_new': posts_new,
