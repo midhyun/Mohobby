@@ -84,10 +84,10 @@
             {% else %}
               <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
             {% endif %}
-            <input name="content" class='comment_input' type="text" placeholder="댓글 달기...">
+            <input id="content_id" name="content" class='comment_input' type="text" placeholder="댓글 달기...">
           </div>
           <div class='d-flex align-items-center'>
-            <input type="submit" class='comment_sbmit mx-2' value="등록">
+            <input id='comment_write' type="submit" class='comment_sbmit mx-2' value="등록">
           </div>
         </div>
       </form>
@@ -329,6 +329,15 @@
           const favCountCom = document.querySelector(`#fav-count-com-${Idx}`)
           favCountCom.innerText = response.data.likes_count
         })
+      })
+    })
+  </script>
+  <script>
+    // 댓글 달기
+    $(document).ready(function () {
+      $('#comment_write').click(function () {
+        var content = $('#content_id').val();
+        var writer = $('#comment_writer').val();
       })
     })
   </script>
