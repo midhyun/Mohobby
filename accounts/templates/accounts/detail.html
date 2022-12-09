@@ -54,7 +54,7 @@
                   <h1>{{ following.username }}</h1>
                 </div>
               </a>
-            {% endfor %}
+            {% endfor %}       
           {% else %}
             <div class="text-center">팔로우 중인 사람이 없습니다.</div>
           {% endif %}
@@ -129,7 +129,7 @@
                 </span></p>
               </div>
             </div>
-            <div class="pf-btns">
+            <div class="pf-btns d-flex">
               {% if request.user != user %}
             <form action="{% url 'accounts:follow' user.pk %}" method="POST">
               {% if request.user.is_authenticated %}
@@ -144,13 +144,24 @@
                 {% endif %}
               </form>
             {% endif %}
+            <!-- 차단 버튼 -->
+            <a href="{% url 'accounts:block' user.pk %}" class="mx-3">
+              {% if request.user in user.blockers.all %}
+                <button type="button" class="btn btn-danger">차단 취소</button>
+              {% else %}
+                <button type="button" class="btn btn-danger">차단</button>
+            </a>
+            {% endif %}
           {% endif %}
+          <!-- 회원 탈퇴 -->
               {% if request.user == user %}
+              <div class="mx-1">
               <a href="{% url 'accounts:update' user.pk %}" type="button" class="btn btn-secondary">수정</a>
               <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 회원탈퇴
               </button>
-              <!-- Modal -->
+              <a href="{% url 'accounts:block_user' %}" class="btn btn-danger">차단 목록</a>
+              <!-- 탈퇴 모달 -->
               <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -167,6 +178,7 @@
                     </div>
                   </div>
                 </div>
+              </div>
               {% endif %}
             </div>
             </div>

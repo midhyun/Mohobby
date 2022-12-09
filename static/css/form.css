@@ -597,3 +597,10 @@ margin: auto;
   align-items: center;
   max-height:500px;
 }
+
+.bi-eye {
+  color: #E84545;
+  font-size: 17px;
+  font-weight: bolder;
+
+}

@@ -16,6 +16,7 @@
     <div class="p-4">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
         {% for product in page_list %}
+        {% if product.user not in request.user.blocking.all %}
           <div class="col">
             <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
               <div class="card h-100">
@@ -32,6 +33,7 @@
               </div>
             </a>
           </div>
+          {% endif %}
           {% empty %}
           <h5 class="fw-bold flex-fill text-center">데이터가 없습니다.</h5>
         {% endfor %}

@@ -34,6 +34,7 @@
         <p class="circle-title">{{hobby.title}}</p>
       </div>
       <p class="text-center mt-3" style="font-size:16px;">
+        <i class="bi bi-eye"></i>&nbsp;<span>{{ hobby.hits }}</span>
         ⏰
         {% if hobby.recruit_type %}
         오프라인 {{ hobby.address }}
@@ -41,6 +42,7 @@
         온라인
         {% endif %}
         📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
+        
       </p>
     </div>
 
