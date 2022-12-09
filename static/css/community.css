@@ -5,6 +5,7 @@
 .main_title {
   color: #E84545;
 }
+
 .write{
   border: 3px solid #E84545;
   height:60px;
@@ -135,8 +136,8 @@
 
 /* detail.html */
 .comment_input{
-  width: 800px;
-  height: 60px;
+  width: 600px;
+  height: 30px;
   font-size: 15px;
   border: 0;
   border-radius: 10px;
@@ -145,7 +146,7 @@
   background-color: #fff;
 }
 .comment_sbmit{
-  height: 60px;
+  height: 30px;
   font-size: 15px;
   border-radius: 10px;
   border: 0;
@@ -167,7 +168,7 @@
   margin-left: 30px;
 }
 .recomment_input{
-  width: 800px;
+  width: 600px;
   height: 60px;
   font-size: 15px;
   border: 0;
@@ -189,7 +190,8 @@
   border: 0;
 }
 .feed_btn{
-  background-color: #dee2e6;
+  background-color: #fff;
+  color:#979AA0;
 }
 .feed_content{
   border: 3px solid #E84545;
