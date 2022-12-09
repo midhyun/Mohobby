@@ -54,4 +54,5 @@ class HobbyComment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comment')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='recomment')
 

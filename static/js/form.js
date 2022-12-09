@@ -231,10 +231,21 @@ free_fee.addEventListener('click', () => {
   fee_input.value = ''
 });
 
-//  유효성 검사
+//  유효성 검사 & 글자수 카운터
 const titleInput = document.querySelector('#title')
 const meetingDay = document.querySelector('#meeting_day')
 const errorMessage = document.querySelector('.error-message')
+const inputTags = document.querySelector('#tag')
+const inputTitle = document.querySelector('#title')
+// 카운터 span
+const counterTags = document.querySelector('#control-input-tags')
+inputTags.addEventListener('input', function(){
+  counterTags.innerText = inputTags.value.length + '/10';
+});
+const counterTitle = document.querySelector('#control-input-title')
+inputTitle.addEventListener('input', function(){
+  counterTitle.innerText = inputTitle.value.length + '/80';
+});
 
 submitBtn.addEventListener('click', checkvalid)
 function checkvalid(e) {

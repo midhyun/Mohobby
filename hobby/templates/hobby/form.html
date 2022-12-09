@@ -72,7 +72,8 @@
                     <div class="offcanvas-body small">
                         <h5>원하는 소셜링 태그를 직접 등록해 보세요</h5>
                         <p class="text-muted">한글과 영어로 최대 10글자까지 등록할 수 있어요.</p>
-                        <input class="form-control mb-3" type="text" name="tags" id="tag" placeholder="태그 입력" required>
+                        <input class="control-input mb-3" maxlength="10" type="text" name="tags" id="tag" placeholder="태그 입력" required>
+                        <div id="control-input-tags" class="d-flex justify-content-end"><span>0/10</span></div>
                         <div class="text-center"><button type="button" class="input_btn" data-bs-dismiss="offcanvas"
                                 aria-label="Close" onclick="changeinner(this)">등록하기</button></div>
                     </div>
@@ -229,6 +230,7 @@
                 </p>
                 <input class="input-control" type="text" maxlength="80" name="title" id="title"
                     placeholder="제목을 입력해 주세요.(필수)" required>
+                <div id="control-input-title" class="d-flex justify-content-end"><span>0/80</span></div>
             </div>
             <!-- 4페이지/ 사진, 상세내용 -->
             <div class="slide_item">
@@ -287,8 +289,8 @@
                                 <ion-icon name="map" size="large"></ion-icon>
                             </p>
                             <h5>장소 또는 지역을 검색해보세요</h5>
-                            <p class="text-muted mb-0">예시)마포구, 합정동, 강남역, 한가람미술관 등</p>
-                            <p style="cursor:pointer;" id="testbtn" value="더보기">더보기</p>
+                            <p class="text-muted">예시)마포구, 합정동, 강남역, 한가람미술관 등</p>
+                            <p style="cursor:pointer; color: #E84545;" id="testbtn" value="더보기">더보기</p>
                         </div>
                     </div>
                 </div>
