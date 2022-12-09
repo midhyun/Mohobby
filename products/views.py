@@ -14,7 +14,7 @@ from django.utils.html import strip_tags
 def index(request):
     products = Product.objects.select_related("user").order_by("-pk")
     page = request.GET.get("page", "1")  # GET 방식으로 정보를 받아오는 데이터
-    paginator = Paginator(products, 12)  # Paginator(분할될 객체, 페이지 당 담길 객체 수)
+    paginator = Paginator(products, 4)  # Paginator(분할될 객체, 페이지 당 담길 객체 수)
     page_list = paginator.get_page(page)  # 페이지 번호를 받아 해당 페이지를 리턴
     context = {
         "page_list": page_list,

@@ -11,3 +11,27 @@
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
 }
+.btn-main{
+  background: #E84545;
+  color: white;
+  border-color: #E84545;
+}
+
+.top-main{
+  background-color: #E84545;
+  width: 140px;
+  height: 55px;
+  border-radius: 30px;
+  color: #ffffff;
+  border: 0px;
+  outline: 0px;
+  margin: 20px; 
+  padding-left: 0.6rem;
+  padding-top: 0.4rem;
+}
+
+.btn-page{
+  background: #E84545;
+  color: white;
+  border: #E84545;
+}
