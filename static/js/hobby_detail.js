@@ -4,8 +4,6 @@ dayjs.extend(window.dayjs_plugin_relativeTime)
 dayjs.extend(window.dayjs_plugin_utc)
 dayjs.extend(window.dayjs_plugin_timezone)
 dayjs.locale('ko')
-console.log(dayjs.tz(new Date()))
-console.log(dayjs.tz.guess())
 const commentInput = document.querySelector('#commentinput')
 const commentInputOff = document.querySelector('#commentinputoff')
 const commentCount = document.querySelector('#comment-count')
@@ -20,7 +18,6 @@ const mainCommentFormOff = document.querySelector('#comment-form-off')
 function submitComment(event) {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     event.preventDefault();
-    console.log(event.target.dataset.action)
     const commentForm = event.target
     if (event.target.dataset.action == 'comment-form') {
     axios({
@@ -31,8 +28,6 @@ function submitComment(event) {
     })
     .then(response => {
       // detail 페이지 댓글 제한 7개
-        console.log(response.data.comments_data)
-        console.log(response.data.comments_data.length)
         commentList.innerHTML = ""
         for (let i=0; i < response.data.comments_data.length; i++){
             let isLike = ""
@@ -187,7 +182,6 @@ function likeHobby(e) {
   .then(response => {
     const likeCount = document.querySelector('#like-count')
     likeCount.innerText = response.data.likeCount
-    console.log(response.data.likeCount)
     if (response.data.is_like === true ) {
       if (response.data.likeCount === 1){
         likeList.textContent = ""
@@ -208,9 +202,7 @@ function likeHobby(e) {
       likeBtn.setAttribute('name', 'heart-outline')
       const likeUserElem = document.querySelector(`#like-user-${response.data.user_pk}`)
       likeUserElem.remove()
-      console.log(response.data.likeCount)
       if (response.data.likeCount === 0) {
-        console.log(response.data.likeCount)
         likeList.insertAdjacentHTML('afterbegin', `<div id="no-like-box" class="text-center mt-5">
         <p>
           <ion-icon name="people" size="large"></ion-icon>
@@ -234,7 +226,6 @@ function likeComment(e) {
       url: `/hobby/${commentPk}/like_comment`,
     })
     .then(response => {
-      console.log(response.data)
       if (response.data.is_like === true ) {
         try { likeBtnComment.setAttribute('name', 'heart') } catch(error) {};
         likeBtnCommentOff.setAttribute('name', 'heart')
@@ -268,7 +259,6 @@ function getReComment(e) {
   const recommentForm = document.querySelector(`#recomment-form-${e.target.dataset.commentId}`)
   const recommentFormOff = document.querySelector(`#recomment-form-${e.target.dataset.commentId}-off`)
   if (e.target.dataset.action == 'reComment') {
-    console.log('yes??')
     recommentForm.classList.toggle('recomment-elem')
     recommentForm.classList.toggle('recomment-elem-active')
     recommentFormOff.classList.toggle('recomment-elem')
@@ -282,17 +272,13 @@ function commentReport() {
 
 function deleteComment(e) {
   const comment_pk = e.dataset.commentId;
-  console.log(comment_pk)
 
   axios({
-      method: 'post',
+      method: 'get',
       url: `/hobby/${comment_pk}/comment_delete`,
-      headers: { 'X-CSRFToken': csrftoken},
   })
   .then(response => {
     // detail 페이지 댓글 제한 7개
-    console.log(response.data.comments_data)
-    console.log(response.data.comments_data.length)
     commentList.innerHTML = ""
     for (let i=0; i < response.data.comments_data.length; i++){
         let isLike = ""
