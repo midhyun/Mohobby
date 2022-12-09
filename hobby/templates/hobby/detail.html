@@ -288,7 +288,7 @@
                   <p>{{ recomment.content }}</p>
                   <div>
                     <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
-                        <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
+                        <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
                         data-user="{{ recomment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -398,7 +398,7 @@
                       <p>{{ recomment.content }}</p>
                       <div>
                         <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
-                            <span id="comment-{{ recomment.pk }}-likecnt-off">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
+                            <span id="comment-{{ recomment.pk }}-likecnt-off">{{ recomment.like_user.count }}</span>개</span>
                           <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                             data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
                             data-user="{{ recomment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -477,8 +477,12 @@
     </a>
     <!-- 비슷한 소셜링 -->
   </div>
+<div id="load">
+  <img style="width:256px; height:256px;" class="translate-middle" src="{% static 'image/loading.gif' %}" alt="loading">
+</div>
   {% endblock content %}
   {% block js %}
+  <script src="https://cdn.lordicon.com/fudrjiwc.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
@@ -513,4 +517,36 @@
     // 주소를 입력하면 콜백함수 실행
     places.keywordSearch('{{ hobby.address }}', callback);
   </script>
+  <script src="https://code.jquery.com/jquery-1.8.0.js" integrity="sha256-00Fh8tkPAe+EmVaHFpD+HovxWk7b97qwqVi7nLvjdgs="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    $(window).on('load', function () {
+      setTimeout(() => {
+        $("#load").hide();;
+  		}, 1500);
+      
+    });
+  </script>
+
+  <style type="text/css">
+    #load {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      position: fixed;
+      display: block;
+      opacity: 0.8;
+      background: white;
+      z-index: 99;
+      text-align: center;
+    }
+
+    #load>img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 100;
+    }
+  </style>
   {% endblock js %}
