@@ -351,6 +351,9 @@ margin: auto;
   outline: 3px solid rgba(0, 0, 0, 0.253);
   transition: 0.15s
 }
+#offcanvasBottom{
+  height:400px
+}
 #offcanvasBottom2{
  height: 800px; 
 }
