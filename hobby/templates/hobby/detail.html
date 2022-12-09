@@ -6,14 +6,15 @@
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
 {% block content %}
-<input id="request-user-id" class="d-none" type="text" value="{{ request.user.pk }}">
+<input id="request-user-id" type="hidden" value="{{ request.user.pk }}">
+<input id="hobby_id" type="hidden" value="{{ hobby.pk }}">
 <div class="detail-wrapper wrapper" style="margin-top: 100px;">
   <!-- 이미지 배너 -->
-  {% if hobby.image %}
-  <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
+    {% if hobby.image %}
+      <div class="image-banner p-5" style="background-image: url('{{ hobby.image.url }}'); height:300px; ">
     {% else %}
-    <div class="image-banner p-5" style="background-image: url('https://dummyimage.com/750x300/000/fff'); height:300px; ">
-      {% endif %}
+      <div class="image-banner p-5" style="background-image: url('https://dummyimage.com/750x300/000/fff'); height:300px; ">
+    {% endif %}
       <span class="badge bg-danger mx-1" style="height:20px">{{ accepted|length }}명 참여중</span>
       <span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
     </div>
@@ -184,24 +185,10 @@
         <!-- 댓글의 수, 모든 댓글보기 -->
         <ion-icon style="cursor:pointer;" name="chatbubble-outline" size="large" data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasBottom3" aria-controls="offcanvasBottom"></ion-icon>
-        <span id="comment-count" style="font-size:24px; width:40px;">{{ comments.count }} </span>
+        <span id="comment-count" style="font-size:24px; width:40px;">{{ comments_len }} </span>
         <!-- 좋아요를 누른 사람 목록 보기... -->
         <ion-icon style="cursor:pointer;" name="ellipsis-horizontal" data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasBottom4" aria-controls="offcanvasBottom"></ion-icon>
-      </li>
-      <!-- 댓글작성 -->
-      <li class="comment-elem">
-        {% if user.image %}
-        <img class="comment-image" src="{{ user.image.url }}" alt="">
-        {% else %}
-        <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
-        {% endif %}
-        <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}"
-          method="POST">
-          {% csrf_token %}
-          <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
-          <input class="d-none" type="submit" value="제출">
-        </form>
       </li>
       <!-- 댓글 삭제 모달 -->
       <div class="modal fade" id="comment-delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -220,8 +207,23 @@
           </div>
         </div>
       </div>
-      <!-- 댓글목록 -->
+      <!-- 댓글작성 폼 -->
+      <div class="comment-elem">
+        {% if user.image %}
+        <img class="comment-image" src="{{ user.image.url }}" alt="">
+        {% else %}
+        <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+        {% endif %}
+        <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action=""
+          method="POST" class="w-100" data-action="comment-form">
+          {% csrf_token %}
+          <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+          <input class="d-none" type="submit" value="제출">
+          <input type="hidden" name="parent">
+        </form>
+      </div>
       <li id="comment-list">
+        <!-- 댓글목록 -->
         {% for comment in comments.all|slice:":7" %}
         <hr>
         <div class="d-flex justify-content-between">
@@ -237,7 +239,7 @@
               <p>{{ comment.content }}</p>
               <div>
                 <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
-                    <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span>
+                    <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                   <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                     data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                     data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -255,6 +257,56 @@
             {% endif %}
           </div>
         </div>
+        <!-- 대댓글 작성 폼 -->
+        <div id="recomment-form-{{ comment.pk }}" class="recomment-elem">
+          {% if user.image %}
+          <img class="comment-image" src="{{ user.image.url }}" alt="">
+          {% else %}
+          <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
+          <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}"
+            method="POST" class="w-100" data-action="comment-form">
+            {% csrf_token %}
+            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input class="d-none" type="submit" value="제출">
+            <input type="hidden" name="parent" value="{{ comment.pk }}">
+          </form>
+        </div>
+        <!-- 대댓글 -->
+            {% for recomment in comment.recomment.all %}
+            <hr>
+            <div class="d-flex justify-content-between ms-5">
+              <div class="comment-elem">
+                <a href="{% url 'accounts:detail' recomment.user.pk %}">
+                  {% if recomment.user.image %}
+                  <img class="comment-image" src="{{ recomment.user.image.url }}" alt="">
+                  {% else %}
+                  <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+                  {% endif %}</a>
+                <div> 
+                  <p>{{ recomment.user.nickname }}</p>
+                  <p>{{ recomment.content }}</p>
+                  <div>
+                    <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
+                        <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
+                      <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
+                        data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
+                        data-user="{{ recomment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {% if request.user in recomment.like_user.all %}
+                <ion-icon data-action="like" id="comment-{{recomment.pk}}-likebtn" data-comment-id="{{ recomment.pk }}"
+                  class="comment-like-btn" style="color:#E84545" name="heart"></ion-icon>
+                {% else %}
+                <ion-icon data-action="like" id="comment-{{recomment.pk}}-likebtn" data-comment-id="{{ recomment.pk }}"
+                  class="comment-like-btn" style="color:#E84545" name="heart-outline"></ion-icon>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
         {% endfor %}
       </li>
       <!-- 댓글 오프캔버스 -->
@@ -263,7 +315,22 @@
           <h5 class="offcanvas-title" id="offcanvasBottomLabel">소셜링이 궁금하다면 댓글을 남겨보세요.</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <hr>
+        <!-- 오프캔버스 댓글 작성 -->
+        <div class="comment-elem">
+          {% if user.image %}
+          <img class="comment-image" src="{{ user.image.url }}" alt="">
+          {% else %}
+          <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+          {% endif %}
+          <form id="comment-form-off" data-hobby-id="{{ hobby.pk }}" action=""
+            method="POST" class="w-100" data-action="comment-form">
+            {% csrf_token %}
+            <input id="commentinputoff" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input class="d-none" type="submit" value="제출">
+            <input type="hidden" name="parent">
+          </form>
+        </div>
+        <!-- 댓글들 -->
         <div class="offcanvas-body small">
           {% if comments %}
           <ul class="" id="comment-list-off">
@@ -277,12 +344,12 @@
                   {% else %}
                   <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
                   {% endif %}</a>
-                <div>
+                <div> 
                   <p>{{ comment.user.nickname }}</p>
                   <p>{{ comment.content }}</p>
                   <div>
-                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span>
-                      <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span>
+                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
+                        <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                         data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -292,14 +359,64 @@
               </div>
               <div>
                 {% if request.user in comment.like_user.all %}
-                <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" class="comment-like-btn"
-                  data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart"></ion-icon>
+                <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" data-comment-id="{{ comment.pk }}"
+                  class="comment-like-btn" style="color:#E84545" name="heart"></ion-icon>
                 {% else %}
-                <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" class="comment-like-btn"
-                  data-comment-id="{{ comment.pk }}" style="color:#E84545" name="heart-outline"></ion-icon>
+                <ion-icon data-action="like" id="comment-{{comment.pk}}-likebtn-off" data-comment-id="{{ comment.pk }}"
+                  class="comment-like-btn" style="color:#E84545" name="heart-outline"></ion-icon>
                 {% endif %}
               </div>
             </div>
+            <!-- 대댓글 작성 폼 -->
+            <div id="recomment-form-{{ comment.pk }}-off" class="recomment-elem">
+              {% if user.image %}
+              <img class="comment-image" src="{{ user.image.url }}" alt="">
+              {% else %}
+              <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+              {% endif %}
+              <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}"
+                method="POST" class="w-100" data-action="comment-form">
+                {% csrf_token %}
+                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+                <input class="d-none" type="submit" value="제출">
+                <input type="hidden" name="parent" value="{{ comment.pk }}">
+              </form>
+            </div>
+            <!-- 대댓글 -->
+                {% for recomment in comment.recomment.all %}
+                <hr>
+                <div class="d-flex justify-content-between ms-5">
+                  <div class="comment-elem">
+                    <a href="{% url 'accounts:detail' recomment.user.pk %}">
+                      {% if recomment.user.image %}
+                      <img class="comment-image" src="{{ recomment.user.image.url }}" alt="">
+                      {% else %}
+                      <img class="comment-image" src="https://dummyimage.com/80x80/000/fff" alt="">
+                      {% endif %}</a>
+                    <div> 
+                      <p>{{ recomment.user.nickname }}</p>
+                      <p>{{ recomment.content }}</p>
+                      <div>
+                        <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
+                            <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
+                          <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
+                            data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
+                            data-user="{{ recomment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {% if request.user in recomment.like_user.all %}
+                    <ion-icon data-action="like" id="comment-{{recomment.pk}}-likebtn-off" data-comment-id="{{ recomment.pk }}"
+                      class="comment-like-btn" style="color:#E84545" name="heart"></ion-icon>
+                    {% else %}
+                    <ion-icon data-action="like" id="comment-{{recomment.pk}}-likebtn-off" data-comment-id="{{ recomment.pk }}"
+                      class="comment-like-btn" style="color:#E84545" name="heart-outline"></ion-icon>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endfor %}
             {% endfor %}
           </ul>
           {% else %}
