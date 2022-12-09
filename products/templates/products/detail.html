@@ -9,7 +9,6 @@
 {% block content %}
   <div class="container">
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
-      <h1 class="my-2">상세 페이지</h1>
     </div>
     <div class="p-4">
       <div class="row justify-content-center g-5 mb-3">
@@ -23,9 +22,9 @@
         <div class="col-12 col-sm-10 col-md-6 col-lg-4 position-relative">
           <h4 class="mb-4">{{ product.title }}</h4>
           <h3 class="mb-4 fw-bold">{{ product.price|intcomma }}원</h3>
-          <h6 class="mb-4">상품 상태 {{ product.productType }}</h6>
-          <h6 class="mb-4">배송 방법 {{ product.tradeType }}</h6>
-          <h6 class="mb-4">거래 위치 {{ product.location }}</h6>
+          <h6 class="mb-4">상품 상태 : {{ product.productType }}</h6>
+          <h6 class="mb-4">배송 방법 : {{ product.tradeType }}</h6>
+          <h6 class="mb-4">거래 위치 : {{ product.location }}</h6>
           <div class="d-flex">
             <button class="btn btn-outline-secondary disabled me-2"><i class="bi bi-eye me-2"></i><span>{{ product.hits }}</span></button>
             {% if request.user.is_authenticated %}
