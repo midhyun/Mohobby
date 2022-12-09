@@ -1,4 +1,3 @@
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const requestUserId = document.querySelector('#request-user-id').value
 const pk = document.querySelector('#hobby_id').value
 dayjs.extend(window.dayjs_plugin_relativeTime)
@@ -8,13 +7,18 @@ dayjs.locale('ko')
 console.log(dayjs.tz(new Date()))
 console.log(dayjs.tz.guess())
 const commentInput = document.querySelector('#commentinput')
+const commentInputOff = document.querySelector('#commentinputoff')
 const commentCount = document.querySelector('#comment-count')
 // 댓글 리스트
 const commentList = document.querySelector('#comment-list')
 // 댓글 리스트 - 오프캔버스
 const commentListOff = document.querySelector('#comment-list-off')
+// 댓글 작성 폼
+const mainCommentForm = document.querySelector('#comment-form')
+const mainCommentFormOff = document.querySelector('#comment-form-off')
 // 댓글 생성 함수
 function submitComment(event) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     event.preventDefault();
     console.log(event.target.dataset.action)
     const commentForm = event.target
@@ -96,6 +100,7 @@ function submitComment(event) {
               )};
             };
         commentInput.value = ""
+        commentInputOff.value = ""
         commentCount.innerText = response.data.comments_len
 
         
@@ -124,10 +129,10 @@ function submitComment(event) {
               </div>
             </div>
             <div>
-            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
             </div>
             </div>
-            <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+            <div id="recomment-form-${response.data.comments_data[i].pk}-off" class="recomment-elem">
             <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
             <form id="comment-form" data-hobby-id="${pk}" action=""
               method="POST" class="w-100" data-action="comment-form">
@@ -158,7 +163,7 @@ function submitComment(event) {
               </div>
             </div>
             <div>
-            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
             </div>
             </div>`
             )};
@@ -261,10 +266,13 @@ function getDeleteComment(e) {
 
 function getReComment(e) {
   const recommentForm = document.querySelector(`#recomment-form-${e.target.dataset.commentId}`)
+  const recommentFormOff = document.querySelector(`#recomment-form-${e.target.dataset.commentId}-off`)
   if (e.target.dataset.action == 'reComment') {
     console.log('yes??')
     recommentForm.classList.toggle('recomment-elem')
     recommentForm.classList.toggle('recomment-elem-active')
+    recommentFormOff.classList.toggle('recomment-elem')
+    recommentFormOff.classList.toggle('recomment-elem-active')
   }
 }
 
@@ -380,10 +388,10 @@ function deleteComment(e) {
           </div>
         </div>
         <div>
-        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
         </div>
         </div>
-        <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+        <div id="recomment-form-${response.data.comments_data[i].pk}-off" class="recomment-elem">
         <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
         <form id="comment-form" data-hobby-id="${pk}" action=""
           method="POST" class="w-100" data-action="comment-form">
@@ -414,18 +422,19 @@ function deleteComment(e) {
           </div>
         </div>
         <div>
-        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
         </div>
         </div>`
         )};
       };
   })
 };
-const mainCommentForm = document.querySelector('#comment-form')
 
 // 폼에 이벤트 추가
 mainCommentForm.addEventListener('submit', submitComment);
+mainCommentFormOff.addEventListener('submit', submitComment);
 commentList.addEventListener('submit', submitComment);
+commentListOff.addEventListener('submit', submitComment);
 // 하트 아이콘 좋아요 이벤트 추가
 commentList.addEventListener('click', likeComment);
 // ... 아이콘 삭제모달 이벤트 추가
