@@ -349,7 +349,7 @@
                   <p>{{ comment.content }}</p>
                   <div>
                     <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
-                        <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
+                        <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                         data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -398,7 +398,7 @@
                       <p>{{ recomment.content }}</p>
                       <div>
                         <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
-                            <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
+                            <span id="comment-{{ recomment.pk }}-likecnt-off">{{ recomment.like_user.count }}</span>개</span> <span data-action="reComment" data-parent-pk="{{ comment.pk }}">답글달기</span>
                           <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                             data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
                             data-user="{{ recomment.user.pk }}" name="ellipsis-horizontal"></ion-icon>

@@ -312,7 +312,7 @@ def comment_like(request, comment_pk):
     
     data = {
         'is_like': is_like,
-        'likeCount': comment.like_user.count(),
+        'likeCount': len(comment.like_user.all())   
     }
     return JsonResponse(data)
 
