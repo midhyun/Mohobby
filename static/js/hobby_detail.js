@@ -1,5 +1,6 @@
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const requestUserId = document.querySelector('#request-user-id').value
+const pk = document.querySelector('#hobby_id').value
 dayjs.extend(window.dayjs_plugin_relativeTime)
 dayjs.extend(window.dayjs_plugin_utc)
 dayjs.extend(window.dayjs_plugin_timezone)
@@ -8,8 +9,6 @@ console.log(dayjs.tz(new Date()))
 console.log(dayjs.tz.guess())
 const commentInput = document.querySelector('#commentinput')
 const commentCount = document.querySelector('#comment-count')
-// 댓글생성 폼
-const commentForm = document.querySelector(`#comment-form`)
 // 댓글 리스트
 const commentList = document.querySelector('#comment-list')
 // 댓글 리스트 - 오프캔버스
@@ -17,8 +16,9 @@ const commentListOff = document.querySelector('#comment-list-off')
 // 댓글 생성 함수
 function submitComment(event) {
     event.preventDefault();
-    const pk = event.target.dataset.hobbyId;
-
+    console.log(event.target.dataset.action)
+    const commentForm = event.target
+    if (event.target.dataset.action == 'comment-form') {
     axios({
         method: 'post',
         url: `/hobby/${pk}/comment_create`,
@@ -27,7 +27,9 @@ function submitComment(event) {
     })
     .then(response => {
       // detail 페이지 댓글 제한 7개
-        commentList.textContent = ""
+        console.log(response.data.comments_data)
+        console.log(response.data.comments_data.length)
+        commentList.innerHTML = ""
         for (let i=0; i < response.data.comments_data.length; i++){
             let isLike = ""
             if (i == 7){
@@ -39,6 +41,74 @@ function submitComment(event) {
               isLike = "heart-outline"
             }
             commentList.insertAdjacentHTML('beforeend', `<hr>
+              <div class="d-flex justify-content-between">
+              <div class="comment-elem" >
+                  <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+                <div>
+                  <p>${ response.data.comments_data[i].user }</p>
+                  <p>${ response.data.comments_data[i].content }</p>
+                  <div>
+                    <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> 
+                    <span data-action="reComment" data-comment-id="${response.data.comments_data[i].pk}" style="cursor:pointer;">답글달기</span>
+                    <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+              <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+              </div>
+              </div>
+              <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+              <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+              <form id="comment-form" data-hobby-id="${pk}" action=""
+                method="POST" class="w-100" data-action="comment-form">
+                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+                <input class="d-none" type="submit" value="제출">
+                <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
+              </form>
+            </div>`)
+            for (let j=0; j < response.data.comments_data[i].recomments.length ; j++){
+              let isLike = ""
+              if (response.data.comments_data[i].recomments[j].is_like === true) {
+                isLike = "heart"
+              } else {
+                isLike = "heart-outline"
+              }
+              commentList.insertAdjacentHTML('beforeend', `<hr>
+              <div class="d-flex justify-content-between ms-5">
+              <div class="comment-elem" >
+                  <img class="comment-image" src="${ response.data.comments_data[i].recomments[j].image }" alt="">
+                <div>
+                  <p>${ response.data.comments_data[i].recomments[j].user }</p>
+                  <p>${ response.data.comments_data[i].recomments[j].content }</p>
+                  <div>
+                    <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].recomments[j].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].recomments[j].pk}-likecnt">${response.data.comments_data[i].recomments[j].likeCount}</span>개</span> 
+                    <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" data-user="${ response.data.comments_data[i].recomments[j].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+              <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+              </div>
+              </div>`
+              )};
+            };
+        commentInput.value = ""
+        commentCount.innerText = response.data.comments_len
+
+        
+        // 오프캔버스 더보기로 모든 댓글 구현
+        commentListOff.textContent = ""
+        for (let i=0; i < response.data.comments_data.length; i++){
+          let isLike = ""
+          if (response.data.comments_data[i].is_like === true) {
+            isLike = "heart"
+          } else {
+            isLike = "heart-outline"
+          }
+          commentListOff.insertAdjacentHTML('beforeend', `<hr>
             <div class="d-flex justify-content-between">
             <div class="comment-elem" >
                 <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
@@ -46,7 +116,8 @@ function submitComment(event) {
                 <p>${ response.data.comments_data[i].user }</p>
                 <p>${ response.data.comments_data[i].content }</p>
                 <div>
-                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span>
+                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> 
+                  <span data-action="reComment" data-comment-id="${response.data.comments_data[i].pk}" style="cursor:pointer;">답글달기</span>
                   <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
@@ -55,44 +126,47 @@ function submitComment(event) {
             <div>
             <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
             </div>
-            </div>`
-            )}
-        commentInput.value = ""
-        commentCount.innerText = response.data.comments_data.length 
-
-        
-        // 오프캔버스 더보기로 모든 댓글 구현
-        commentListOff.textContent = ""
-        for (let i=0; i < response.data.comments_data.length; i++){
+            </div>
+            <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+            <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+            <form id="comment-form" data-hobby-id="${pk}" action=""
+              method="POST" class="w-100" data-action="comment-form">
+              <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+              <input class="d-none" type="submit" value="제출">
+              <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
+            </form>
+          </div>`)
+          for (let j=0; j < response.data.comments_data[i].recomments.length ; j++){
             let isLike = ""
-            if (response.data.comments_data[i].is_like === true) {
+            if (response.data.comments_data[i].recomments[j].is_like === true) {
               isLike = "heart"
             } else {
               isLike = "heart-outline"
             }
             commentListOff.insertAdjacentHTML('beforeend', `<hr>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between ms-5">
             <div class="comment-elem" >
-                <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+                <img class="comment-image" src="${ response.data.comments_data[i].recomments[j].image }" alt="">
               <div>
-                <p>${ response.data.comments_data[i].user }</p>
-                <p>${ response.data.comments_data[i].content }</p>
+                <p>${ response.data.comments_data[i].recomments[j].user }</p>
+                <p>${ response.data.comments_data[i].recomments[j].content }</p>
                 <div>
-                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span> 
-                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                  <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].recomments[j].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].recomments[j].pk}-likecnt">${response.data.comments_data[i].recomments[j].likeCount}</span>개</span> 
+                  <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" data-user="${ response.data.comments_data[i].recomments[j].user_pk }" name="ellipsis-horizontal"></ion-icon>
                   </p>
                 </div>
               </div>
             </div>
             <div>
-              <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
             </div>
             </div>`
-            )}
+            )};
+          };
 
     })
 
-};
+}};
 
 
 
@@ -176,8 +250,6 @@ function likeComment(e) {
 
 
 function getDeleteComment(e) {
-  console.log(e.target.dataset.user)
-  console.log(requestUserId)
   if (e.target.dataset.action == 'getDelete') {
     const btnDiv = document.querySelector('.modal-body')
     if (requestUserId == e.target.dataset.user) {
@@ -186,6 +258,15 @@ function getDeleteComment(e) {
       btnDiv.innerHTML = `<button onclick="commentReport()" id="comment-report-btn" data-bs-dismiss="modal" class="mt-3 submit_btn slide_button" type="button">댓글 신고하기</button>`
     }};
 };
+
+function getReComment(e) {
+  const recommentForm = document.querySelector(`#recomment-form-${e.target.dataset.commentId}`)
+  if (e.target.dataset.action == 'reComment') {
+    console.log('yes??')
+    recommentForm.classList.toggle('recomment-elem')
+    recommentForm.classList.toggle('recomment-elem-active')
+  }
+}
 
 function commentReport() {
   swal("신고가 완료되었습니다.", `감사합니다.`, "success");
@@ -202,75 +283,156 @@ function deleteComment(e) {
   })
   .then(response => {
     // detail 페이지 댓글 제한 7개
-      commentList.textContent = ""
-      for (let i=0; i < response.data.comments_data.length; i++){
+    console.log(response.data.comments_data)
+    console.log(response.data.comments_data.length)
+    commentList.innerHTML = ""
+    for (let i=0; i < response.data.comments_data.length; i++){
+        let isLike = ""
+        if (i == 7){
+          break;
+        }
+        if (response.data.comments_data[i].is_like === true) {
+          isLike = "heart"
+        } else {
+          isLike = "heart-outline"
+        }
+        commentList.insertAdjacentHTML('beforeend', `<hr>
+          <div class="d-flex justify-content-between">
+          <div class="comment-elem" >
+              <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+            <div>
+              <p>${ response.data.comments_data[i].user }</p>
+              <p>${ response.data.comments_data[i].content }</p>
+              <div>
+                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> 
+                <span data-action="reComment" data-comment-id="${response.data.comments_data[i].pk}" style="cursor:pointer;">답글달기</span>
+                <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+          <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+          </div>
+          </div>
+          <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+          <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+          <form id="comment-form" data-hobby-id="${pk}" action=""
+            method="POST" class="w-100" data-action="comment-form">
+            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input class="d-none" type="submit" value="제출">
+            <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
+          </form>
+        </div>`)
+        for (let j=0; j < response.data.comments_data[i].recomments.length ; j++){
           let isLike = ""
-          if (i == 7){
-            break;
-          }
-          if (response.data.comments_data[i].is_like === true) {
+          if (response.data.comments_data[i].recomments[j].is_like === true) {
             isLike = "heart"
           } else {
             isLike = "heart-outline"
           }
           commentList.insertAdjacentHTML('beforeend', `<hr>
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between ms-5">
           <div class="comment-elem" >
-              <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+              <img class="comment-image" src="${ response.data.comments_data[i].recomments[j].image }" alt="">
             <div>
-              <p>${ response.data.comments_data[i].user }</p>
-              <p>${ response.data.comments_data[i].content }</p>
+              <p>${ response.data.comments_data[i].recomments[j].user }</p>
+              <p>${ response.data.comments_data[i].recomments[j].content }</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span>
-                <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].recomments[j].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].recomments[j].pk}-likecnt">${response.data.comments_data[i].recomments[j].likeCount}</span>개</span> 
+                <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" data-user="${ response.data.comments_data[i].recomments[j].user_pk }" name="ellipsis-horizontal"></ion-icon>
                 </p>
               </div>
             </div>
           </div>
           <div>
-            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
-          </div>
-          </div>`
-          )}
-      commentInput.value = ""
-      commentCount.innerText = response.data.comments_data.length 
-      // 오프캔버스 더보기로 모든 댓글 구현
-      commentListOff.textContent = ""
-      for (let i=0; i < response.data.comments_data.length; i++){
-          let isLike = ""
-          if (response.data.comments_data[i].is_like === true) {
-            isLike = "heart"
-          } else {
-            isLike = "heart-outline"
-          }
-          commentListOff.insertAdjacentHTML('beforeend', `<hr>
-          <div class="d-flex justify-content-between">
-          <div class="comment-elem" >
-              <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
-            <div>
-              <p>${ response.data.comments_data[i].user }</p>
-              <p>${ response.data.comments_data[i].content }</p>
-              <div>
-                <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt-off">${response.data.comments_data[i].likeCount}</span>개</span>
-                <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn-off" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+          <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
           </div>
           </div>`
           )};
+        };
+    commentInput.value = ""
+    commentCount.innerText = response.data.comments_len
+
+    
+    // 오프캔버스 더보기로 모든 댓글 구현
+    commentListOff.textContent = ""
+    for (let i=0; i < response.data.comments_data.length; i++){
+      let isLike = ""
+      if (response.data.comments_data[i].is_like === true) {
+        isLike = "heart"
+      } else {
+        isLike = "heart-outline"
+      }
+      commentListOff.insertAdjacentHTML('beforeend', `<hr>
+        <div class="d-flex justify-content-between">
+        <div class="comment-elem" >
+            <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+          <div>
+            <p>${ response.data.comments_data[i].user }</p>
+            <p>${ response.data.comments_data[i].content }</p>
+            <div>
+              <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].pk}-likecnt">${response.data.comments_data[i].likeCount}</span>개</span> 
+              <span data-action="reComment" data-comment-id="${response.data.comments_data[i].pk}" style="cursor:pointer;">답글달기</span>
+              <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].pk}" data-user="${ response.data.comments_data[i].user_pk }" name="ellipsis-horizontal"></ion-icon>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div>
+        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+        </div>
+        </div>
+        <div id="recomment-form-${response.data.comments_data[i].pk}" class="recomment-elem">
+        <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
+        <form id="comment-form" data-hobby-id="${pk}" action=""
+          method="POST" class="w-100" data-action="comment-form">
+          <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+          <input class="d-none" type="submit" value="제출">
+          <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
+        </form>
+      </div>`)
+      for (let j=0; j < response.data.comments_data[i].recomments.length ; j++){
+        let isLike = ""
+        if (response.data.comments_data[i].recomments[j].is_like === true) {
+          isLike = "heart"
+        } else {
+          isLike = "heart-outline"
+        }
+        commentListOff.insertAdjacentHTML('beforeend', `<hr>
+        <div class="d-flex justify-content-between ms-5">
+        <div class="comment-elem" >
+            <img class="comment-image" src="${ response.data.comments_data[i].recomments[j].image }" alt="">
+          <div>
+            <p>${ response.data.comments_data[i].recomments[j].user }</p>
+            <p>${ response.data.comments_data[i].recomments[j].content }</p>
+            <div>
+              <p class="text-muted" style="font-size:12px"><span>${dayjs.utc(response.data.comments_data[i].recomments[j].created_at).local().fromNow()}</span> <span>좋아요 <span id="comment-${response.data.comments_data[i].recomments[j].pk}-likecnt">${response.data.comments_data[i].recomments[j].likeCount}</span>개</span> 
+              <ion-icon data-action='getDelete' type="button" data-bs-toggle="modal" data-bs-target="#comment-delete" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" data-user="${ response.data.comments_data[i].recomments[j].user_pk }" name="ellipsis-horizontal"></ion-icon>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div>
+        <ion-icon data-action="like" id="comment-${response.data.comments_data[i].recomments[j].pk}-likebtn" class="comment-like-btn" data-comment-id="${response.data.comments_data[i].recomments[j].pk}" style="color:#E84545" name=${isLike}></ion-icon>
+        </div>
+        </div>`
+        )};
+      };
   })
 };
+const mainCommentForm = document.querySelector('#comment-form')
 
 // 폼에 이벤트 추가
-commentForm.addEventListener('submit', submitComment)
+mainCommentForm.addEventListener('submit', submitComment);
+commentList.addEventListener('submit', submitComment);
 // 하트 아이콘 좋아요 이벤트 추가
-commentList.addEventListener('click', likeComment)
+commentList.addEventListener('click', likeComment);
 // ... 아이콘 삭제모달 이벤트 추가
-commentList.addEventListener('click', getDeleteComment)
+commentList.addEventListener('click', getDeleteComment);
+// 대댓글 인풋 이벤트
+commentList.addEventListener('click', getReComment);
 // 오프캔버스에도 이벤트 추가
-commentListOff.addEventListener('click', likeComment)
-commentListOff.addEventListener('click', getDeleteComment)
+commentListOff.addEventListener('click', likeComment);
+commentListOff.addEventListener('click', getDeleteComment);
+commentListOff.addEventListener('click', getReComment);

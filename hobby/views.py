@@ -28,7 +28,7 @@ def create(request):
             atemp.hobby = temp
             atemp.user = request.user
             atemp.save()
-            return redirect("main")
+            return redirect("hobby:detail", temp.pk)
     else:
         form = HobbyForm()
     context = {
@@ -44,8 +44,8 @@ def test(request):
         response = request.POST['captchatoken']
         url = 'https://www.google.com/recaptcha/api/siteverify'
         data = {
-            'secret': secret,
-            'response': response,
+            'secret': secret, # 시크릿 키
+            'response': response, # 토큰
         }
         res = requests.post(url, data=data)
         print(res.json()['success'])
@@ -58,7 +58,7 @@ def test(request):
 @login_required
 def detail(request, hobby_pk):
     hobby = Hobby.objects.get(pk=hobby_pk)
-    comments = HobbyComment.objects.filter(hobby=hobby).order_by('-pk')
+    comments = HobbyComment.objects.filter(hobby=hobby, parent=None).order_by('-pk')
     accepted = Accepted.objects.filter(hobby=hobby, joined=True)
     waiting = Accepted.objects.filter(hobby=hobby, joined=False)
     expire_date, now = datetime.now(), datetime.now()
@@ -71,7 +71,8 @@ def detail(request, hobby_pk):
         'hobby':hobby,
         'accepted': accepted,
         'waiting': waiting,
-        'comments':comments,        
+        'comments':comments,
+        'comments_len': len(HobbyComment.objects.filter(hobby_id=hobby_pk)),
     }
     response = render(request, "hobby/detail.html", context)
     if f"_{hobby_pk}_" not in cookie_value:
@@ -182,15 +183,42 @@ def reject(request, hobby_pk, user_pk):
 @login_required
 def comment_create(request, hobby_pk):
     if request.method == 'POST':
+        print(request.POST)
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             temp = comment_form.save(commit=False)
+            if request.POST['parent']:
+                temp.parent_id = int(request.POST['parent'])
             temp.user = request.user
             temp.hobby_id = hobby_pk
             temp.save()
-    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk, parent=None).order_by('-pk')
+    lenComments = len(HobbyComment.objects.filter(hobby_id=hobby_pk))
     comments_data = []
     for comment in comments:
+        print(comment.parent)
+        recomments = comment.recomment.all()
+        recomments_data = []
+        if len(recomments):
+            for recomment in recomments:
+                if request.user in recomment.like_user.all():
+                    is_like = True
+                else: is_like = False
+                created_at = recomment.created_at.strftime('%Y-%m-%d %H:%M')
+                if recomment.user.image:
+                    image = recomment.user.image.url
+                else: image = 'https://dummyimage.com/80x80/000/fff'
+                recomments_data.append({
+                    "pk": recomment.pk,
+                    "user": recomment.user.nickname,
+                    "user_pk": recomment.user.pk,
+                    "content": recomment.content,
+                    "created_at": created_at,
+                    "is_like": is_like,
+                    "image": image,
+                    'likeCount': comment.like_user.count(),
+                })
+
         if request.user in comment.like_user.all():
             is_like = True
         else: is_like = False
@@ -207,9 +235,11 @@ def comment_create(request, hobby_pk):
             "is_like": is_like,
             "image": image,
             'likeCount': comment.like_user.count(),
+            'recomments': recomments_data,
         })
     context = {
         "comments_data": comments_data,
+        "comments_len": lenComments
     }
     return JsonResponse(context)
 
@@ -221,9 +251,32 @@ def comment_delete(request, comment_pk):
         comment.delete()
     else:
         print('권한이 없습니다.')
-    comments = HobbyComment.objects.filter(hobby_id=hobby_pk).order_by('-pk')
+    comments = HobbyComment.objects.filter(hobby_id=hobby_pk, parent=None).order_by('-pk')
+    lenComments = len(HobbyComment.objects.filter(hobby_id=hobby_pk))
     comments_data = []
     for comment in comments:
+        recomments = comment.recomment.all()
+        recomments_data = []
+        if len(recomments):
+            for recomment in recomments:
+                if request.user in recomment.like_user.all():
+                    is_like = True
+                else: is_like = False
+                created_at = recomment.created_at.strftime('%Y-%m-%d %H:%M')
+                if recomment.user.image:
+                    image = recomment.user.image.url
+                else: image = 'https://dummyimage.com/80x80/000/fff'
+                recomments_data.append({
+                    "pk": recomment.pk,
+                    "user": recomment.user.nickname,
+                    "user_pk": recomment.user.pk,
+                    "content": recomment.content,
+                    "created_at": created_at,
+                    "is_like": is_like,
+                    "image": image,
+                    'likeCount': comment.like_user.count(),
+                })
+
         if request.user in comment.like_user.all():
             is_like = True
         else: is_like = False
@@ -240,9 +293,11 @@ def comment_delete(request, comment_pk):
             "is_like": is_like,
             "image": image,
             'likeCount': comment.like_user.count(),
+            'recomments': recomments_data,
         })
     context = {
         "comments_data": comments_data,
+        "comments_len": lenComments
     }
     return JsonResponse(context)
 

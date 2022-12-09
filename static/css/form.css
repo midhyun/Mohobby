@@ -528,7 +528,6 @@ margin: auto;
   display: flex;
   align-items: center;
   max-height:500px;
-  overflow:hidden;
 }
 .comment-image{
   width:35px;
@@ -584,6 +583,17 @@ margin: auto;
 .error-message{
   color:#E84545;
   font-size: 16px;
-  text-align: center;
-  
+  text-align: center; 
+}
+
+.recomment-elem{
+  display: none;
+  align-items: center;
+  max-height:500px;
+}
+
+.recomment-elem-active{
+  display: flex;
+  align-items: center;
+  max-height:500px;
 }
