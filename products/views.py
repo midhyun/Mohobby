@@ -200,6 +200,25 @@ def comment_delete(request, product_pk, comment_pk):
 
 
 @require_POST
+def comment_like(request, product_pk, comment_pk):
+    product = get_object_or_404(Product, pk=product_pk)
+    comment = get_object_or_404(Product_Comment, pk=comment_pk)
+
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
+
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+    else:
+        comment.like_users.add(request.user)
+    # context = {
+    #     "like_count": comment.like_users.count(),
+    # }
+    # return JsonResponse(context)
+    return redirect("products:product_detail", product.pk)
+
+
+@require_POST
 def reply_create(request, product_pk, comment_pk):
     product = get_object_or_404(Product, pk=product_pk)
     parent_comment = get_object_or_404(Product_Comment, pk=comment_pk)
