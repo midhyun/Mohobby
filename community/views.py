@@ -235,3 +235,5 @@ def comment_like(request, comment_pk):
         is_likes = True
     data = {"is_likes": is_likes, "likes_count": comment.like.count()}
     return JsonResponse(data)
+
+
