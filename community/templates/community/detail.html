@@ -93,56 +93,59 @@
       </form>
       <hr>
       <!-- 댓글 목록 -->
-      <div>
+      <div id="comment-list">
         {% for comment in comments %}
           {% if comment.parent_comment == NULL %}
-            <div id='comment' class='d-flex'>
-              <div>
-                {% if comment.user.image %}
-                  <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
-                {% else %}
-                  <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
-                {% endif %}
-              </div>
-              <div>
-                <div class='d-flex'>
-                  <strong>{{comment.user.username}}</strong>
-                  {% if request.user == comment.user %}
-                    <div class='d-flex'>
-                      <!-- 댓글 수정 -->
-                      <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#comment{{comment.pk}}" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="bi bi-pencil comment_small_btn"></i>
-                      </button>
-                      <!-- 댓글 삭제 -->
-                      <form action="{% url 'community:comments_delete' post.pk comment.pk %}" method="POST">
-                        {% csrf_token %}
-                        <button class='comment_update_btn' type="submit">
-                          <i class="bi bi-x-lg comment_small_btn"></i>
-                        </button>
-                      </form>
-                    </div>
+            <div class='d-flex' style='justify-content: space-between'>
+              <div class='d-flex'>
+                <div>
+                  {% if comment.user.image %}
+                    <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
+                  {% else %}
+                    <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
                   {% endif %}
                 </div>
-                <!-- 댓글 내용 -->
-                <div class='comment_content'>{{comment.content}}
-                </div>
-                <div class='comment_small_text d-flex'>
-                  <div class='mx-1'>좋아요
-                    <span id='fav-count-com-{{forloop.counter0}}' class="text-center">{{ comment.like.count }}</span>
-                    개</div>
-                  <!-- 답글 달기 -->
-                  <div>
-                    <a class="text-decoration-none mx-1" data-bs-toggle="collapse" style='color:#979AA0;' href="#collapse{{comment.pk}}">답글달기</a>
+                <div>
+                  <div class='d-flex'>
+                    <strong>{{comment.user.nickname}}</strong>
+                    {% if request.user == comment.user %}
+                      <div class='d-flex'>
+                        <!-- 댓글 수정 -->
+                        <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#comment{{comment.pk}}" aria-expanded="false" aria-controls="collapseExample">
+                          <i class="bi bi-pencil comment_small_btn"></i>
+                        </button>
+                        <!-- 댓글 삭제 -->
+                        <form action="{% url 'community:comments_delete' post.pk comment.pk %}" method="POST">
+                          {% csrf_token %}
+                          <button class='comment_update_btn' type="submit">
+                            <i class="bi bi-x-lg comment_small_btn"></i>
+                          </button>
+                        </form>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <!-- 댓글 내용 -->
+                  <div class='comment_content'>{{comment.content}}
+                  </div>
+                  <div class='comment_small_text d-flex'>
+                    <div class='mx-1'>좋아요
+                      <span id='fav-count-{{comment.pk}}' class="text-center">{{ comment.like.count }}</span>
+                      개</div>
+                    <!-- 답글 달기 -->
+                    <div>
+                      <a class="text-decoration-none mx-1" data-bs-toggle="collapse" style='color:#979AA0;' href="#collapse{{comment.pk}}">답글달기</a>
+                    </div>
                   </div>
                 </div>
               </div>
+
               <!-- 댓글 좋아요 -->
               <div class='like_btn'>
                 {% if user.is_authenticated %}
                   {% if request.user in comment.like.all %}
-                    <button type="button" style="color:red;" data-comment-id='{{ comment.pk }}' id='fav-btn-com-{{forloop.counter0}}' class="btn bi bi-heart-fill"></button>
+                    <button type="button" data-action="like" style="color:red;" data-comment-id='{{ comment.pk }}' id="fav-btn-{{comment.pk}}" class="btn bi bi-heart-fill"></button>
                   {% else %}
-                    <button type="button" id='fav-btn-com-{{forloop.counter0}}' data-comment-id='{{ comment.pk }}' style="color:red;" class="btn bi bi-heart"></button>
+                    <button type="button" data-action="like" id="fav-btn-{{comment.pk}}" data-comment-id='{{ comment.pk }}' style="color:red;" class="btn bi bi-heart"></button>
                   {% endif %}
                 {% endif %}
               </div>
@@ -165,33 +168,54 @@
             <!-- 답글 목록 -->
             <div class='recomment_list'>
               {% for recom in comment.recomment.all %}
-                <div class='d-flex'>
-                  <div>
-                    {% if recom.user.image %}
-                      <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
-                    {% else %}
-                      <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
-                    {% endif %}
-                  </div>
-                  <div>
-                    <div class='d-flex'>
-                      <div>{{ recom.user.username }}</div>
-                      {% if request.user == recom.user %}
-                        <div class='d-flex'>
-                          <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#recomment{{recom.pk}}" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="bi bi-pencil comment_small_btn"></i>
-                          </button>
-                          <form action="{% url 'community:recomments_delete' post.pk recom.pk %}" method="POST">
-                            {% csrf_token %}
-                            <button class='comment_update_btn' type="submit">
-                              <i class="bi bi-x-lg comment_small_btn"></i>
-                            </button>
-                          </form>
-                        </div>
+                <div class='d-flex' style='justify-content: space-between'>
+                  <div class='d-flex'>
+                    <div>
+                      {% if recom.user.image %}
+                        <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
+                      {% else %}
+                        <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
                       {% endif %}
                     </div>
+                    <div>
+                      <div class='d-flex'>
+                        <div>{{ recom.user.nickname }}</div>
+                        {% if request.user == recom.user %}
+                          <div class='d-flex'>
+                            <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#recomment{{recom.pk}}" aria-expanded="false" aria-controls="collapseExample">
+                              <i class="bi bi-pencil comment_small_btn"></i>
+                            </button>
+                            <form action="{% url 'community:recomments_delete' post.pk recom.pk %}" method="POST">
+                              {% csrf_token %}
+                              <button class='comment_update_btn' type="submit">
+                                <i class="bi bi-x-lg comment_small_btn"></i>
+                              </button>
+                            </form>
+                          </div>
+                        {% endif %}
+                      </div>
 
-                    <div>{{ recom.content}}</div>
+                      <div>{{ recom.content}}</div>
+                      <div class='comment_small_text d-flex'>
+                        <div class='mx-1'>좋아요
+                          <span id='fav-count-{{recom.pk}}' class="text-center">{{ recom.like.count }}</span>
+                          개</div>
+                        <!-- 답글 달기 -->
+                        <div>
+                          <a class="text-decoration-none mx-1" data-bs-toggle="collapse" style='color:#979AA0;' href="#collapse{{comment.pk}}">답글달기</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class='like_btn'>
+                    {% if user.is_authenticated %}
+                      {% if request.user in recom.like.all %}
+                        <button type="button" data-action="like" style="color:red;" data-comment-id='{{ recom.pk }}' id='fav-btn-{{recom.pk}}' class="btn bi bi-heart-fill"></button>
+                      {% else %}
+                        <button type="button" data-action="like" id='fav-btn-{{recom.pk}}' data-comment-id='{{ recom.pk }}' style="color:red;" class="btn bi bi-heart"></button>
+                      {% endif %}
+                    {% endif %}
                   </div>
                 </div>
                 <!-- 답글 수정 -->
@@ -299,38 +323,42 @@
 
   <script>
     // 댓글 좋아요
-    const comments = document.querySelectorAll('#comment')
-    comments.forEach(function (comment, Idx) {
-      const favBtnCom = document.querySelector(`#fav-btn-com-${Idx}`)
-      favBtnCom.addEventListener('click', function (event) {
-        console.log(event.target.dataset)
-        console.log(event.target.dataset.commentId)
+    const commentList = document.querySelector('#comment-list')
 
-        axios({method: 'get', url: `/community/${event.target.dataset.commentId}/comment_like/`}).then(response => {
+    function likeComment(e) {
+      const commentPk = e.target.dataset.commentId;
+      const favBtnCom = document.querySelector(`#fav-btn-${commentPk}`);
+      if (e.target.dataset.action == 'like') {
+        axios({
+          method: 'get',
+          url: `/community/${commentPk}/comment_like`
+        },).then(response => {
           if (response.data.is_likes === true) { // 좋아요 했으면
-            event
+            e
               .target
               .classList
               .add('bi-heart-fill')
-            event
+            e
               .target
               .classList
               .remove('bi-heart')
           } else {
-            event
+            e
               .target
               .classList
               .add('bi-heart')
-            event
+            e
               .target
               .classList
               .remove('bi-heart-fill')
           }
-          const favCountCom = document.querySelector(`#fav-count-com-${Idx}`)
+          const favCountCom = document.querySelector(`#fav-count-${commentPk}`)
           favCountCom.innerText = response.data.likes_count
         })
-      })
-    })
+
+      };
+    };
+    commentList.addEventListener('click', likeComment);
   </script>
   <script>
     // 댓글 달기
