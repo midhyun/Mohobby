@@ -63,7 +63,11 @@
                       {% for member in tag_post.accepted.all %}
                       {% if forloop.counter <= 6 %}
                       {% if member.joined == 1 %}
+                      {% if member.user.image %}
                       <img class="tag_profil" src="{{ member.user.image.url }}">
+                      {% else %}
+                      <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                      {% endif %}
                       {% endif %}
                       {% endif %}
                       {% endfor %}
@@ -142,7 +146,11 @@
                       {% for member in tag_post.accepted.all %}
                       {% if forloop.counter <= 6 %}
                       {% if member.joined == 1 %}
+                      {% if member.user.image %}
                       <img class="tag_profil" src="{{ member.user.image.url }}">
+                      {% else %}
+                      <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                      {% endif %}
                       {% endif %}
                       {% endif %}
                       {% endfor %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_safe
+from django.contrib.auth import get_user_model
 from hobby.models import Hobby
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
 
@@ -33,3 +34,4 @@ def main(request):
         return render(request, "main.html", context)
     else:
         return redirect('accounts:login')
+

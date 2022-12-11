@@ -7,9 +7,11 @@ from datetime import date, datetime, timedelta
 from django.conf import settings
 from django.http import JsonResponse
 from django.db.models import Avg, Count, Max, Case, When, IntegerField, Q
+from django.core.paginator import Paginator
 import requests
 import json
 import os
+
 # Create your views here.
 
 @login_required
@@ -134,11 +136,16 @@ def tag(request, tag_name):
 
     else:
         tag_posts = Hobby.objects.filter(tags=tag_name).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
+    
+    page = request.GET.get("page", "1")
+    paginator = Paginator(tag_posts, 4)
+    page_obj = paginator.get_page(page)
 
     context = {
         "tag_posts": tag_posts,
         "tag_name": tag_name,
         "user": user,
+        'page_obj' : page_obj
     }
 
     return render(request, "hobby/tag.html", context)

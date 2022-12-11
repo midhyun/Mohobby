@@ -13,6 +13,7 @@ class Received_Note(models.Model):
     is_trash = models.BooleanField(default=False)
     sent_at = models.DateTimeField(auto_now_add=True)
     received_at = models.DateTimeField(null=True, blank=True)
+    
 
     @property
     def sent_at_string(self):

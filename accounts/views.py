@@ -192,6 +192,7 @@ def KakaoCallBack(request):
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
+        
         return redirect(request.GET.get("next") or "main")
     else:
         kakao_login_user = get_user_model()()
