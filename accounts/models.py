@@ -4,7 +4,7 @@ from django.utils import timezone
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from multiselectfield import MultiSelectField
-from imagekit.processors import Thumbnail
+from imagekit.processors import Thumbnail, Transpose
 
 # Create your models here.
 # 이름 비밀번호 설명 주소 생년월일
@@ -32,6 +32,9 @@ class User(AbstractUser):
     image = ProcessedImageField(
         upload_to="image/",
         format="JPEG",
+        processors = [
+            Transpose(),
+        ],
         options={"quality": 30},
         blank=True,
         null=True,

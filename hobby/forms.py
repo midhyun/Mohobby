@@ -31,5 +31,5 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = HobbyComment
         fields = [
-            'content'
+            'content',
         ]

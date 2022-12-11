@@ -4,15 +4,15 @@
 {% block css %}{% endblock css %}
 
 {% block content %}
-  <div class="container">
+  <div class="container" style='padding-inline: 15rem'>
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
       {% if request.resolver_match.url_name == "product_create" %}
-        <h1 class="my-2">게시글 작성</h1>
+        <h1 class="my-2 fw-bold" style="color:  #E84545;">판매글 작성</h1>
       {% elif request.resolver_match.url_name == "product_update" %}
-        <h1 class="my-2">게시글 수정</h1>
+        <h1 class="my-2 fw-bold"style="color:  #E84545;" >판매글 수정</h1>
       {% endif %}
     </div>
-    <div class="p-4">
+    <div class="p-4 mx-5">
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">

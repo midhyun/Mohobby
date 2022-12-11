@@ -90,6 +90,7 @@ class Product_Comment(models.Model):
         null=True,
         blank=True,
     )
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_product_comment")
 
     @property
     def created_at_string(self):
