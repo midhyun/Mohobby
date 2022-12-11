@@ -95,10 +95,16 @@ def index(request, category_name):
     category_posts_hit = category_posts.order_by("-hits")[:3]
 
     tags = Tag.objects.filter(category=category_name)
+
+    page = request.GET.get("page", "1")
+    paginator = Paginator(category_posts, 4)
+    page_obj = paginator.get_page(page)
+
     context = {
         "category_name": category_name,
         "category_posts": category_posts,
         "category_posts_hit": category_posts_hit,
+        'page_obj': page_obj,
         "tags": tags,
     }
     return render(request, "hobby/index.html", context)
@@ -327,6 +333,8 @@ def comment_like(request, comment_pk):
 # 카테고리별 태그 저장
 def save(request):
     lsit_1 = [
+        "축구",
+        "농구",
         "야구",
         "클라이밍",
         "등산",

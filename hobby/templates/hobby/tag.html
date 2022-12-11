@@ -16,53 +16,53 @@
             {% for tag_post in page_obj %}
             {% if tag_post.host not in request.user.blocking.all %}
             <div class="infinite-item">
-            <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
-              <div class='d-flex my-2 post'>
-                <div class="col-4">
-                  {% if tag_post.image %}
-                  <img class='post_img' src="{{ tag_post.image.url }}" style='width:100%; height: 250px;'>
-                  {% else %}
-                  <img class='post_img' src="{% static 'images/더미이미지.png' %}" alt="...">
-                  {% endif %}
-                </div>
-                <div class="d-flex align-items-center">
-                  <div class='mx-5'>
-                    <div class='my-3'>
-                      <small class="tag p-1"> {{ tag_post.tags }}</small>
-                    </div>
-                    <p class="post_title">{{ tag_post.title }}</p>
-                    <small class='text-muted post_detail'>
-                      <span class="detail">
-                        <i class="bi bi-geo-alt-fill"></i>
-                        {{ tag_post.address }}&nbsp;
+              <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
+                <div class='d-flex my-2 post'>
+                  <div class="col-4">
+                    {% if tag_post.image %}
+                    <img class='post_img' src="{{ tag_post.image.url }}" style='width:100%; height: 250px;'>
+                    {% else %}
+                    <img class='post_img' src="{% static 'images/더미이미지.png' %}" alt="...">
+                    {% endif %}
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class='mx-5'>
+                      <div class='my-3'>
+                        <small class="tag p-1"> {{ tag_post.tags }}</small>
+                      </div>
+                      <p class="post_title">{{ tag_post.title }}</p>
+                      <small class='text-muted post_detail'>
+                        <span class="detail">
+                          <i class="bi bi-geo-alt-fill"></i>
+                          {{ tag_post.address }}&nbsp;
+                        </span>
+                        <span class="detail">
+                          <i class="bi bi-calendar-check-fill"></i>
+                          {{ tag_post.meeting_day|date:'m.d(D) af' }}&nbsp;
+                        </span>
+                        <span class="detail">
+                          <i class="bi bi-people-fill"></i>
+                          {{ tag_post.joinmembers }}/{{ tag_post.limit }}</small>
                       </span>
-                      <span class="detail">
-                        <i class="bi bi-calendar-check-fill"></i>
-                        {{ tag_post.meeting_day|date:'m.d(D) af' }}&nbsp;
-                      </span>
-                      <span class="detail">
-                        <i class="bi bi-people-fill"></i>
-                        {{ tag_post.joinmembers }}/{{ tag_post.limit }}</small>
-                    </span>
-                    <div class="profil_box d-flex">
-                      {% for member in tag_post.accepted.all %}
-                      {% if forloop.counter <= 6 %}
-                      {% if member.joined == 1 %}
-                      {% if member.user.image %}
-                      <img class="tag_profil" src="{{ member.user.image.url }}">
-                      {% else %}
-                      <img class="tag_profil" src="{% static 'images/프로필.png' %}">
-                      {% endif %}
-                      {% endif %}
-                      {% endif %}
-                      {% endfor %}
-                      <i class="bi bi-plus-circle"></i>
+                      <div class="profil_box d-flex">
+                        {% for member in tag_post.accepted.all %}
+                        {% if forloop.counter <= 6 %} 
+                        {% if member.joined == 1 %} 
+                        {% if member.user.image %} 
+                        <img class="tag_profil" src="{{ member.user.image.url }}">
+                        {% else %}
+                        <img class="tag_profil" src="{% static 'images/프로필.png' %}">
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        <i class="bi bi-plus-circle"></i>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </a>
-          </div>
+              </a>
+            </div>
             {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
@@ -83,10 +83,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"></script>
 <script>
   let infinite = new Waypoint.Infinite({
-      element: $('.infinite-container')[0],
-      offset: 'bottom-in-view',
-      onBeforePageLoad: () => { },
-      onAfterPageLoad: () => { }
+    element: $('.infinite-container')[0],
+    offset: 'bottom-in-view',
+    onBeforePageLoad: () => { },
+    onAfterPageLoad: () => { }
   })
 </script>
 
