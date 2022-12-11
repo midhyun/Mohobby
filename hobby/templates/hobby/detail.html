@@ -267,7 +267,7 @@
           <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}"
             method="POST" class="w-100" data-action="comment-form">
             {% csrf_token %}
-            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
             <input class="d-none" type="submit" value="제출">
             <input type="hidden" name="parent" value="{{ comment.pk }}">
           </form>
@@ -325,15 +325,15 @@
           <form id="comment-form-off" data-hobby-id="{{ hobby.pk }}" action=""
             method="POST" class="w-100" data-action="comment-form">
             {% csrf_token %}
-            <input id="commentinputoff" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input id="commentinputoff" name="content" class="comment-control" type="text" placeholder="답글 달기...">
             <input class="d-none" type="submit" value="제출">
             <input type="hidden" name="parent">
           </form>
         </div>
         <!-- 댓글들 -->
         <div class="offcanvas-body small">
-          {% if comments %}
           <ul id="comment-list-off">
+          {% if comments %}
             {% for comment in comments.all %}
             <hr>
             <div class="d-flex justify-content-between">
@@ -377,7 +377,7 @@
               <form id="comment-form" data-hobby-id="{{ hobby.pk }}" action="{% url 'hobby:comment_create' hobby.pk %}"
                 method="POST" class="w-100" data-action="comment-form">
                 {% csrf_token %}
-                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
                 <input class="d-none" type="submit" value="제출">
                 <input type="hidden" name="parent" value="{{ comment.pk }}">
               </form>
@@ -480,73 +480,74 @@
 <div id="load">
   <img style="width:256px; height:256px;" class="translate-middle" src="{% static 'image/loading.gif' %}" alt="loading">
 </div>
-  {% endblock content %}
-  {% block js %}
-  <script src="https://cdn.lordicon.com/fudrjiwc.js"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script type="text/javascript"
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
-  <script type="text/javascript" src="{% static 'js/hobby_detail.js' %}"></script>
-  <!-- 주소로 지도띄우기 스크립트 -->
-  <script>
-    var places = new kakao.maps.services.Places();
-    var callback = function (result, status) {
-      // 주소가 유효할 경우
-      if (status === kakao.maps.services.Status.OK) {
-        var mapContainer = document.getElementById('map'),
-          mapOption = {
-            center: new kakao.maps.LatLng(result[0].y, result[0].x),
-            level: 3
-          };
+{% endblock content %}
+{% block js %}
+<script src="https://cdn.lordicon.com/fudrjiwc.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/ko.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a296fe5c49ee5c07b18af90b459b38bb&libraries=services"></script>
+<script type="text/javascript" src="{% static 'js/hobby_detail.js' %}"></script>
+<!-- 주소로 지도띄우기 스크립트 -->
+<script>
+  var places = new kakao.maps.services.Places();
+  var callback = function (result, status) {
+    // 주소가 유효할 경우
+    if (status === kakao.maps.services.Status.OK) {
+      var mapContainer = document.getElementById('map'),
+        mapOption = {
+          center: new kakao.maps.LatLng(result[0].y, result[0].x),
+          level: 3
+        };
 
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-        var markerPosition = new kakao.maps.LatLng(result[0].y, result[0].x);
-        var marker = new kakao.maps.Marker({
-          position: markerPosition
-        });
-        marker.setMap(map);
-      }
-    };
-    // 주소를 입력하면 콜백함수 실행
-    places.keywordSearch('{{ hobby.address }}', callback);
-  </script>
-  <script src="https://code.jquery.com/jquery-1.8.0.js" integrity="sha256-00Fh8tkPAe+EmVaHFpD+HovxWk7b97qwqVi7nLvjdgs="
-    crossorigin="anonymous"></script>
-  <script type="text/javascript">
-    $(window).on('load', function () {
-      setTimeout(() => {
-        $("#load").hide();;
-  		}, 1500);
-      
-    });
-  </script>
-
-  <style type="text/css">
-    #load {
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      position: fixed;
-      display: block;
-      opacity: 0.8;
-      background: white;
-      z-index: 99;
-      text-align: center;
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+      var markerPosition = new kakao.maps.LatLng(result[0].y, result[0].x);
+      var marker = new kakao.maps.Marker({
+        position: markerPosition
+      });
+      marker.setMap(map);
     }
+  };
+  // 주소를 입력하면 콜백함수 실행
+  places.keywordSearch('{{ hobby.address }}', callback);
+</script>
+<!-- 로딩페이지 구현 -->
+<script src="https://code.jquery.com/jquery-1.8.0.js" integrity="sha256-00Fh8tkPAe+EmVaHFpD+HovxWk7b97qwqVi7nLvjdgs="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $(window).on('load', function () {
+    setTimeout(() => {
+      $("#load").hide();;
+    }, 1500);
+    
+  });
+</script>
 
-    #load>img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: 100;
-    }
-  </style>
-  {% endblock js %}
+<style type="text/css">
+  #load {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 0.8;
+    background: white;
+    z-index: 99;
+    text-align: center;
+  }
+
+  #load>img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+  }
+</style>
+{% endblock js %}

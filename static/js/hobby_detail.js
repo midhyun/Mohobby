@@ -62,7 +62,7 @@ function submitComment(event) {
               <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
               <form id="comment-form" data-hobby-id="${pk}" action=""
                 method="POST" class="w-100" data-action="comment-form">
-                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+                <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
                 <input class="d-none" type="submit" value="제출">
                 <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
               </form>
@@ -131,7 +131,7 @@ function submitComment(event) {
             <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
             <form id="comment-form" data-hobby-id="${pk}" action=""
               method="POST" class="w-100" data-action="comment-form">
-              <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+              <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
               <input class="d-none" type="submit" value="제출">
               <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
             </form>
@@ -257,15 +257,18 @@ function getDeleteComment(e) {
 
 function getReComment(e) {
   const recommentForm = document.querySelector(`#recomment-form-${e.target.dataset.commentId}`)
-  const recommentFormOff = document.querySelector(`#recomment-form-${e.target.dataset.commentId}-off`)
   if (e.target.dataset.action == 'reComment') {
     recommentForm.classList.toggle('recomment-elem')
     recommentForm.classList.toggle('recomment-elem-active')
+  }
+}
+function getReCommentOff(e) {
+  const recommentFormOff = document.querySelector(`#recomment-form-${e.target.dataset.commentId}-off`)
+  if (e.target.dataset.action == 'reComment') {
     recommentFormOff.classList.toggle('recomment-elem')
     recommentFormOff.classList.toggle('recomment-elem-active')
   }
 }
-
 function commentReport() {
   swal("신고가 완료되었습니다.", `감사합니다.`, "success");
 }
@@ -313,7 +316,7 @@ function deleteComment(e) {
           <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
           <form id="comment-form" data-hobby-id="${pk}" action=""
             method="POST" class="w-100" data-action="comment-form">
-            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+            <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
             <input class="d-none" type="submit" value="제출">
             <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
           </form>
@@ -381,7 +384,7 @@ function deleteComment(e) {
         <img class="comment-image" src="${ response.data.comments_data[i].image }" alt="">
         <form id="comment-form" data-hobby-id="${pk}" action=""
           method="POST" class="w-100" data-action="comment-form">
-          <input id="commentinput" name="content" class="comment-control" type="text" placeholder="댓글 달기...">
+          <input id="commentinput" name="content" class="comment-control" type="text" placeholder="답글 달기...">
           <input class="d-none" type="submit" value="제출">
           <input type="hidden" name="parent" value="${response.data.comments_data[i].pk}">
         </form>
@@ -430,25 +433,6 @@ commentList.addEventListener('click', getReComment);
 // 오프캔버스에도 이벤트 추가
 commentListOff.addEventListener('click', likeComment);
 commentListOff.addEventListener('click', getDeleteComment);
-commentListOff.addEventListener('click', getReComment);
+commentListOff.addEventListener('click', getReCommentOff);
 
 // 로더
-// const loader = document.querySelector('.loader');
-// const html = document.querySelector('html');
-
-// html.style.overflow = 'hidden'; //로딩 중 스크롤 방지
-
-// window.addEventListener('load', ()=>{
-
-//      setTimeout(() => { //  <-* 로딩속도를 구현하기 위한 코드로 실제 적용시 제거
-    
-//       	loader.style.opacity = '0';
-// 		html.style.overflow = 'auto'; //스크롤 방지 해제
-      	
-//         setTimeout(() => {
-//       		loader.style.display = 'none';
-//   		}, 400);
-        
-//   }, 2000); // <-* 로딩속도 구현
-
-// })
