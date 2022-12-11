@@ -54,7 +54,7 @@
               <!-- input : 생년월일 -->
             <div class="form_field">
               <label class="birth_label">생년월일</label>
-              <input type="date" class="user_input" name="birth" value="2000-01-01">
+              <input tabindex="-1" type="date" class="user_input" name="birth" value="2000-01-01">
             </div>
             <!-- input : 성별 -->
             <div class="select">
@@ -66,17 +66,17 @@
             <!-- input : 우편번호, 검색 기능 -->
             <div class="form_field">
               <div class="address_box">
-                <input type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
-                <input type="button" id="search_address" value="주소 찾기" class="address_btn">
+                <input tabindex="-1" type="text" id="postcode" placeholder="우편번호" class="sm_user_input">
+                <input tabindex="-1" type="button" id="search_address" value="주소 찾기" class="address_btn">
               </div>
             </div>
             <!-- input : 도로명 주소 -->
             <div class="form_field">
-              <input type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input">
+              <input tabindex="-1" type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input">
             </div>
             <!-- input : 상세 주소 -->
             <div class="form_field">
-              {% render_field form.address_detail class="user_input" placeholder="상세주소 (선택)"%}
+              {% render_field form.address_detail class="user_input" placeholder="상세주소 (선택)" tabindex="-1"%}
             </div>
           </div>
         </div>
@@ -147,19 +147,16 @@
                 </div>
               </div>
             </div>
-            <!-- 가입 제출 버튼 -->
-            <div class="text-center">
-              <button class="signup_btn" type="submit">가입</button>
-            </div>
           </div>
         </div>
       </div>
+      <!-- 페이지 넘기기 버튼 -->
+      <div class="page_btn_group">
+        <button type="button" class="page_btn slide_prev_button">이전</button>
+        <button type="button" class="page_btn slide_next_button">다음</button>
+        <button id="submit_btn" class="signup_btn" type="submit">가입</button>
+      </div>
     </form>
-    <!-- 페이지 넘기기 버튼 -->
-    <div class="text-center">
-      <button class="page_btn slide_prev_button">이전</button>
-      <button class="page_btn slide_next_button">다음</button>
-    </div>
   </div>
 {% endblock %}
 
