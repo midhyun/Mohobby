@@ -14,11 +14,9 @@ import os
 
 @login_required
 def create(request):
-    print(request.method)
     if request.method == "POST":
         form = HobbyForm(request.POST, request.FILES)
         accepted = AcceptedForm()
-        print(request.POST)
         if form.is_valid():
             temp = form.save(commit=False)
             temp.host = request.user
@@ -183,7 +181,6 @@ def reject(request, hobby_pk, user_pk):
 @login_required
 def comment_create(request, hobby_pk):
     if request.method == 'POST':
-        print(request.POST)
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             temp = comment_form.save(commit=False)
@@ -196,7 +193,6 @@ def comment_create(request, hobby_pk):
     lenComments = len(HobbyComment.objects.filter(hobby_id=hobby_pk))
     comments_data = []
     for comment in comments:
-        print(comment.parent)
         recomments = comment.recomment.all()
         recomments_data = []
         if len(recomments):
