@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_safe, require_http_methods
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Q
 from django.http import JsonResponse
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from .models import Product, Product_Comment
 from .forms import ProductForm, Product_CommentForm, Product_ReplyForm
 from django.core.paginator import Paginator
@@ -144,13 +144,16 @@ def product_like(request, product_pk):
 
     if product.like_users.filter(pk=request.user.pk).exists():
         product.like_users.remove(request.user)
+        is_product_liked = False
     else:
         product.like_users.add(request.user)
-    # context = {
-    #     "like_count": product.like_users.count(),
-    # }
-    # return JsonResponse(context)
-    return redirect("products:product_detail", product.pk)
+        is_product_liked = True
+    context = {
+        "is_product_liked": is_product_liked,
+        "product_like_count": product.like_users.count(),
+    }
+    return JsonResponse(context)
+    # return redirect("products:product_detail", product.pk)
 
 
 @require_POST
@@ -166,7 +169,8 @@ def comment_create(request, product_pk):
         comment.user = request.user
         comment.product = product
         comment.save()
-    return redirect("products:product_detail", product_pk)
+    # return redirect("products:product_detail", product_pk)
+    return JsonResponse(comment_context_create(request, product))
 
 
 @require_POST
@@ -182,26 +186,31 @@ def comment_update(request, product_pk, comment_pk):
     form = Product_CommentForm(request.POST, instance=comment)
     if form.is_valid():
         form.save()
-    return redirect("products:product_detail", product_pk)
+    # return redirect("products:product_detail", product_pk)
+    context = {
+        "content": comment.content,
+        "updated_at_string": comment.updated_at_string,
+    }
+    return JsonResponse(context)
 
 
 @require_POST
 def comment_delete(request, product_pk, comment_pk):
+    product = get_object_or_404(Product, pk=product_pk)
     comment = get_object_or_404(Product_Comment, pk=comment_pk)
 
     if not request.user.is_authenticated:
         return redirect("accounts:login")
 
     if request.user != comment.user:
-        return redirect("products:product_detail", product_pk)
+        return JsonResponse(comment_context_create(request, product))
 
     comment.delete()
-    return redirect("products:product_detail", product_pk)
+    return JsonResponse(comment_context_create(request, product))
 
 
 @require_POST
 def comment_like(request, product_pk, comment_pk):
-    product = get_object_or_404(Product, pk=product_pk)
     comment = get_object_or_404(Product_Comment, pk=comment_pk)
 
     if not request.user.is_authenticated:
@@ -209,13 +218,16 @@ def comment_like(request, product_pk, comment_pk):
 
     if comment.like_users.filter(pk=request.user.pk).exists():
         comment.like_users.remove(request.user)
+        is_comment_liked = False
     else:
         comment.like_users.add(request.user)
-    # context = {
-    #     "like_count": comment.like_users.count(),
-    # }
-    # return JsonResponse(context)
-    return redirect("products:product_detail", product.pk)
+        is_comment_liked = True
+    context = {
+        "is_comment_liked": is_comment_liked,
+        "comment_like_count": comment.like_users.count(),
+    }
+    return JsonResponse(context)
+    # return redirect("products:product_detail", product.pk)
 
 
 @require_POST
@@ -233,4 +245,53 @@ def reply_create(request, product_pk, comment_pk):
         reply.product = product
         reply.parent = parent_comment
         reply.save()
-    return redirect("products:product_detail", product_pk)
+    # return redirect("products:product_detail", product_pk)
+    return JsonResponse(comment_context_create(request, product))
+
+
+def comment_context_create(request, product):
+    comment_set = (
+        Product_Comment.objects.select_related("user")
+        .prefetch_related("like_users")
+        .filter(product=product)
+        .annotate(Count("like_users"))
+        .order_by("pk")
+    )
+    comment_set_list = list()
+    for comment in comment_set:
+        if comment.parent == None:
+            comment_set_list.append(
+                {
+                    "pk": comment.pk,
+                    "parent": None,
+                    "content": comment.content,
+                    "updated_at_string": comment.updated_at_string,
+                    "is_liked": comment.like_users.filter(pk=request.user.pk).exists(),
+                    "like_count": comment.like_users__count,
+                    "user_pk": comment.user.pk,
+                    "image": comment.user.image.url,
+                    "nickname": comment.user.nickname,
+                }
+            )
+        else:
+            comment_set_list.append(
+                {
+                    "pk": comment.pk,
+                    "parent": comment.parent.pk,
+                    "content": comment.content,
+                    "updated_at_string": comment.updated_at_string,
+                    "is_liked": comment.like_users.filter(pk=request.user.pk).exists(),
+                    "like_count": comment.like_users__count,
+                    "user_pk": comment.user.pk,
+                    "image": comment.user.image.url,
+                    "nickname": comment.user.nickname,
+                }
+            )
+    context = {
+        "comments": comment_set_list,
+        "product_pk": product.pk,
+        "request_is_authenticated": request.user.is_authenticated,
+        "request_image": request.user.image.url,
+        "request_nickname": request.user.nickname,
+    }
+    return context
