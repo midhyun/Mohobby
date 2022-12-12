@@ -159,6 +159,7 @@ def product_like(request, product_pk):
 @require_POST
 def comment_create(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
+    print(product)
 
     if not request.user.is_authenticated:
         return redirect("accounts:login")
