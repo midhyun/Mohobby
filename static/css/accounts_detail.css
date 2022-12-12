@@ -321,5 +321,7 @@ aside {
   }
 
 
+  .mail:hover {
+    color: rgb(232, 69, 69) !important;
 
-
+}

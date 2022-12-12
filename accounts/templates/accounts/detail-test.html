@@ -104,6 +104,10 @@
         <!-- 팔로우 카운트 + 모달 -->
         <div class="follow_box">
           <div class="follow">
+            <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
+            <span class="mute_text">{{ user.received_note_set.all.count }}</span>
+          </div>
+          <div class="follow">
             <span>{{ user.followings.count }}</span>
             <span class="mute_text" data-bs-target="#followingModal" data-bs-toggle="modal">팔로잉 ></span>
           </div>
