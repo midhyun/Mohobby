@@ -51,10 +51,11 @@
           <li class="mt-2 mx-2">
             <a href="{% url 'notes:received_box' %}">
               <i class="nav_person bi bi-envelope-fill position-relative">
-                  {% if user.received_note_set.all.count != 0 %}
-                    <span class="position-absolute translate-middle badge rounded-pill top-0 start-100 text-center" style="--bs-badge-font-size: 0.4rem !important; font-weight:650; background-color: white; color: rgb(232, 69, 69);">
-                      {{ request.user.received_note_set.all.count }}
-                    </span>
+                  {% if user.received_mail == 0 %}
+                  {% else %}
+                  <span class="position-absolute translate-middle badge rounded-pill top-0 start-100 text-center" style="--bs-badge-font-size: 0.4rem !important; font-weight:650; background-color: white; color: rgb(232, 69, 69);">
+                    {{ request.user.received_mail }}
+                  </span>
                   {% endif %}
               </i>
             </a>

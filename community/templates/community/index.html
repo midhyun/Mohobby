@@ -18,7 +18,7 @@
       <div class='feed_list' style='background-color:#f1f3f5; width:1000px;'>
         {% for post in posts %}
           {% if post.user not in request.user.blocking.all %}
-            <div class='feeds my-5 py-3'>
+            <div class='feeds my-5 py-3 '>
               <div class='d-flex flex-column align-items-center py-4'>
                 <div style="width:830px; background-color:white">
                   <!-- 프로필 이미지 설정 -->
@@ -134,5 +134,7 @@
       });
     });
   </script>
+
+
 
 {% endblock content %}

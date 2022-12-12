@@ -56,6 +56,7 @@ def trash_box(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def send(request):
+    
     if request.method == "POST":
         form = NoteForm(request.POST)
         if form.is_valid():
@@ -72,6 +73,11 @@ def send(request):
             sent_note.content = received_note.content
             sent_note.received_note = received_note
             sent_note.save()
+
+            user = get_user_model().objects.get(nickname=received_note.received_username)
+            user.received_mail = int(user.received_mail) + 1
+            user.save()
+            print(user.received_mail)
             return redirect("notes:sent_box")
     else:
         if "to" in request.GET:
@@ -96,6 +102,12 @@ def received_note_detail(request, received_note_pk):
     if received_note.received_at_string == "읽지 않음":
         received_note.received_at = datetime.now(tz=timezone.utc)
         received_note.save()
+
+        user = request.user
+        user.received_mail = int(user.received_mail) - 1
+        user.save()
+        print(user.received_mail)
+
 
         try:
             sent_note = received_note.sent_note
