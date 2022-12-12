@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os, dj_database_url
+import os
 from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv()
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -251,17 +251,6 @@ SUMMERNOTE_CONFIG = {
 #         },
 #     },
 # }
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DATABASE_NAME"),  # 코드 블럭 아래 이미지 참고하여 입력
-        "USER": "suyoung049",
-        "PASSWORD": os.getenv("DATABASE_PASSWORD"),  # 데이터베이스 생성 시 작성한 패스워드
-        "HOST": os.getenv("DATABASE_HOST"),  # 코드 블럭 아래 이미지 참고하여 입력
-        "PORT": "5432",
-    }
-}
 
 # 소셜
 LOGIN_REDIRECT_URL = "/"  # 로그인 후 리디렉션할 페이지
