@@ -176,17 +176,17 @@
       </div>
       <hr>
       <div class="community_wrap">
-        {% for community in my_community %}
+        {% for community in user.community_set.all reversed %}
           <div class="community_item">
-            <!-- 사진이 2개 이상일 때 고장날 수도 있음 -->
             {% for photo in community.photo_set.all %}
+            <!-- 사진이 2개 이상일 때 고장날 수도 있음 -->
               {% if photo.image %}
               <a href="{% url 'community:detail' community.pk %}">
                 <img src="{{ photo.image.url }}" alt="community">
               </a>
               {% endif %}
-            <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
             {% empty %}
+              <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
               <a href="{% url 'community:detail' community.pk %}">
                 <div class="community_text">
                   <p>{{ community.content }}</p>
@@ -194,8 +194,8 @@
               </a>
             {% endfor %}
           </div>
-        <!-- 피드가 없을 시 발생하는 이벤트 -->
         {% empty %}
+          <!-- 피드가 없을 시 발생하는 이벤트 -->
           <div class="mute_text m-5 grid_text">
             <h4> 작성한 피드가 없습니다. </h4>
           </div>
@@ -209,17 +209,17 @@
       </div>
       <hr>
       <div class="community_wrap">
-        {% for community in like_community %}
+        {% for community in user.like_community.all reversed %}
           <div class="community_item">
-            <!-- 사진이 2개 이상일 때 고장날 수도 있음 문제시 바로 수정해야함.-->
             {% for photo in community.photo_set.all %}
+            <!-- 사진이 2개 이상일 때 고장날 수도 있음 문제시 바로 수정해야함.-->
               {% if photo.image %}
               <a href="{% url 'community:detail' community.pk %}">
                 <img src="{{ photo.image.url }}" alt="community">
               </a>
               {% endif %}
-            <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
             {% empty %}
+              <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
               <a href="{% url 'community:detail' community.pk %}">
                 <div class="community_text">
                   <p>{{ community.content }}</p>
@@ -227,8 +227,8 @@
               </a>
             {% endfor %}
           </div>
-        <!-- 피드가 없을 시 발생하는 이벤트 -->
         {% empty %}
+        <!-- 피드가 없을 시 발생하는 이벤트 -->
         <div class="mute_text m-5 grid_text">
           <h4> 관심 피드가 없습니다. </h4>
         </div>
@@ -360,7 +360,7 @@
       <hr>
       <div class="product_wrap">
         <div class="row row-cols-1 row-cols-md-5">
-          {% for product in user.product_set.all %}
+          {% for product in user.product_set.all reversed %}
             <a class="btn p-2" href="{% url 'products:product_detail' product.pk %}">
               <div class="card">
                 {% if product.image %}
@@ -402,7 +402,7 @@
       <hr>
       <div class="product_wrap">
         <div class="row row-cols-1 row-cols-md-5">
-          {% for product in user.like_product.all %}
+          {% for product in user.like_product.all reversed %}
             <a class="btn p-2" href="{% url 'products:product_detail' product.pk %}">
               <div class="card">
                 {% if product.image %}

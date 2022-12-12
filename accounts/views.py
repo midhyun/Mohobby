@@ -12,7 +12,6 @@ from django.views.decorators.http import require_safe, require_http_methods
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
 from hobby.models import Accepted
-from community.models import Community
 
 # Create your views here.
 
@@ -79,20 +78,16 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
-    
-    # 일단 좋아요 한 "최신글" 순
-    like_community = user.like_community.all().order_by("-pk")
 
-    community = Community.objects.filter(user=user).order_by("-pk")
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
+
     context = {
         "user": user,
         "accepted": accepted,
         "waiting" : waiting,
-        "my_community" : community,
-        "like_community": like_community
     }
+    
     return render(request, "accounts/detail-test.html", context)
 
 
