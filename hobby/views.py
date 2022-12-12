@@ -36,6 +36,28 @@ def create(request):
     }
     return render(request, "hobby/form.html", context)
 
+@login_required
+def update(request, hobby_pk):
+    hobby = get_object_or_404(Hobby, pk=hobby_pk)
+    if request.method == "POST":
+        form = HobbyForm(request.POST, request.FILES)
+        accepted = AcceptedForm()
+        if form.is_valid():
+            temp = form.save(commit=False)
+            temp.host = request.user
+            temp.save()
+            atemp = accepted.save(commit=False)
+            atemp.joined = True
+            atemp.hobby = temp
+            atemp.user = request.user
+            atemp.save()
+            return redirect("hobby:detail", temp.pk)
+    else:
+        form = HobbyForm(instance=hobby)
+    context = {
+        "form": form,
+    }
+    return render(request, "hobby/form.html", context)
 
 def test(request):
     if request.method == 'POST':
@@ -164,10 +186,13 @@ def call(request, hobby_pk):
         temp.hobby = hobby
         temp.user = request.user
         temp.save()
-        print('호스트의 승인을 기다려주세요.')
+        res = True
     else:
-        print("이미 신청한 소셜링입니다.")
-    return redirect("hobby:detail", hobby_pk)
+        res = False
+    context = {
+        'res': res
+    }
+    return JsonResponse(context)
 
 @login_required
 def approve(request, hobby_pk, user_pk):
@@ -467,3 +492,12 @@ def like_comment(request, comment_pk):
         'likeCount': comment.like_user.count()
     }
     return JsonResponse(data)
+
+def delete_hobby(request, hobby_pk):
+    hobby = get_object_or_404(Hobby, pk=hobby_pk)
+    if request.user == hobby.host:
+        hobby.delete()
+        return redirect("main")
+    else:
+        print('권한이 없습니다.')
+        return redirect("hobby:detail", hobby_pk)

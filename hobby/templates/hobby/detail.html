@@ -2,6 +2,7 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% load humanize %}
+{% load extra_timesince %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock css %}
@@ -224,7 +225,7 @@
       </div>
       <li id="comment-list">
         <!-- 댓글목록 -->
-        {% for comment in comments.all|slice:":7" %}
+        {% for comment in comments|slice:":7" %}
         <hr>
         <div class="d-flex justify-content-between">
           <div class="comment-elem">
@@ -238,7 +239,7 @@
               <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
+                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> <span>좋아요
                     <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                   <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                     data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
@@ -287,7 +288,7 @@
                   <p>{{ recomment.user.nickname }}</p>
                   <p>{{ recomment.content }}</p>
                   <div>
-                    <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
+                    <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|extra_timesince }}</span> <span>좋아요
                         <span id="comment-{{ recomment.pk }}-likecnt">{{ recomment.like_user.count }}</span>개</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
@@ -348,7 +349,7 @@
                   <p>{{ comment.user.nickname }}</p>
                   <p>{{ comment.content }}</p>
                   <div>
-                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|naturaltime }}</span> <span>좋아요
+                    <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> <span>좋아요
                         <span id="comment-{{ comment.pk }}-likecnt-off">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                       <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                         data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
@@ -397,7 +398,7 @@
                       <p>{{ recomment.user.nickname }}</p>
                       <p>{{ recomment.content }}</p>
                       <div>
-                        <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|naturaltime }}</span> <span>좋아요
+                        <p class="text-muted" style="font-size:12px"><span>{{ recomment.created_at|extra_timesince }}</span> <span>좋아요
                             <span id="comment-{{ recomment.pk }}-likecnt-off">{{ recomment.like_user.count }}</span>개</span>
                           <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                             data-bs-target="#comment-delete" data-comment-id="{{ recomment.pk }}"
@@ -470,11 +471,19 @@
         </div>
       </div>
     </ul>
-    <a href="{% url 'hobby:call' hobby.pk %}" class="accept-btn text-black">
+    {% if request.user == hobby.host %}
+    <a id="hobby-delete-btn" href="{% url 'hobby:delete_hobby' hobby.pk %}" class="accept-btn text-black">
+      <div>
+        <span class=" footer_accept">삭제</span>
+      </div>
+    </a>
+    {% else %}
+    <a id="hobby-call-btn" href="{% url 'hobby:call' hobby.pk %}" class="accept-btn text-black">
       <div>
         <span class=" footer_accept">참여</span>
       </div>
     </a>
+    {% endif %}
     <!-- 비슷한 소셜링 -->
   </div>
 <div id="load">
