@@ -104,8 +104,12 @@
         <!-- 메일, 팔로우(카운트) + 모달 -->
         <div class="follow_box">
           <div class="mail_btn follow">
+            {% if request.user == user %}
             <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
             <span class="mute_text">{{ user.received_note_set.all.count }}</span>
+            {% else %}
+            <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
+            {% endif %}
           </div>
           <div class="follow">
             <span>{{ user.followings.count }}</span>

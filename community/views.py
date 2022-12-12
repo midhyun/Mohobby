@@ -12,7 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 
-
+@login_required
 def index(request):
     posts = Community.objects.order_by("-pk")
     context = {"posts": posts,}
