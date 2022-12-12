@@ -39,6 +39,7 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
+    received_mail = models.IntegerField(default=0, null=True)
 
     STORTS_CHOICES = (
         ("축구", "축구"),
