@@ -98,16 +98,22 @@
           {% if comment.parent_comment == NULL %}
             <div class='d-flex' style='justify-content: space-between'>
               <div class='d-flex'>
-                <div>
-                  {% if comment.user.image %}
-                    <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
-                  {% else %}
-                    <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
-                  {% endif %}
-                </div>
+
+                <a class='text-decoration-none' href="{%url 'accounts:detail' user.pk%}">
+                  <div>
+                    {% if comment.user.image %}
+                      <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
+                    {% else %}
+                      <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
+                    {% endif %}
+                  </div>
+                </a>
                 <div>
                   <div class='d-flex'>
-                    <strong>{{comment.user.nickname}}</strong>
+                    <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' user.pk%}">
+                      <strong>{{comment.user.nickname}}</strong>
+                    </a>
+
                     {% if request.user == comment.user %}
                       <div class='d-flex'>
                         <!-- 댓글 수정 -->
@@ -170,16 +176,22 @@
               {% for recom in comment.recomment.all %}
                 <div class='d-flex' style='justify-content: space-between'>
                   <div class='d-flex'>
-                    <div>
-                      {% if recom.user.image %}
-                        <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
-                      {% else %}
-                        <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
-                      {% endif %}
-                    </div>
+                    <a class='text-decoration-none' href="{%url 'accounts:detail' user.pk%}">
+                      <div>
+                        {% if recom.user.image %}
+                          <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
+                        {% else %}
+                          <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                        {% endif %}
+                      </div>
+                    </a>
+
                     <div>
                       <div class='d-flex'>
-                        <div>{{ recom.user.nickname }}</div>
+                        <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' user.pk%}">
+                          <strong>{{comment.user.nickname}}</strong>
+                        </a>
+
                         {% if request.user == recom.user %}
                           <div class='d-flex'>
                             <button class='comment_update_btn' type="button" data-bs-toggle="collapse" data-bs-target="#recomment{{recom.pk}}" aria-expanded="false" aria-controls="collapseExample">
