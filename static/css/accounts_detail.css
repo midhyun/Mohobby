@@ -300,6 +300,16 @@ aside {
     transform: scale(1.05);
 }
 
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.card-text {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 /* 못생겨서 빼는게 나은것같음.. */ 
 .community_item img {
     transition: all 0.3s linear;
