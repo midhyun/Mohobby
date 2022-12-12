@@ -32,9 +32,9 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: [mohobby]
+          application_name: "mohobby"
 					
-          environment_name: [Mohobby-env]
+          environment_name: "Mohobby-env"
 			
           version_label: "python-${{ steps.format-time.outputs.replaced }}"
           region: "ap-northeast-2"
