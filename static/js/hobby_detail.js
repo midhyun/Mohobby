@@ -437,7 +437,8 @@ commentListOff.addEventListener('click', getReCommentOff);
 
 // 삭제
 const hobbyDelete = document.querySelector('#hobby-delete-btn')
-hobbyDelete.addEventListener('click', gethobbyDelete)
+try{
+  hobbyDelete.addEventListener('click', gethobbyDelete)
 function gethobbyDelete(event) {
   event.preventDefault()
   swal({
@@ -467,3 +468,49 @@ function gethobbyDelete(event) {
     }
   });
 }
+} catch {
+  const hobbyCall = document.querySelector('#hobby-call-btn')
+  hobbyCall.addEventListener('click', gethobbyCall)
+  function gethobbyCall(event) {
+    event.preventDefault()
+    swal({
+      title: "정말로 소셜링에 참여하시겠습니까?",
+      text: "호스트의 승인 후에 참여가 완료됩니다.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willCall) => {
+      if (willCall) {
+        axios({
+          method: 'get',
+          url: `/hobby/${pk}/call`
+        })
+        .then(response => {
+          if (response.data.res) {
+            swal("신청이 완료되었습니다.", {
+              icon: "success",
+              buttons: true,
+            })
+            .then((redirectbtn) => {
+              if (redirectbtn) {
+                window.location.replace(`/hobby/${pk}`)
+              }
+            });
+          } else {
+            swal("이미 신청한 소셜링입니다.", {
+              icon: "warning",
+              buttons: true,
+            });
+          }
+          
+        })
+        
+      } else {
+        swal("소셜링 신청이 취소되었습니다.");
+      }
+    });
+  }
+}
+
+// 신청
