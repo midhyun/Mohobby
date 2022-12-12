@@ -111,8 +111,9 @@
             <span>{{ user.followers.count }}</span>
             <span class="mute_text" data-bs-target="#followerModal" data-bs-toggle="modal">팔로워 ></span>
           </div>
-        </div>
+        </div>     
       </div>
+      
       <!-- 버튼 그룹 -->
       <nav class="tap_nav" id="tab-button-nav">
         <!-- 큰 화면 버튼 -->
@@ -131,6 +132,9 @@
         <button class="mobile tab-button bi bi-cart" data-tab-section="tab-section-6"></button>
         <!-- 로그인한 유저는 회원탈퇴, 아니면 차단 버튼 -->
         {% if request.user == user %}
+        <a href="{% url 'accounts:block_user' %}">
+          <button class="delete_btn">차단목록</button>
+        </a>
         <button class="delete_btn" id="confirmStart">회원탈퇴</button>
         {% else %}
           <a href="{% url 'accounts:block' user.pk %}">
