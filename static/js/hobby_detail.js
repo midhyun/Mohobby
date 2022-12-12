@@ -435,4 +435,35 @@ commentListOff.addEventListener('click', likeComment);
 commentListOff.addEventListener('click', getDeleteComment);
 commentListOff.addEventListener('click', getReCommentOff);
 
-// 로더
+// 삭제
+const hobbyDelete = document.querySelector('#hobby-delete-btn')
+hobbyDelete.addEventListener('click', gethobbyDelete)
+function gethobbyDelete(event) {
+  event.preventDefault()
+  swal({
+    title: "정말로 삭제하시겠습니까?",
+    text: "삭제 후에는 소셜링의 복구가 불가능 합니다.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      axios({
+        method: 'get',
+        url: `/hobby/${pk}/delete_hobby`
+      })
+      swal("소셜링이 삭제되었습니다.", {
+        icon: "success",
+        buttons: true,
+      })
+      .then((redirectbtn) => {
+        if (redirectbtn) {
+          window.location.replace('/')
+        }
+      });
+    } else {
+      swal("소셜링 삭제가 취소되었습니다.");
+    }
+  });
+}

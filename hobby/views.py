@@ -467,3 +467,12 @@ def like_comment(request, comment_pk):
         'likeCount': comment.like_user.count()
     }
     return JsonResponse(data)
+
+def delete_hobby(request, hobby_pk):
+    hobby = get_object_or_404(Hobby, pk=hobby_pk)
+    if request.user == hobby.host:
+        hobby.delete()
+        return redirect("main")
+    else:
+        print('권한이 없습니다.')
+        return redirect("hobby:detail", hobby_pk)
