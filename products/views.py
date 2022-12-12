@@ -11,6 +11,7 @@ from django.utils.html import strip_tags
 
 # Create your views here.
 @require_safe
+@login_required
 def index(request):
     products = Product.objects.select_related("user").order_by("-pk")
     page = request.GET.get("page", "1")  # GET 방식으로 정보를 받아오는 데이터
