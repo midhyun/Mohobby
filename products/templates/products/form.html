@@ -4,21 +4,25 @@
 {% block css %}{% endblock css %}
 
 {% block content %}
-  <div class="container" style='padding-inline: 15rem'>
+  <div class="container-lg">
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
       {% if request.resolver_match.url_name == "product_create" %}
-        <h1 class="my-2 fw-bold" style="color:  #E84545;">판매글 작성</h1>
+        <h1 class="my-2 fw-bold" style="color: #E84545;">판매글 작성</h1>
       {% elif request.resolver_match.url_name == "product_update" %}
-        <h1 class="my-2 fw-bold" style="color:  #E84545;" >판매글 수정</h1>
+        <h1 class="my-2 fw-bold" style="color: #E84545;" >판매글 수정</h1>
       {% endif %}
     </div>
-    <div class="p-4 mx-5">
+    <div class="p-0 p-lg-4">
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" class="form-control" name="next" value="{{ request.GET.next }}">
         {% bootstrap_form form %}
-        <button class="btn btn-outline-primary form-control mb-3" type="submit">OK</button>
-        <button class="btn btn-outline-secondary form-control mb-3" type="button" onclick="window.history.back()">BACK</button>
+        <div class="mb-3 text-end">
+          <button class="btn btn-outline-primary form-control" type="submit" style="max-width: 450px;">OK</button>
+        </div>
+        <div class="mb-3 text-end">
+          <button class="btn btn-outline-secondary form-control" type="button" onclick="window.history.back()" style="max-width: 450px;">BACK</button>
+        </div>
       </form>
     </div>
   </div>
@@ -30,14 +34,12 @@
   <script>
     const locationInput = document.querySelector("#id_location")
     locationInput.addEventListener("click", function () {
-      new daum
-        .Postcode({
-          oncomplete: function (data) {
-            // 주소 정보를 해당 필드에 넣는다.
-            locationInput.value = `${data.sido} ${data.sigungu}`
-          }
-        })
-        .open()
+      new daum.Postcode({
+        oncomplete: function (data) {
+          // 주소 정보를 해당 필드에 넣는다.
+          locationInput.value = `${data.sido} ${data.sigungu}`
+        }
+      }).open()
     })
   </script>
 {% endblock js %}

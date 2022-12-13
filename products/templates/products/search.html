@@ -13,12 +13,12 @@
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 8rem">
       <h1 class="my-2" style="color: #E84545;">"{{ query }}" 검색 결과</h1>
     </div>
-    <div class="p-4">
+    <div class="p-0 p-lg-4">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
         {% for product in page_list %}
           <div class="col">
             <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
-              <div class="card h-100">
+              <div class="card" style="min-width: 150px; min-height: 250px;">
                 {% if product.thumbnail %}
                   <img src="{{ product.thumbnail.url }}" class="card-img-top img-fluid" alt="thumbnail">
                 {% else %}
@@ -32,7 +32,7 @@
               </div>
             </a>
           </div>
-          {% empty %}
+        {% empty %}
           <h5 class="fw-bold flex-fill text-center">검색 결과가 없습니다.</h5>
         {% endfor %}
       </div>
@@ -40,11 +40,11 @@
       <ul class="pagination justify-content-center mb-4" style="margin-top: 90px;">
         {% if page_list.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.previous_page_number }}">이전</a>
+            <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px;">이전</a>
           </li>
         {% else %}
           <li class="page-item disabled">
-            <a class="page-link" href="#">이전</a>
+            <a class="page-link" href="#" style="min-width: 60px;">이전</a>
           </li>
         {% endif %}
         {% for page_number in page_list.paginator.page_range %}
@@ -62,11 +62,11 @@
         {% endfor %}
         {% if page_list.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.next_page_number }}">다음</a>
+            <a class="page-link" href="?page={{ page_list.next_page_number }}" style="min-width: 60px;">다음</a>
           </li>
         {% else %}
           <li class="page-item disabled">
-            <a class="page-link" href="#">다음</a>
+            <a class="page-link" href="#" style="min-width: 60px;">다음</a>
           </li>
         {% endif %}
       </ul>

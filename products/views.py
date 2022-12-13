@@ -31,11 +31,11 @@ def search(request):
     if "q" in request.GET:
         query = request.GET.get("q").split("&")[0]
         products = Product.objects.order_by("-pk").filter(
-            Q(title__contains=query)
-            | Q(productType__contains=query)
-            | Q(tradeType__contains=query)
-            | Q(location__contains=query)
-            | Q(contentStripTag__contains=query)
+            Q(title__icontains=query)
+            | Q(productType__icontains=query)
+            | Q(tradeType__icontains=query)
+            | Q(location__icontains=query)
+            | Q(contentStripTag__icontains=query)
         )
     page = request.GET.get("page", "1")  # GET 방식으로 정보를 받아오는 데이터
     paginator = Paginator(products, 8)  # Paginator(분할될 객체, 페이지 당 담길 객체 수)

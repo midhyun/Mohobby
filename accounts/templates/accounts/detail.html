@@ -108,10 +108,7 @@
             <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
             <span class="mute_text">{{ user.received_note_set.all.count }}</span>
             {% else %}
-            <form action="{% url 'notes:send' %}" method="GET">
-              <input type="hidden" class="form-control" value="{{ user.nickname }}" name="to">
-              <button class="btn btn-outline-danger me-2"><i class="bi bi-cursor-fill"></i></button>
-            </form>
+            <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
             {% endif %}
           </div>
           <div class="follow">
@@ -172,7 +169,7 @@
         {% if request.user == user %}
         <!-- 차단 목록 버튼 -->
         <button class="delete_btn" data-bs-target="#blockModal" data-bs-toggle="modal">차단목록</button>
-        <button class="delete_btn2" id="confirmStart">회원탈퇴</button>
+        <button class="delete_btn" id="confirmStart" style="margin-top: 2rem;">회원탈퇴</button>
         {% else %}
           <a href="{% url 'accounts:block' user.pk %}">
             {% if request.user in user.blockers.all %}
@@ -474,7 +471,7 @@
                       {% endif %}
                     </p>
                   </div>
-                  <p class="card-text text-end"><small class="text-muted">작성자 : {{ user.nickname }}</small></p>
+                  <p class="card-text text-end"><small class="text-muted">작성자 : {{ product.user.nickname }}</small></p>
                 </div>
               </div>
             </a>
