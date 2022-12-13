@@ -237,13 +237,16 @@
                   <div class="card-body">
                     <h5 class="card-title text-black">{{ product.title }}</h5>
                     <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.nickname }}</a>
+                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none products_user">{{ product.user.nickname }}</a>
                   </div>
                 </div>
               </a>
             </div>
             {% endif %}
             {% endfor %}
+            {% if page_obj.has_next %}
+            <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+            {% endif %}
           </div>
         </div>
       </div>

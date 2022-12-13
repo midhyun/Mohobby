@@ -29,7 +29,7 @@
                   <div class="card-body">
                     <h5 class="card-title text-black">{{ product.title }}</h5>
                     <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.nickname }}</a>
+                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none products_user">{{ product.user.nickname }}</a>
                   </div>
                 </div>
               </a>
@@ -43,7 +43,7 @@
       <ul class="pagination justify-content-center mb-4" style="margin-top: 90px;">
         {% if page_list.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px;">이전</a>
+            <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px; color: gray;">이전</a>
           </li>
         {% else %}
           <li class="page-item disabled">
@@ -54,18 +54,18 @@
           {% if page_number >= page_list.number|add:-5 and page_number <= page_list.number|add:5 %}
             {% if page_number == page_list.number %}
               <li class="page-item active">
-                <a class="page-link bg-danger border-white" href="?page={{ page_number }}">{{ page_number }}</a>
+                <a class="page-link bg-danger border-white"   href="?page={{ page_number }}">{{ page_number }}</a>
               </li>
             {% else %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                <a class="page-link" style="color: #E84545;" href="?page={{ page_number }}">{{ page_number }}</a>
               </li>
             {% endif %}
           {% endif %}
         {% endfor %}
         {% if page_list.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.next_page_number }}" style="min-width: 60px;">다음</a>
+            <a class="page-link" href="?page={{ page_list.next_page_number }}" style="min-width: 60px; color: gray;">다음</a>
           </li>
         {% else %}
           <li class="page-item disabled">
