@@ -195,23 +195,23 @@ def KakaoCallBack(request):
     kakao_user_id = kakao_user_data['id']
     
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
-        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
-        
+
         return redirect(request.GET.get("next") or "main")
     else:
         kakao_login_user = get_user_model()()
         kakao_login_user.last_name = kakao_user_nickname
         kakao_login_user.kakao_id = kakao_user_id
         kakao_login_user.save()
-        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
     
         auth_login(request, kakao_user)
         return redirect("accounts:social_signup", kakao_user.pk)
 
 @login_required 
 def social_signup(request, pk):
-    user_info = get_object_or_404(get_user_model(), pk=pk)
+    user_info = get_user_model().objects.get(pk=pk)
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
