@@ -78,17 +78,18 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
-
+    blockers = request.user.blocking.all()
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
 
     context = {
         "user": user,
-        "accepted": accepted,
+        "accepted" : accepted,
         "waiting" : waiting,
+        "blockers" : blockers,
     }
     
-    return render(request, "accounts/detail-test.html", context)
+    return render(request, "accounts/detail.html", context)
 
 
 @login_required
@@ -243,25 +244,4 @@ def block(request, pk):
         else:
             user.blockers.add(request.user)
             user.save()
-    return redirect("accounts:detail", pk)
-
-@login_required
-def block_user(request):
-    blockers = request.user.blocking.all()
-    context = {
-        "blockers": blockers,
-    }
-    return render(request, "accounts/block_user.html", context)
-
-
-@login_required
-def block_user_block(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.blockers.filter(pk=request.user.pk).exists():
-            user.blockers.remove(request.user)
-            user.save()
-        else:
-            user.blockers.add(request.user)
-            user.save()
-    return redirect("accounts:block_user")
+    return redirect("accounts:detail", request.user.pk)
