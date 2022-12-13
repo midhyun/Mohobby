@@ -156,8 +156,8 @@ def kakao_login(request):
     # API KEY 
     app_key = os.getenv("KAKAO_REST_API_KEY")
     # callback 받을 url  
-    redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
-    # redirect_uri = 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback'
+    # redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
+    redirect_uri = 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback'
     # 카카오 로그인 URL
     kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
 
@@ -177,7 +177,7 @@ def KakaoCallBack(request):
         'grant_type': 'authorization_code',
         # 카카오 API KEY
         'client_id': os.getenv("KAKAO_REST_API_KEY"),
-        'redirection_uri': 'http://localhost:8000/accounts/login/kakao/callback',
+        'redirection_uri': 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback',
         'code': auth_code,
     }
     # 토큰 발급받기
