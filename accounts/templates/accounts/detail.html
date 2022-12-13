@@ -429,7 +429,7 @@
       <hr>
       <div class="product_wrap">
         <div class="row row-cols-1 row-cols-md-5">
-          {% for product in user.product_set.all reversed %}
+          {% for product in my_product %}
             <a class="btn p-2" href="{% url 'products:product_detail' product.pk %}">
               <div class="card">
                 {% if product.image %}

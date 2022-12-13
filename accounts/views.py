@@ -12,6 +12,8 @@ from django.views.decorators.http import require_safe, require_http_methods
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
 from hobby.models import Accepted
+from community.models import Community
+from products.models import Product
 
 # Create your views here.
 
@@ -90,6 +92,9 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
+
+    my_Product = Product.objects.filter(user=user).order_by('-id')
+
     blockers = request.user.blocking.all()
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
@@ -99,6 +104,7 @@ def detail(request, pk):
         "accepted" : accepted,
         "waiting" : waiting,
         "blockers" : blockers,
+        "my_product" : my_Product,
     }
     
     return render(request, "accounts/detail.html", context)
