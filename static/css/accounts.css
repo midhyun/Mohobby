@@ -502,6 +502,16 @@ background-color: transparent;
     display: none;
 }
 
+.password_change_btn {
+    background-color:  #E84545;
+    width: 100%;
+    height: 55px;
+    border-radius: 30px;
+    color: #ffffff;
+    border: 0px;
+    outline: 0px;
+}
+
 .social_button {
     width: 600px;
     height: 55px;
