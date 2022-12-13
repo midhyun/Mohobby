@@ -179,6 +179,7 @@
         <div class="d-flex justify-content-center">
           <div class='d-flex flex-column post_size'>
             {% for tag_post in posts_like %}
+            {% if tag_post.host not in request.user.blocking.all %}
             <a href="{% url 'hobby:detail' tag_post.pk %}" class="tag_a">
               <div class='d-flex my-2 post'>
                 <div class="col-4">
@@ -225,6 +226,7 @@
                 </div>
               </div>
             </a>
+            {% endif %}
             {% endfor %}
             <a href="/hobby/index/tag/hits">
               <div class="more_button position-relative">
