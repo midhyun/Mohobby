@@ -10,8 +10,8 @@
 
 {% block content %}
   <div class="container">
-    <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
-      <h1 class="my-2">"{{ query }}" 검색 결과</h1>
+    <div class="d-flex justify-content-center align-items-center" style="margin-top: 8rem">
+      <h1 class="my-2" style="color: #E84545;">"{{ query }}" 검색 결과</h1>
     </div>
     <div class="p-4">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
@@ -37,7 +37,7 @@
         {% endfor %}
       </div>
 
-      <ul class="pagination justify-content-center mb-4">
+      <ul class="pagination justify-content-center mb-4" style="margin-top: 90px;">
         {% if page_list.has_previous %}
           <li class="page-item">
             <a class="page-link" href="?page={{ page_list.previous_page_number }}">이전</a>
