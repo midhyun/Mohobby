@@ -225,14 +225,26 @@ def social_signup(request, pk):
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
-            # 소셜 폼 사용
-            form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
-            if form.is_valid():
-                form.save()
-                return redirect("main")
+            secret = os.getenv('RECAPTCHA_SECRET_KEY')
+            response = request.POST['captchatoken']
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            data = {
+                'secret': secret, # 시크릿 키
+                'response': response, # 토큰
+            }
+            res = requests.post(url, data=data)
+            print(res.json()['success'])
+            if not res.json()['success']:
+                return JsonResponse({'result':res.json()['success']})
             else:
-                # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
-                messages.warning(request, '필수 정보를 입력해주세요.')
+                # 소셜 폼 사용
+                form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
+                if form.is_valid():
+                    form.save()
+                    return redirect("main")
+                else:
+                    # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
+                    messages.warning(request, '필수 정보를 입력해주세요.')
         else:
             form = CustomSocialForm(instance=request.user)
     
