@@ -169,7 +169,7 @@
         {% if request.user == user %}
         <!-- 차단 목록 버튼 -->
         <button class="delete_btn" data-bs-target="#blockModal" data-bs-toggle="modal">차단목록</button>
-        <button class="delete_btn" id="confirmStart">회원탈퇴</button>
+        <button class="delete_btn2" id="confirmStart">회원탈퇴</button>
         {% else %}
           <a href="{% url 'accounts:block' user.pk %}">
             {% if request.user in user.blockers.all %}

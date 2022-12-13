@@ -54,6 +54,17 @@ aside {
         left: 0;
         font-size: 8px;
     }
+    .delete_btn2 {
+        border: solid rgba(27,31,36,0.15) 1px;
+        border-radius: 6px;
+        font-weight: 500;
+        color: #888888;
+        margin: 10px;
+        position: absolute;
+        top: 25px; 
+        left: 0;
+        font-size: 8px;
+    }
 
     .side_wrap {
         display: flex;
