@@ -190,19 +190,15 @@ def KakaoCallBack(request):
 
     # json 파일로 카카오 계정 정보 받아오기
     kakao_user_data = user_info_response.json()
-
     # 일단 닉네임만. 받을 수 있는 개인정보는 설정으로 바꿀수있음.
-    kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
-
         return redirect(request.GET.get("next") or "main")
     else:
         kakao_login_user = get_user_model()()
-        kakao_login_user.last_name = kakao_user_nickname
         kakao_login_user.kakao_id = kakao_user_id
         kakao_login_user.save()
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
