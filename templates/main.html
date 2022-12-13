@@ -223,10 +223,10 @@
           <h3 class="main_color fw-bold"> 중고거래 <i class="bi bi-chevron-right"></i></h3>
         </a>
         <div class="d-flex justify-content-center mt-3">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4" style="width: 910px;">
-            {% for product in products %}
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4 infinite-container" style="width: 910px;" id="scroll_data" data-scroll="{{ products }}">
+            {% for product in page_obj %}
             {% if product.user not in request.user.blocking.all %}
-            <div class="col">
+            <div class="col infinite-item">
               <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
                 <div class="card h-100">
                   {% if product.thumbnail %}
@@ -237,8 +237,8 @@
                   <div class="card-body">
                     <h5 class="card-title text-black">{{ product.title }}</h5>
                     <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">
-                      {{product.user.nickname }}</a>
+                    <span  class="card-text text-decoration-none" style="color: black;">
+                      {{product.created_at|date:'m.d a f' }}</span>
                   </div>
                 </div>
               </a>
@@ -252,7 +252,19 @@
   </div>
 </div>
 
-
+<!-- JQuery CDN !-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- WayPoints CDN !-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/shortcuts/infinite.min.js"></script>
+<script>
+  let infinite = new Waypoint.Infinite({
+    element: $('.infinite-container')[0],
+    offset: 'bottom-in-view',
+    onBeforePageLoad: () => { },
+    onAfterPageLoad: () => { }
+  })
+</script>
 
 {% endblock content %}
 
