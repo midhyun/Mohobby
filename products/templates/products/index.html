@@ -43,11 +43,11 @@
       <ul class="pagination justify-content-center mb-4" style="margin-top: 90px;">
         {% if page_list.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px; min-height: 40px;">이전</a>
+            <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px;">이전</a>
           </li>
         {% else %}
           <li class="page-item disabled">
-            <a class="page-link" href="#" style="min-width: 60px; min-height: 40px;">이전</a>
+            <a class="page-link" href="#" style="min-width: 60px;">이전</a>
           </li>
         {% endif %}
         {% for page_number in page_list.paginator.page_range %}
@@ -65,11 +65,11 @@
         {% endfor %}
         {% if page_list.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_list.next_page_number }}" style="min-width: 60px; min-height: 40px;">다음</a>
+            <a class="page-link" href="?page={{ page_list.next_page_number }}" style="min-width: 60px;">다음</a>
           </li>
         {% else %}
           <li class="page-item disabled">
-            <a class="page-link" href="#" style="min-width: 60px; min-height: 40px;">다음</a>
+            <a class="page-link" href="#" style="min-width: 60px;">다음</a>
           </li>
         {% endif %}
       </ul>
