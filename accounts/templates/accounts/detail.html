@@ -194,19 +194,39 @@
       </div>
       <div id="my_hobby" class="hobbys">
         {% for sports in user.sports %}
-          <p class="all-tag">#{{ sports }}&nbsp</p>
+          <a href="{% url 'hobby:tag' sports %}">
+              <div class="all-tag">
+                #{{ sports }}&nbsp
+              </div>
+          </a>
         {% endfor %}
         {% for travel in user.travel %}
-          <p class="all-tag">#{{ travel }}&nbsp</p>
+          <a href="{% url 'hobby:tag' travel %}">
+              <div class="all-tag">
+                #{{ travel }}&nbsp
+              </div>
+          </a>
         {% endfor %}
         {% for art in user.art %}
-          <p class="all-tag">#{{ art }}&nbsp</p>
+          <a href="{% url 'hobby:tag' art %}">
+              <div class="all-tag">
+                #{{ art }}&nbsp
+              </div>
+          </a>
         {% endfor %}
         {% for food in user.food %}
-          <p class="all-tag">#{{ food }}&nbsp</p>
+          <a href="{% url 'hobby:tag' food %}">
+              <div class="all-tag">
+                #{{ food }}&nbsp
+              </div>
+          </a>
         {% endfor %}
         {% for develop in user.develop %}
-          <p class="all-tag">#{{ develop }}&nbsp</p>
+          <a href="{% url 'hobby:tag' develop %}">
+              <div class="all-tag">
+                #{{ develop }}&nbsp
+              </div>
+          </a>
         {% endfor %}
       </div>
     </div>
