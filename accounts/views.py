@@ -12,6 +12,7 @@ from django.views.decorators.http import require_safe, require_http_methods
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
 from hobby.models import Accepted
+from .models import User
 
 # Create your views here.
 
@@ -193,7 +194,7 @@ def KakaoCallBack(request):
     kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
-    if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
+    if User.objects.filter(kakao_id=kakao_user_id).exists():
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
         
@@ -210,7 +211,7 @@ def KakaoCallBack(request):
 
 @login_required 
 def social_signup(request, pk):
-    user_info = get_user_model().objects.get(pk=pk)
+    user_info = User.objects.get(pk=pk)
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
