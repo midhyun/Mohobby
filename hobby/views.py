@@ -62,7 +62,6 @@ def update(request, hobby_pk):
 def test(request):
     if request.method == 'POST':
         secret = os.getenv('RECAPTCHA_SECRET_KEY')
-        print(request.POST)
         response = request.POST['captchatoken']
         url = 'https://www.google.com/recaptcha/api/siteverify'
         data = {
@@ -250,7 +249,7 @@ def comment_create(request, hobby_pk):
                     "created_at": created_at,
                     "is_like": is_like,
                     "image": image,
-                    'likeCount': comment.like_user.count(),
+                    'likeCount': recomment.like_user.count(),
                 })
 
         if request.user in comment.like_user.all():
@@ -308,7 +307,7 @@ def comment_delete(request, comment_pk):
                     "created_at": created_at,
                     "is_like": is_like,
                     "image": image,
-                    'likeCount': comment.like_user.count(),
+                    'likeCount': recomment.like_user.count(),
                 })
 
         if request.user in comment.like_user.all():

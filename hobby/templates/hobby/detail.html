@@ -239,8 +239,8 @@
               <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> <span>좋아요
-                    <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
+                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> 
+                  <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                   <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                     data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                     data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -335,7 +335,7 @@
         <div class="offcanvas-body small">
           <ul id="comment-list-off">
           {% if comments %}
-            {% for comment in comments.all %}
+            {% for comment in comments %}
             <hr>
             <div class="d-flex justify-content-between">
               <div class="comment-elem">
