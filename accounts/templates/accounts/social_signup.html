@@ -204,7 +204,7 @@
       } else {
         axios({
           method:'post',
-          url: `/accounts/social_signup/`,
+          url: `/accounts/signup/`,
           headers: { 'X-CSRFToken': csrftoken},
           data: new FormData(myForm),
         })
