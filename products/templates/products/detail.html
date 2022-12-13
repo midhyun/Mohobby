@@ -9,11 +9,11 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="container">
+  <div class="container-lg">
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
       <h1 class="my-2">상세 페이지</h1>
     </div>
-    <div class="p-4">
+    <div class="p-0 p-lg-4">
       <div class="row justify-content-center g-5">
         <div class="col-12 col-sm-10 col-md-4 col-lg-3">
           {% if product.image %}
@@ -72,7 +72,7 @@
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-12 col-sm-10 col-md-10 col-lg-7">
+        <div id="product-content" class="col-12 col-sm-10 col-md-10 col-lg-7">
           <hr>
           {{ product.content|safe }}
           <hr>
@@ -209,6 +209,12 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  </script>
+  <script>
+    const productContentImgs = document.querySelectorAll("#product-content img")
+    productContentImgs.forEach((productContentImg) => {
+      productContentImg.style.cssText = "max-width: 100%;"
+    })
   </script>
   <script>
     const productLikeForm = document.querySelector("#product-like-form")
