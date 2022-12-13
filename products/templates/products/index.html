@@ -12,6 +12,7 @@
   <div class="container-lg">
     <div class="d-flex justify-content-center align-items-center" style="margin-top: 6rem">
       <h1 class="my-2 fw-bold" style="color: #E84545;">만물상</h1>
+
     </div>
     <div class="p-0 p-lg-4">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
@@ -38,12 +39,8 @@
           <h5 class="fw-bold flex-fill text-center">데이터가 없습니다.</h5>
         {% endfor %}
       </div>
-
-      <div class="d-flex justify-content-end mb-4">
-        <a class="btn btn-main" href="{% url 'products:product_create' %}" style="min-width: 80px; min-height: 40px;">글쓰기</a>
-      </div>
-
-      <ul class="pagination justify-content-center mb-4">
+      
+      <ul class="pagination justify-content-center mb-4" style="margin-top: 90px;">
         {% if page_list.has_previous %}
           <li class="page-item">
             <a class="page-link" href="?page={{ page_list.previous_page_number }}" style="min-width: 60px; min-height: 40px;">이전</a>
@@ -93,6 +90,12 @@
       </div>
     </div>
   </div>
+
+  <a href="{% url 'products:product_create' %}" class='plus-btn'>
+    <div>
+      <i class="bi bi-plus"></i>
+    </div>
+  </a>
 {% endblock content %}
 
 {% block js %}{% endblock js %}

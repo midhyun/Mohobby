@@ -6,7 +6,7 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="container" style="margin-top: 6rem">
+  <div class="container" style="margin-top: 10rem">
     <div class="p-4">
       <div class="row">
         <div class="col-8 col-md-2">
@@ -23,7 +23,7 @@
             {% csrf_token %}
             {% bootstrap_form form %}
             <div class="text-end">
-              <button type="submit" class="btn btn-primary">전송</button>
+              <button type="submit" class="btn btn-danger">전송</button>
             </div>
           </form>
         </div>

@@ -46,7 +46,7 @@
         
       </p>
     </div>
-
+    <div class="content-wrapper">
     <pre class="detail-content">{{ hobby.content }}</pre>
     <!-- 참여 중인 유저  -->
     <ul id="accepted-user">
@@ -84,11 +84,13 @@
     </ul>
     <!-- 승인 대기 멤버 -->
     <ul>
-      <li class="detail-title">승인 대기 멤버</li>
-      <li class="detail-subtitle d-flex justify-content-between">
-        <span>호스트의 승인을 기다리고 있어요</span>
+      <li class="detail-title d-flex justify-content-between">
+        <span>승인 대기 멤버</span>
         <span class="text-muted fs-6 member-more" type="button" id="offline-box" class="" data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasBottom2" aria-controls="offcanvasBottom">더보기》</span>
+      </li>
+      <li class="detail-subtitle d-flex justify-content-between">
+        <span>호스트의 승인을 기다리고 있어요</span>
       </li>
       <li class="d-flex" style="overflow:hidden;">
         {% for member in waiting %}
@@ -239,8 +241,8 @@
               <p>{{ comment.user.nickname }}</p>
               <p>{{ comment.content }}</p>
               <div>
-                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> <span>좋아요
-                    <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
+                <p class="text-muted" style="font-size:12px"><span>{{ comment.created_at|extra_timesince }}</span> 
+                  <span>좋아요 <span id="comment-{{ comment.pk }}-likecnt">{{ comment.like_user.count }}</span>개</span> <span data-action="reComment" data-comment-id="{{comment.pk}}" style="cursor:pointer;">답글달기</span>
                   <ion-icon data-action="getDelete" type="button" data-bs-toggle="modal"
                     data-bs-target="#comment-delete" data-comment-id="{{ comment.pk }}"
                     data-user="{{ comment.user.pk }}" name="ellipsis-horizontal"></ion-icon>
@@ -335,7 +337,7 @@
         <div class="offcanvas-body small">
           <ul id="comment-list-off">
           {% if comments %}
-            {% for comment in comments.all %}
+            {% for comment in comments %}
             <hr>
             <div class="d-flex justify-content-between">
               <div class="comment-elem">
@@ -486,6 +488,7 @@
     {% endif %}
     <!-- 비슷한 소셜링 -->
   </div>
+</div>
 <div id="load">
   <img style="width:256px; height:256px;" class="translate-middle" src="{% static 'image/loading.gif' %}" alt="loading">
 </div>

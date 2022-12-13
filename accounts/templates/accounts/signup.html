@@ -11,7 +11,7 @@
 {% block content %}
   <div class="wrapper">
     <h1 class="login_banner text-center">회원가입</h1>
-    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="return mySubmit()">
+    <form id="myForm" name="myForm" action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data" autocomplete="off" onsubmit="stopEvent(e)">
       {% csrf_token %}
       <div class="slide">
         <!-- 첫번째 페이지 (ID, PW)-->
@@ -74,7 +74,7 @@
             </div>
             <!-- input : 도로명 주소 -->
             <div class="form_field">
-              <input tabindex="-1" type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input">
+              <input tabindex="-1" type="text" id="roadAddress" name="address" placeholder="도로명주소" class="user_input" required>
             </div>
             <!-- input : 상세 주소 -->
             <div class="form_field">
@@ -163,6 +163,8 @@
                     </span>
                   {% endfor %}
                 </div>
+                <div id="html_element" data-callback="successCaptcha"></div>
+                <input name="captchatoken" type="hidden" required>
               </div>
             </div>
           </div>
@@ -172,7 +174,7 @@
       <div class="page_btn_group">
         <button type="button" class="page_btn slide_prev_button">이전</button>
         <button type="button" class="page_btn slide_next_button">다음</button>
-        <button id="submit_btn" class="signup_btn" type="submit">가입</button>
+        <button id="submit_btn" class="signup_btn">가입</button>
       </div>
     </form>
   </div>
@@ -181,6 +183,71 @@
 {% block js %}
   <!-- sweetalert -->
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- reCaptcha -->
+  <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="text/javascript">
+    function onloadCallback() {
+        grecaptcha.render('html_element', {
+          'sitekey' : '6Le-rWMjAAAAAOGdCaktt6BXwNuG81jSV4HqaPw5'
+        });
+      };
+    function stopEvent(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    };
+    let isCaptchaSuccess = false;
+    function successCaptcha(token) {
+      document.myForm.captchatoken.value = token
+      isCaptchaSuccess = true;
+      console.log(isCaptchaSuccess)
+    };
+    const htmlSave = document.querySelector('#submit_btn');
+    htmlSave.addEventListener('click', testSubmit);
+    
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const myForm = document.querySelector('#myForm')
+    const addressInput = document.querySelector('#roadAddress')
+    const nicknameInput = document.querySelector('#nickname')
+    const pswd2Input = document.querySelector('#pswd2')
+    const pswd1Input = document.querySelector('#pswd1')
+    const idInput = document.querySelector('#id')
+    function testSubmit(e) {
+      e.preventDefault()
+      if (addressInput.value === "" || nicknameInput.value === "" || pswd2Input.value === "" || pswd1Input.value === "" || idInput.value === "" ){
+        swal('필수 정보를 입력해 주세요!', {
+              icon: 'error',
+              button: true,
+            })  
+      } else{
+        if (!isCaptchaSuccess)  {
+        swal("'로봇이 아닙니다'를 선택해주세요.")
+      } else {
+        axios({
+          method:'post',
+          url: `/accounts/signup/`,
+          headers: { 'X-CSRFToken': csrftoken},
+          data: new FormData(myForm),
+        })
+        .then(response => {
+          console.log(response.data.result)
+          if (!response.data.result){
+            swal('새로고침 후에 다시 입력해주세요.', {
+              icon: 'success',
+              button: true,
+            })
+            grecaptcha.reset('html_element', {
+            'sitekey' : '6Le-rWMjAAAAAOGdCaktt6BXwNuG81jSV4HqaPw5'
+            })
+          } else {
+            window.location.replace('/')
+          }
+          })
+      };
+    
+    };
+      }
+  </script>
   <!-- 폼 페이지 -->
   <script src="{% static 'js/signup_form.js' %}"></script>
   <!-- 주소 찾기 -->
@@ -337,23 +404,6 @@
     }
   </script>
   <!-- 이미지 미리보기 -->
-  <script>
-    function readURL(input) {
-      // 파일이 들어오면 실행
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
+  <script src="{% static 'js/imagepreview.js'%}"></script>
 
-        // 이벤트 결과를 src에 집어넣음
-        reader.onload = function (e) {
-          $('#image_section').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    $("#imgInput").change(function () {
-      readURL(this);
-    });
-  </script>
 {% endblock js %}

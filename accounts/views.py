@@ -17,15 +17,27 @@ from hobby.models import Accepted
 
 def signup(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)  # 로그인
-            # 리다이렉트 URL
-            return redirect("main")
+        secret = os.getenv('RECAPTCHA_SECRET_KEY')
+        response = request.POST['captchatoken']
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        data = {
+            'secret': secret, # 시크릿 키
+            'response': response, # 토큰
+        }
+        res = requests.post(url, data=data)
+        print(res.json()['success'])
+        if not res.json()['success']:
+            return JsonResponse({'result':res.json()['success']})
         else:
-            # 에러 발생
-            messages.warning(request, '필수 정보를 입력해주세요.')
+            form = CustomUserCreationForm(request.POST, request.FILES)
+            if form.is_valid():
+                user = form.save()
+                auth_login(request, user)  # 로그인
+                # 리다이렉트 URL
+                return JsonResponse({'result':res.json()['success']})
+            else:
+                # 에러 발생
+                messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -78,17 +90,18 @@ def logout(request):
 @login_required
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
-
+    blockers = request.user.blocking.all()
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
 
     context = {
         "user": user,
-        "accepted": accepted,
+        "accepted" : accepted,
         "waiting" : waiting,
+        "blockers" : blockers,
     }
     
-    return render(request, "accounts/detail-test.html", context)
+    return render(request, "accounts/detail.html", context)
 
 
 @login_required
@@ -189,40 +202,49 @@ def KakaoCallBack(request):
 
     # json 파일로 카카오 계정 정보 받아오기
     kakao_user_data = user_info_response.json()
-
     # 일단 닉네임만. 받을 수 있는 개인정보는 설정으로 바꿀수있음.
-    kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
-        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
-        
         return redirect(request.GET.get("next") or "main")
     else:
         kakao_login_user = get_user_model()()
-        kakao_login_user.last_name = kakao_user_nickname
         kakao_login_user.kakao_id = kakao_user_id
+        kakao_login_user.username = kakao_user_id
         kakao_login_user.save()
-        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
+        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
     
         auth_login(request, kakao_user)
         return redirect("accounts:social_signup", kakao_user.pk)
 
 @login_required 
 def social_signup(request, pk):
-    user_info = get_object_or_404(get_user_model(), pk=pk)
+    user_info = get_user_model().objects.get(pk=pk)
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
-            # 소셜 폼 사용
-            form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
-            if form.is_valid():
-                form.save()
-                return redirect("main")
+            secret = os.getenv('RECAPTCHA_SECRET_KEY')
+            response = request.POST['captchatoken']
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            data = {
+                'secret': secret, # 시크릿 키
+                'response': response, # 토큰
+            }
+            res = requests.post(url, data=data)
+            print(res.json()['success'])
+            if not res.json()['success']:
+                return JsonResponse({'result':res.json()['success']})
             else:
-                # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
-                messages.warning(request, '필수 정보를 입력해주세요.')
+                # 소셜 폼 사용
+                form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse({'result':res.json()['success']}) 
+                else:
+                    # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
+                    messages.warning(request, '필수 정보를 입력해주세요.')
         else:
             form = CustomSocialForm(instance=request.user)
     
@@ -243,25 +265,4 @@ def block(request, pk):
         else:
             user.blockers.add(request.user)
             user.save()
-    return redirect("accounts:detail", pk)
-
-@login_required
-def block_user(request):
-    blockers = request.user.blocking.all()
-    context = {
-        "blockers": blockers,
-    }
-    return render(request, "accounts/block_user.html", context)
-
-
-@login_required
-def block_user_block(request, pk):
-    user = get_object_or_404(get_user_model(), pk=pk)
-    if user != request.user:
-        if user.blockers.filter(pk=request.user.pk).exists():
-            user.blockers.remove(request.user)
-            user.save()
-        else:
-            user.blockers.add(request.user)
-            user.save()
-    return redirect("accounts:block_user")
+    return redirect("accounts:detail", request.user.pk)

@@ -77,7 +77,7 @@ def send(request):
             user = get_user_model().objects.get(nickname=received_note.received_username)
             user.received_mail = int(user.received_mail) + 1
             user.save()
-            print(user.received_mail)
+            
             return redirect("notes:sent_box")
     else:
         if "to" in request.GET:
