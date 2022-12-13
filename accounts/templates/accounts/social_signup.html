@@ -233,6 +233,7 @@
   <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
   <!-- 회원가입 폼--> 
   <script src="{% static 'js/signup_form.js' %}"></script>
+  <!-- 네브바 숨김 -->
   <script>
     $(document).ready(function() { 
       $('.nav_main').css('display', 'none');
@@ -242,25 +243,8 @@
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script src="{% static 'js/search_address.js' %}"></script>
   <!-- 프로필 이미지 미리보기-->
-  <script>
-    function readURL(input) {
-      // 파일이 들어오면 실행
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        // 이벤트 결과를 src에 집어넣음
-        reader.onload = function (e) {
-          $('#image_section').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    $("#imgInput").change(function () {
-      readURL(this);
-    });
-  </script>
+  <!-- 이미지 미리보기-->
+  <script src="{% static 'js/imagepreview.js'%}"></script>
   <!-- 중복 닉네임 체크 -->
   <script>
     var nickname = document.querySelector('#nickname');
@@ -314,3 +298,4 @@
     }
   </script>
 {% endblock js %}
+
