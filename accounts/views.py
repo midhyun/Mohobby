@@ -95,9 +95,18 @@ def detail(request, pk):
 
     
     my_Product = Product.objects.filter(user=user).order_by('-id')
+    my_community = Community.objects.filter(user=user).order_by('-id')
+    
+    # 정렬할 테이블 -pk 포멧
+    # recently_like = '-{}.id'.format(Community.like.through._meta.db_table)
+    # a = Community.objects.filter(like=user).order_by(recently_like)
+
+    like_community = user.like_community.all().order_by("-community_community_like.id")
+    like_product = user.like_product.all().order_by("-products_product_like_users.id")
+
     blockers = request.user.blocking.all()
-    accepted = Accepted.objects.filter(user=user, joined=True)
-    waiting = Accepted.objects.filter(user=user, joined=False)
+    accepted = Accepted.objects.filter(user=user, joined=True).order_by('-id')
+    waiting = Accepted.objects.filter(user=user, joined=False).order_by('-id')
 
     context = {
         "user": user,
@@ -105,6 +114,9 @@ def detail(request, pk):
         "waiting" : waiting,
         "blockers" : blockers,
         "my_product" : my_Product,
+        "my_community": my_community,
+        "like_community" : like_community,
+        "like_product": like_product,
     }
     
     return render(request, "accounts/detail.html", context)
