@@ -237,8 +237,7 @@
                   <div class="card-body">
                     <h5 class="card-title text-black">{{ product.title }}</h5>
                     <h4 class="card-text text-black fw-bold mb-2">{{ product.price|intcomma }}원</h4>
-                    <span  class="card-text text-decoration-none" style="color: black;">
-                      {{product.created_at|date:'m.d a f' }}</span>
+                    <a href="{% url 'accounts:detail' product.user.pk %}" class="card-text text-decoration-none">{{ product.user.nickname }}</a>
                   </div>
                 </div>
               </a>
