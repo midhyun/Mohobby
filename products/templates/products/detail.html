@@ -47,10 +47,8 @@
                 <input type="hidden" class="form-control" value="{{ product.user.nickname }}" name="to">
                 <button class="btn btn-outline-success me-2">쪽지</button>
               </form>
-              <button class="btn btn-outline-primary">채팅</button>
             {% else %}
               <button class="btn btn-outline-success disabled me-2">쪽지</button>
-              <button class="btn btn-outline-primary disabled">채팅</button>
             {% endif %}
           </div>
           {% if request.user == product.user %}
