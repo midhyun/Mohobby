@@ -108,7 +108,10 @@
             <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
             <span class="mute_text">{{ user.received_note_set.all.count }}</span>
             {% else %}
-            <a href="{% url 'notes:received_box' %}"><span><i class="mail bi bi-envelope-fill"></i></span></a>
+            <form action="{% url 'notes:send' %}" method="GET">
+              <input type="hidden" class="form-control" value="{{ user.nickname }}" name="to">
+              <button class="btn btn-outline-danger me-2"><i class="bi bi-cursor-fill"></i></button>
+            </form>
             {% endif %}
           </div>
           <div class="follow">
