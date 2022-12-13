@@ -200,7 +200,9 @@
             })  
       } else{
         if (!isCaptchaSuccess)  {
-        swal("'로봇이 아닙니다'를 선택해주세요.")
+        swal("'로봇이 아닙니다'를 선택해주세요.", {
+          icon: 'warning'
+        })
       } else {
         axios({
           method:'post',
