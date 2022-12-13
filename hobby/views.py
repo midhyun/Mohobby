@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import HobbyForm, AcceptedForm, CommentForm
+from .forms import HobbyForm, HobbyUpdateForm, AcceptedForm, CommentForm
 from .models import Hobby, Accepted, Tag, HobbyComment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -39,25 +39,20 @@ def create(request):
 @login_required
 def update(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
-    if request.method == "POST":
-        form = HobbyForm(request.POST, request.FILES)
-        accepted = AcceptedForm()
-        if form.is_valid():
-            temp = form.save(commit=False)
-            temp.host = request.user
-            temp.save()
-            atemp = accepted.save(commit=False)
-            atemp.joined = True
-            atemp.hobby = temp
-            atemp.user = request.user
-            atemp.save()
-            return redirect("hobby:detail", temp.pk)
-    else:
-        form = HobbyForm(instance=hobby)
-    context = {
-        "form": form,
-    }
-    return render(request, "hobby/form.html", context)
+    if request.user == hobby.host:
+        if request.method == "POST":
+            form = HobbyUpdateForm(request.POST, request.FILES, instance=hobby)
+            if form.is_valid():
+                temp = form.save(commit=False)
+                temp.host = request.user
+                temp.save()
+                return redirect("hobby:detail", temp.pk)
+        else:
+            form = HobbyUpdateForm(instance=hobby)
+        context = {
+            "form": form,
+        }
+        return render(request, "hobby/test.html", context)
 
 def test(request):
     if request.method == 'POST':

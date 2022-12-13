@@ -22,6 +22,18 @@ class HobbyForm(forms.ModelForm):
             'image',
         ]
 
+class HobbyUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Hobby
+        fields = [
+            'title',
+            'meeting_day',
+            'address',
+            'entry_fee',
+            'content',
+            'image',
+        ]
+
 class AcceptedForm(forms.ModelForm):
     class Meta:
         model = Accepted

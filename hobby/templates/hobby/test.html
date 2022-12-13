@@ -1,4 +1,6 @@
 {% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %} {% bootstrap_javascript %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,76 +8,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-
 </head>
 <body>
-  <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-<form id="myForm" name="myForm" action="" method="POST" onsubmit="stopEvent(event)">
-  {% csrf_token %}
-  <input type="text">
-  <br>
-  <div id="html_element" data-callback="successCaptcha"></div>
-  <input name="captchatoken" type="hidden">
-  <input id="html_save" type="submit" value="저장하기">
-</form>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="text/javascript">
-function onloadCallback() {
-    grecaptcha.render('html_element', {
-      'sitekey' : '6Le-rWMjAAAAAOGdCaktt6BXwNuG81jSV4HqaPw5'
-    });
-  };
-function stopEvent(e) {
-  e.stopPropagation();
-  e.preventDefault();
-};
-let isCaptchaSuccess = false;
-function successCaptcha(token) {
-  document.myForm.captchatoken.value = token
-  isCaptchaSuccess = true;
-  console.log(isCaptchaSuccess)
-};
-function writeOk() {
-  if (!isCaptchaSuccess)  {
-    alert("'로봇이 아닙니다'를 선택해주세요.")
-    return false
-  } else {
-    alert("성공적으로 저장되었습니다.")
-    document.myForm.submit();
-  }
-};
-const htmlSave = document.querySelector('#html_save');
-htmlSave.addEventListener('click', testSubmit);
-
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-const myForm = document.querySelector('#myForm')
-function testSubmit() {
-  if (!isCaptchaSuccess)  {
-    alert("'로봇이 아닙니다'를 선택해주세요.")
-    return false
-  } else {
-    axios({
-      method:'post',
-      url: `/hobby/test`,
-      headers: { 'X-CSRFToken': csrftoken},
-      data: new FormData(myForm),
-    })
-    .then(response => {
-      if (response.data.result) {
-        alert('로그인 해도 돼~')
-      } else {
-        alert('인증 실패!!')
-      }
-    })
-  };
-
-};
-
-</script>
-
-<script>
-
-</script>
+  <div class="container">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token%}
+    {% bootstrap_form form %}
+    <input class="btn btn-primary" type="submit" valeu="submit">
+  </form>
+</div>
 </body>
 </html>
