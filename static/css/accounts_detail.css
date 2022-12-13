@@ -279,17 +279,20 @@ aside {
 .hobbys {
     display: flex;
     flex-wrap: wrap;
+    padding: 5px;
+    line-height: 24px;
 }
 
 .all-tag{
     background-color: #E84545;
     color: #ffffff;
-    border-radius: 20px;
+    border-radius: 30px;
     text-align: center;
-    margin: 0.2rem;
+    margin: 3px;
     font-size: 14px;
-    padding: 0.5px 4px 0.5px 4px;
     min-width: 66px;
+    font-weight: 500;
+    padding: 0px 5px 0px 5px;
 }
 
 .hobby_wrap {
