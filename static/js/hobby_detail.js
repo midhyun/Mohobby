@@ -477,8 +477,9 @@ function gethobbyDelete(event) {
       title: "정말로 소셜링에 참여하시겠습니까?",
       text: "호스트의 승인 후에 참여가 완료됩니다.",
       icon: "warning",
-      buttons: true,
       dangerMode: true,
+      buttons: true,
+      reverseButtons: false,
     })
     .then((willCall) => {
       if (willCall) {

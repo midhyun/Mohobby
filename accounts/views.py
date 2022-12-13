@@ -17,15 +17,27 @@ from hobby.models import Accepted
 
 def signup(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)  # 로그인
-            # 리다이렉트 URL
-            return redirect("main")
+        secret = os.getenv('RECAPTCHA_SECRET_KEY')
+        response = request.POST['captchatoken']
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        data = {
+            'secret': secret, # 시크릿 키
+            'response': response, # 토큰
+        }
+        res = requests.post(url, data=data)
+        print(res.json()['success'])
+        if not res.json()['success']:
+            return JsonResponse({'result':res.json()['success']})
         else:
-            # 에러 발생
-            messages.warning(request, '필수 정보를 입력해주세요.')
+            form = CustomUserCreationForm(request.POST, request.FILES)
+            if form.is_valid():
+                user = form.save()
+                auth_login(request, user)  # 로그인
+                # 리다이렉트 URL
+                return JsonResponse({'result':res.json()['success']})
+            else:
+                # 에러 발생
+                messages.warning(request, '필수 정보를 입력해주세요.')
     else:
         form = CustomUserCreationForm()
     context = {
