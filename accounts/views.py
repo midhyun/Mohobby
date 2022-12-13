@@ -156,8 +156,8 @@ def kakao_login(request):
     # API KEY 
     app_key = os.getenv("KAKAO_REST_API_KEY")
     # callback 받을 url  
-    # redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
-    redirect_uri = 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback'
+    redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
+    # redirect_uri = 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback'
     # 카카오 로그인 URL
     kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
 
@@ -177,7 +177,7 @@ def KakaoCallBack(request):
         'grant_type': 'authorization_code',
         # 카카오 API KEY
         'client_id': os.getenv("KAKAO_REST_API_KEY"),
-        'redirection_uri': 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback',
+        'redirection_uri': 'http://localhost:8000/accounts/login/kakao/callback',
         'code': auth_code,
     }
     # 토큰 발급받기
@@ -189,19 +189,15 @@ def KakaoCallBack(request):
 
     # json 파일로 카카오 계정 정보 받아오기
     kakao_user_data = user_info_response.json()
-
     # 일단 닉네임만. 받을 수 있는 개인정보는 설정으로 바꿀수있음.
-    kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
     if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
-
         return redirect(request.GET.get("next") or "main")
     else:
         kakao_login_user = get_user_model()()
-        kakao_login_user.last_name = kakao_user_nickname
         kakao_login_user.kakao_id = kakao_user_id
         kakao_login_user.save()
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
