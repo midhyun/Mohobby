@@ -214,7 +214,7 @@
     const idInput = document.querySelector('#id')
     function testSubmit(e) {
       e.preventDefault()
-      if (addressInput !== "" | nicknameInput !== "" | pswd2Input !== "" | pswd1Input !== "" | idInput !== ""){
+      if (addressInput.value === "" || nicknameInput.value === "" || pswd2Input.value === "" || pswd1Input.value === "" || idInput.value === "" ){
         swal('필수 정보를 입력해 주세요!', {
               icon: 'error',
               button: true,
