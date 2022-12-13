@@ -28,7 +28,7 @@ def main(request):
         posts_hit = Hobby.objects.all().order_by("-hits")[:3].annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
         posts_like = Hobby.objects.filter(tags__in=my_tags)[:3].annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
         
-        Products = Product.objects.all().order_by("-hits")
+        Products = Product.objects.all().order_by("-hits")[:16]
 
         page = request.GET.get("page", "1")
         paginator = Paginator(Products, 8)
