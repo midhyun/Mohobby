@@ -12,14 +12,14 @@ function readURL(input) {
 }
 
 $("#imgInput").off().on("change", function(){
-    
+
     if (this.files && this.files[0]) {
 
-        var maxSize = 1 * 1024 * 1024;
+        var maxSize = 5 * 1024 * 1024;
         var fileSize = this.files[0].size;
 
         if(fileSize > maxSize){
-        alert("사진 용량 1MB 이내로 등록 가능합니다.");
+        alert("사진 용량 5MB 이내로 등록 가능합니다.");
         $(this).val('');
         return false;
         } else {
