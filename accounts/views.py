@@ -12,7 +12,6 @@ from django.views.decorators.http import require_safe, require_http_methods
 from .forms import CustomUserCreationForm, CustomUserChangeForm, CustomPasswordChangeForm, CustomSocialForm
 import requests, os
 from hobby.models import Accepted
-from .models import User
 
 # Create your views here.
 
@@ -78,7 +77,7 @@ def logout(request):
 
 @login_required
 def detail(request, pk):
-    user = get_user_model().objects.get(pk=pk)
+    user = get_object_or_404(get_user_model(), pk=pk)
 
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
@@ -94,7 +93,7 @@ def detail(request, pk):
 
 @login_required
 def follow(request, pk):
-    accounts = get_user_model().objects.get(pk=pk)
+    accounts = get_object_or_404(get_user_model(), pk=pk)
     if request.user == accounts:
         return redirect("accounts:detail", pk)
     if request.user in accounts.followers.all():
@@ -116,7 +115,7 @@ def delete(request):
 
 @login_required
 def update(request, pk):
-    user_info = get_user_model().objects.get(pk=pk)
+    user_info = get_object_or_404(get_user_model(), pk=pk)
     # 요청한 유저가 로그인한 해당 유저인 경우
     if request.method == "POST":
         user_form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
@@ -135,7 +134,7 @@ def update(request, pk):
 
 @login_required
 def password_change(request, pk):
-    user_info = get_user_model().objects.get(pk=pk)
+    user_info = get_object_or_404(get_user_model(), pk=pk)
 
     if request.method == 'POST':
         # django에서 지원하는 패스워드 체인지폼
@@ -157,6 +156,7 @@ def kakao_login(request):
     # API KEY 
     app_key = os.getenv("KAKAO_REST_API_KEY")
     # callback 받을 url  
+    # redirect_uri = 'http://localhost:8000/accounts/login/kakao/callback'
     redirect_uri = 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback'
     # 카카오 로그인 URL
     kakao_auth_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
@@ -177,7 +177,7 @@ def KakaoCallBack(request):
         'grant_type': 'authorization_code',
         # 카카오 API KEY
         'client_id': os.getenv("KAKAO_REST_API_KEY"),
-        'redirection_url': 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback',
+        'redirection_uri': 'http://mohobby-env.eba-v2kvw9tu.ap-northeast-2.elasticbeanstalk.com/accounts/login/kakao/callback',
         'code': auth_code,
     }
     # 토큰 발급받기
@@ -194,8 +194,8 @@ def KakaoCallBack(request):
     kakao_user_nickname = kakao_user_data['properties']['nickname']
     kakao_user_id = kakao_user_data['id']
     
-    if User.objects.filter(kakao_id=kakao_user_id).exists():
-        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+    if get_user_model().objects.filter(kakao_id=kakao_user_id).exists():
+        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
         auth_login(request, kakao_user)
         
         return redirect(request.GET.get("next") or "main")
@@ -204,14 +204,14 @@ def KakaoCallBack(request):
         kakao_login_user.last_name = kakao_user_nickname
         kakao_login_user.kakao_id = kakao_user_id
         kakao_login_user.save()
-        kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
+        kakao_user = get_object_or_404(get_user_model(), kakao_id=kakao_user_id)
     
         auth_login(request, kakao_user)
         return redirect("accounts:social_signup", kakao_user.pk)
 
 @login_required 
 def social_signup(request, pk):
-    user_info = User.objects.get(pk=pk)
+    user_info = get_object_or_404(get_user_model(), pk=pk)
     # 로그인한 유저가 찾는 유저가 맞는지 확인
     if request.user == user_info:
         if request.method == "POST":
@@ -235,7 +235,7 @@ def social_signup(request, pk):
 # 차단
 @login_required
 def block(request, pk):
-    user = get_user_model().objects.get(pk=pk)
+    user = get_object_or_404(get_user_model(), pk=pk)
     if user != request.user:
         if user.blockers.filter(pk=request.user.pk).exists():
             user.blockers.remove(request.user)
@@ -256,7 +256,7 @@ def block_user(request):
 
 @login_required
 def block_user_block(request, pk):
-    user = get_user_model().objects.get(pk=pk)
+    user = get_object_or_404(get_user_model(), pk=pk)
     if user != request.user:
         if user.blockers.filter(pk=request.user.pk).exists():
             user.blockers.remove(request.user)
