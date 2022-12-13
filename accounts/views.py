@@ -241,7 +241,7 @@ def social_signup(request, pk):
                 form = CustomSocialForm(request.POST, request.FILES, instance=request.user)
                 if form.is_valid():
                     form.save()
-                    return redirect("main")
+                    return JsonResponse({'result':res.json()['success']}) 
                 else:
                     # 필수 정보를 입력하지 않았을 때 출력하는 에러메시지 
                     messages.warning(request, '필수 정보를 입력해주세요.')
