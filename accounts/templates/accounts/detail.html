@@ -302,7 +302,7 @@
       <!-- 소셜 정보 (가능한 디자인 통일을 위해 메인과 같음) -->
       <div class="hobby_wrap">
         <!-- 승인된 소셜 -->
-        {% for hobby in accepted %}
+        {% for hobby in accepted reversed %}
         <a href="{% url 'hobby:detail' hobby.hobby.pk %}" class="tag_a">
           <div class='d-flex my-2 post'>
             <div class="col-4">
@@ -364,7 +364,7 @@
       <hr>
       <!-- 소셜 정보 (가능한 디자인 통일을 위해 메인과 같음) -->
       <div class="hobby_wrap">
-        {% for hobby in waiting %}
+        {% for hobby in waiting reversed %}
         <a href="{% url 'hobby:detail' hobby.hobby.pk %}" class="tag_a">
           <div class='d-flex my-2 post'>
             <div class="col-4">

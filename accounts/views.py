@@ -93,8 +93,8 @@ def logout(request):
 def detail(request, pk):
     user = get_object_or_404(get_user_model(), pk=pk)
 
+    
     my_Product = Product.objects.filter(user=user).order_by('-id')
-
     blockers = request.user.blocking.all()
     accepted = Accepted.objects.filter(user=user, joined=True)
     waiting = Accepted.objects.filter(user=user, joined=False)
