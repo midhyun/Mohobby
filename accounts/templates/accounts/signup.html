@@ -155,7 +155,7 @@
                   {% endfor %}
                 </div>
                 <label class="form-label">Develop</label>
-                <div id="id_develop">
+                <div id="id_develop" class="mb-5">
                   {% for value, text in form.develop.field.choices %}
                     <span class="category_select">
                       <input id="id_develop_{{ forloop.counter0 }}" name="{{ form.develop.name }}" type="checkbox" value="{{ value }}">
