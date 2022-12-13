@@ -200,6 +200,7 @@ def KakaoCallBack(request):
     else:
         kakao_login_user = get_user_model()()
         kakao_login_user.kakao_id = kakao_user_id
+        kakao_login_user.username = kakao_user_id
         kakao_login_user.save()
         kakao_user = get_user_model().objects.get(kakao_id=kakao_user_id)
     
