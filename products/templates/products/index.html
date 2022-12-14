@@ -18,7 +18,7 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2 g-md-4 mb-4">
         {% for product in page_list %}
           {% if product.user not in request.user.blocking.all %}
-            <div class="col">
+            <div class="col" style="margin-bottom:20px">
               <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
                 <div class="card" style="min-width: 150px; min-height: 100%;">
                   {% if product.thumbnail %}
