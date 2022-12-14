@@ -15,69 +15,67 @@
       </a>
     </div>
     <div class='d-flex' style='justify-content: space-evenly'>
-      <div class='feed_list' style='background-color:#f1f3f5; width:1000px;'>
+      <div class='feed_list' width:'1000px;'>
         {% for post in posts %}
           {% if post.user not in request.user.blocking.all %}
-            <div class='feeds my-5 py-3 '>
-              <div class='d-flex flex-column align-items-center py-4'>
-                <div style="width:830px; background-color:white">
-                  <!-- 프로필 이미지 설정 -->
-                  <div class='d-flex' style='margin-top:10px'>
-                    <a href="{%url 'accounts:detail' user.pk%}"><img class=' user_img mx-3' id="profile_img" style="width:55px; height:55px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}"></a>
-                    <a class='text-decoration-none align-self-center' href="{%url 'accounts:detail' user.pk%}">
-                      <span class='text-muted fw-bold  ' style='font-size:20px'>{{post.user.nickname}}</span>
-                    </a>
-                  </div>
+            <div class='feeds'>
+              <div style="width:830px;">
+                <!-- 프로필 이미지 설정 -->
+                <div class='d-flex' style='margin-top:10px'>
+                  <a href="{%url 'accounts:detail' user.pk%}"><img class=' user_img mx-3' id="profile_img" style="width:55px; height:55px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}"></a>
+                  <a class='text-decoration-none align-self-center' href="{%url 'accounts:detail' user.pk%}">
+                    <span class='text-muted fw-bold  ' style='font-size:20px'>{{post.user.nickname}}</span>
+                  </a>
+                </div>
 
-                  <!-- 이미지 캐러셀 -->
-                  <div class='slideShow' id='slides-{{forloop.counter0}}' style='margin-top:10px'>
-                    <a href="{%url 'community:detail' post.pk%}">
-                      <ul class='slides list-unstyled'>
-                        {% for photo in post.photo_set.all %}
-                          <!-- 이미지 설정 -->
-                          <li>
-                            <img class='feeds_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;">
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    </a>
+                <!-- 이미지 캐러셀 -->
+                <div class='slideShow' id='slides-{{forloop.counter0}}' style='margin-top:10px'>
+                  <a href="{%url 'community:detail' post.pk%}">
+                    <ul class='slides list-unstyled'>
+                      {% for photo in post.photo_set.all %}
+                        <!-- 이미지 설정 -->
+                        <li>
+                          <img class='feeds_img' src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;">
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </a>
 
-                    <p class="controller">
-                      <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
-                      <span class="prev">&lang;</span>
-                      <span class="next">&rang;</span>
-                    </p>
-                  </div>
-                  <div class='d-flex flex-column align-items-center'>
-                    <div class='feeds_content' style='width:800px; background-color: white;'>
-                      <div class=' d-flex justify-content-center'>
-                        <div class='d-flex justify-content-between mx-2' style='width:800px;'>
-                          <div class='d-flex'>
-                            <p class='px-1'>
-                              <i class="bi bi-eye"></i>{{post.hits}}</p>
-                            <p class='px-1'>
-                              <i class="bi bi-heart"></i>{{post.like.count}}</p>
-                            <p class='px-1'>
-                              <i class="bi bi-chat"></i>{{post.comment_set.count}}</p>
+                  <p class="controller">
+                    <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
+                    <span class="prev carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="next carousel-control-next-icon" aria-hidden="true"></span>
+                  </p>
+                </div>
+                <div class='d-flex flex-column align-items-center'>
+                  <div class='feeds_content' style='width:800px; background-color: white;'>
+                    <div class='d-flex justify-content-center my-2'>
+                      <div class='d-flex justify-content-between' style='width:800px;'>
+                        <div class='d-flex'>
+                          <p class='px-1'>
+                            <i class="bi bi-eye"></i> {{post.hits}}</p>
+                          <p class='px-1'>
+                            <i class="bi bi-heart"></i> {{post.like.count}}</p>
+                          <p class='px-1'>
+                            <i class="bi bi-chat"></i> {{post.comment_set.count}}</p>
 
-                          </div>
-                          <div>
-                            <small class='text-muted'>
-                              <i class="bi bi-calendar"></i>{{post.created_at}}</small>
-                          </div>
+                        </div>
+                        <div>
+                          <small class='text-muted'>
+                            <i class="bi bi-calendar"></i> {{post.created_at}}</small>
                         </div>
                       </div>
-                      <div class='d-flex justify-content-center mt-3'>
-                        <div style='width:800px;'>
-                          <div class='d-flex justify-content-center'>
-                            <div class='d-flex flex-column' style='width:800px; margin-bottom:10px'>
-                              <h3>
-                                <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">{{post.title}}</a>
-                              </h3>
-                              <div>
-                                {{post.summary}}
-                                <a class='text-decoration-none' style='color:#979AA0' href="{%url 'community:detail' post.pk%}">...more</a>
-                              </div>
+                    </div>
+                    <div class='d-flex justify-content-center mt-3'>
+                      <div style='width:800px;'>
+                        <div class='d-flex justify-content-center'>
+                          <div class='d-flex flex-column' style='width:800px; margin-bottom:10px'>
+                            <h3>
+                              <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">{{post.title}}</a>
+                            </h3>
+                            <div class="p-1">
+                              {{post.summary}}
+                              <a class='text-decoration-none' style='color:#979AA0' href="{%url 'community:detail' post.pk%}">...more</a>
                             </div>
                           </div>
                         </div>
@@ -134,7 +132,32 @@
       });
     });
   </script>
-
-
-
 {% endblock content %}
+
+{% block js %}
+<script>
+  function timeForToday(value) {
+    const today = new Date();
+    const timeValue = new Date(value);
+
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+        return `${betweenTime}분전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+        return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+    if (betweenTimeDay < 365) {
+        return `${betweenTimeDay}일전`;
+    }
+
+    return `${Math.floor(betweenTimeDay / 365)}년전`;
+  } 
+</script>
+
+{% endblock %}
