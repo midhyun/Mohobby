@@ -37,7 +37,7 @@
         <div>
           <img class='mb-2 user_img' id="profile_img" style="width:60px; height:60px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}">
           <span style='font-size:20px'>
-            <a class='text-decoration-none fw-bold' style='color:black' href="{%url 'accounts:detail' user.pk%}">{{post.user.nickname}}</a></span></div>
+            <a class='text-decoration-none fw-bold' style='color:black' href="{%url 'accounts:detail' post.user.pk%}">{{post.user.nickname}}</a></span></div>
       </div>
 
       <div class='slideShow'>
@@ -99,7 +99,7 @@
             <div class='d-flex' style='justify-content: space-between'>
               <div class='d-flex'>
 
-                <a class='text-decoration-none' href="{%url 'accounts:detail' user.pk%}">
+                <a class='text-decoration-none' href="{%url 'accounts:detail' comment.user.pk%}">
                   <div>
                     {% if comment.user.image %}
                       <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
@@ -110,7 +110,7 @@
                 </a>
                 <div>
                   <div class='d-flex'>
-                    <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' user.pk%}">
+                    <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' comment.user.pk%}">
                       <strong>{{comment.user.nickname}}</strong>
                     </a>
 
@@ -176,7 +176,7 @@
               {% for recom in comment.recomment.all %}
                 <div class='d-flex' style='justify-content: space-between'>
                   <div class='d-flex'>
-                    <a class='text-decoration-none' href="{%url 'accounts:detail' user.pk%}">
+                    <a class='text-decoration-none' href="{%url 'accounts:detail' recom.user.pk%}">
                       <div>
                         {% if recom.user.image %}
                           <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
@@ -188,8 +188,8 @@
 
                     <div>
                       <div class='d-flex'>
-                        <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' user.pk%}">
-                          <strong>{{comment.user.nickname}}</strong>
+                        <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' recom.user.pk%}">
+                          <strong>{{recom.user.nickname}}</strong>
                         </a>
 
                         {% if request.user == recom.user %}

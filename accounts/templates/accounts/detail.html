@@ -151,14 +151,22 @@
                 <h5 class="modal-title w-100 text-center fw-bold" id="blockModalLabel">차단목록</h5>
               </div>
               <div class="modal-body">
-                {% if user.blockers %}
+                {% if blockers %}
                   {% for block_user in blockers %}
-                      <div class="d-flex justify-content-center">
-                          <img src="{{ block_user.image.url }}" class="rounded-circle" alt="" style="height: 50px; width:50px;">
-                          <p class="align-self-center pt-3 ms-4">{{ block_user.username }}</p>
-                          <a class="ms-5 align-self-center text-decoration-none text-white fw-bold btn btn-danger"
-                              href="{% url 'accounts:block' block_user.pk %}">차단 취소</a>
-                      </div>
+                    {% if block_user.image %}
+                    <div class="d-flex justify-content-center">
+                    <img src="{{ block_user.image.url }}" class="rounded-circle" alt="" style="height: 50px; width:50px;">
+                      <p class="align-self-center pt-3 ms-4">{{ block_user.nickname }}</p>
+                        <a class="ms-5 align-self-center text-decoration-none text-white fw-bold btn btn-danger"
+                            href="{% url 'accounts:block' block_user.pk %}">차단 취소</a>
+                    </div>
+                    {% else %}
+                    <div class="d-flex justify-content-center">
+                      <p class="align-self-center pt-3 ms-4">{{ block_user.nickname }}</p>
+                        <a class="ms-5 align-self-center text-decoration-none text-white fw-bold btn btn-danger"
+                            href="{% url 'accounts:block' block_user.pk %}">차단 취소</a>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                   {% else %}
                   <div class="text-center">차단 유저가 없습니다.</div>
