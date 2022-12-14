@@ -2,20 +2,167 @@ p {
   margin: 0px;
 }
 
+a {
+  text-decoration-line: none;
+}
+
 a:hover {
   color: #E84545;
 }
 
 /* 768px 이하에서 작동 (Mobile) */ 
 @media screen and (max-width: 768px) {
+  .pc {
+    display: none;
+  }
 
+  .feeds {
+    background-color: white;
+    width: 360px;
+    height: 430px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    border-radius: 20px;
+  }
+
+  .feeds:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
+  }
+
+  .profile {
+    display: flex;
+    padding: 10px 10px 0px 10px;
+    align-items: center;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .profile img {
+    border-radius: 50%;
+    width: 39px;
+    height: 39px;
+    margin-right: 10px;
+  }
+
+  .content {
+    height: 280px;
+    width: 360px;
+  }
+
+  .content img {
+    height: 280px;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .mute_text {
+    color: #4A4F5A;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .mute_text:hover {
+    color: #4A4F5A;
+  }
+
+  .create_text {
+    color: #4A4F5A;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 10px;
+  }
+
+  .post_text_wrap {
+    padding: 0px 10px 5px 10px;
+  }
+
+  .post_text {
+    color: #4A4F5A;
+    font-size: 14px;
+    padding: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .over {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+
+  .main_title {
+    color: #E84545;
+    font-size: 18px;
+  }
+
+  .create_btn {
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+
+  .feed_info {
+    margin: 5px 0px 0px 0px;
+    padding: 0px 5px 0px 5px;
+  }
+
+  .write{
+    border: 3px solid #E84545;
+    height: 40px;
+    border-radius: 30px;
+    font-size: 20px;
+  }
 }
 
 /* 769px 이상에서 작동 (PC) */ 
 @media screen and (min-width: 769px) {
+  .pc {
+    display: block
+  }
+
   .feed_info {
     display: flex;
     justify-content: space-between;
+    width: 800px;
+  }
+
+  .slideShow{
+    width: 800px;
+    height: 500px;
+    position: relative;
+    margin: 0px auto;
+    overflow: hidden;   
+  }
+
+  .feeds{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    margin-bottom: 40px;
+    border-radius: 25px;
+    background-color: #ffffff;
+    min-width: 830px;
+  }
+  
+  .feeds:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  .write{
+    border: 3px solid #E84545;
+    height:60px;
+    border-radius: 30px;
+    font-size: 20px;
+    margin: 35px 0px;
   }
 }
 
@@ -27,21 +174,8 @@ a:hover {
   color: #E84545;
 }
 
-.write{
-  border: 3px solid #E84545;
-  height:60px;
-  border-radius: 30px;
-  font-size: 20px;
-}
 .feed_list{
   border-radius: 30px;
-}
-.slideShow{
-  width: 800px;
-  height: 500px;
-  position: relative;
-  margin: 0px auto;
-  overflow: hidden;   
 }
 
 .slides{
@@ -103,21 +237,6 @@ a:hover {
 이전 화살표가 살짝 오른쪽으로 이동하는 효과*/
 .next:hover{
   transform: translateX(0px);
-}
-.feeds{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-  margin-bottom: 40px;
-  border-radius: 25px;
-  background-color: #ffffff;
-  min-width: 830px;
-}
-
-.feeds:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.23);
 }
 
 .create_button {
