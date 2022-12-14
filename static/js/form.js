@@ -200,7 +200,9 @@ limit_minus.addEventListener('click', () => {
     limit_n.innerText = limit
     limit_input.value = limit
   } else {
-    alert('최소 인원은 3명 입니다.')
+    swal('최소 인원은 3명 입니다.', {
+      icon: 'info',
+    })
   }
 });
 limit_plus.addEventListener('click', () => {
@@ -209,7 +211,9 @@ limit_plus.addEventListener('click', () => {
     limit_n.innerText = limit
     limit_input.value = limit
   } else {
-    alert('최대 인원은 15명 입니다.')
+    swal('최대 인원은 15명 입니다.', {
+      icon: 'info',
+    })
   }
 });
 

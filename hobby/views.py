@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import HobbyForm, AcceptedForm, CommentForm
+from .forms import HobbyForm, HobbyUpdateForm, AcceptedForm, CommentForm
 from .models import Hobby, Accepted, Tag, HobbyComment
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -39,42 +39,20 @@ def create(request):
 @login_required
 def update(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
-    if request.method == "POST":
-        form = HobbyForm(request.POST, request.FILES)
-        accepted = AcceptedForm()
-        if form.is_valid():
-            temp = form.save(commit=False)
-            temp.host = request.user
-            temp.save()
-            atemp = accepted.save(commit=False)
-            atemp.joined = True
-            atemp.hobby = temp
-            atemp.user = request.user
-            atemp.save()
-            return redirect("hobby:detail", temp.pk)
-    else:
-        form = HobbyForm(instance=hobby)
-    context = {
-        "form": form,
-    }
-    return render(request, "hobby/form.html", context)
-
-def test(request):
-    if request.method == 'POST':
-        secret = os.getenv('RECAPTCHA_SECRET_KEY')
-        response = request.POST['captchatoken']
-        url = 'https://www.google.com/recaptcha/api/siteverify'
-        data = {
-            'secret': secret, # 시크릿 키
-            'response': response, # 토큰
-        }
-        res = requests.post(url, data=data)
-        print(res.json()['success'])
+    if request.user == hobby.host:
+        if request.method == "POST":
+            form = HobbyUpdateForm(request.POST, request.FILES, instance=hobby)
+            if form.is_valid():
+                temp = form.save(commit=False)
+                temp.host = request.user
+                temp.save()
+                return redirect("hobby:detail", temp.pk)
+        else:
+            form = HobbyUpdateForm(instance=hobby)
         context = {
-            'result': res.json()['success']
+            "form": form,
         }
-        return JsonResponse(context)
-    return render(request, "hobby/test.html")
+        return render(request, "hobby/update.html", context)
 
 @login_required
 def detail(request, hobby_pk):
@@ -334,6 +312,7 @@ def comment_delete(request, comment_pk):
     }
     return JsonResponse(context)
 
+@login_required
 def comment_like(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
     if request.user not in comment.like_user.all():
@@ -492,6 +471,7 @@ def like_comment(request, comment_pk):
     }
     return JsonResponse(data)
 
+@login_required
 def delete_hobby(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     if request.user == hobby.host:

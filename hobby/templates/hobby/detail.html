@@ -18,6 +18,9 @@
     {% endif %}
       <span class="badge bg-danger mx-1" style="height:20px">{{ accepted|length }}명 참여중</span>
       <span class="badge bg-dark mx-1" style="height:20px">{{ hobby.tags }}</span>
+      {% if request.user == hobby.host %}
+      <a href="{% url 'hobby:update' hobby.pk %}" class="badge bg-warning mx-1" style="height:20px">수정하기</a>
+      {% endif %}
     </div>
     <!-- 본문 -->
     <div class="transup">
