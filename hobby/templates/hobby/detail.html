@@ -483,11 +483,13 @@
       </div>
     </a>
     {% else %}
+    {% if request.user not in hobby.host.blocking.all %}
     <a id="hobby-call-btn" href="{% url 'hobby:call' hobby.pk %}" class="accept-btn text-black">
       <div>
         <span class=" footer_accept">참여</span>
       </div>
     </a>
+    {% endif %}
     {% endif %}
     <!-- 비슷한 소셜링 -->
   </div>
