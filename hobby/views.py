@@ -139,12 +139,14 @@ def tag(request, tag_name):
 
     else:
         tag_posts = Hobby.objects.filter(tags=tag_name).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-    
     page = request.GET.get("page", "1")
     paginator = Paginator(tag_posts, 4)
     page_obj = paginator.get_page(page)
-
+    category_name = Tag.objects.get(tag=tag_name).category
+    tags = Tag.objects.filter(category=category_name)
     context = {
+        "tags": tags,
+        "category_name": category_name,
         "tag_posts": tag_posts,
         "tag_name": tag_name,
         "user": user,
