@@ -136,7 +136,7 @@
                 <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">신청취소</a>
                 {% endif %}
                 {% if request.user == hobby.host %}
-                <a style="color:forestgreen" href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
+                <a id="approveBtn" data-user-id="{{ member.user.pk }}" style="color:forestgreen" href="{% url 'hobby:approve' hobby.pk member.user.pk %}">승인하기</a>
                 <a style="color:#E84545" href="{% url 'hobby:reject' hobby.pk member.user.pk %}">거절하기</a>
                 {% endif %}
               </div>
@@ -547,7 +547,36 @@
     
   });
 </script>
-
+<!-- 소셜링 신청 승인하기 -->
+<script>
+const approveBtn = document.querySelector('#approveBtn')
+approveBtn.addEventListener('click', approveHobby)
+function approveHobby(event) {
+  event.preventDefault();
+  console.log('yese??')
+  if ({{hobby.limit}}>{{accepted|length}}) {
+    axios({
+      method: 'get',
+      url: `/hobby/{{hobby.pk}}/${event.target.dataset.userId}/approve`,
+    })
+    .then(response => {
+      swal("가입을 승인했습니다.",{
+        icon:'success',
+        button: true,
+      })
+      .then((result)=> {
+        window.location.replace(`/hobby/{{hobby.pk}}`)
+      })
+      
+    })
+  } else {
+    swal("소셜링 인원이 가득찼습니다.",{
+        icon:'warning',
+        button: true,
+      } )
+  };
+}
+</script>
 <style type="text/css">
   #load {
     width: 100%;

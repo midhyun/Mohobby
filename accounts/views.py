@@ -65,7 +65,7 @@ def nickname_check(request):
 
 @require_http_methods(["GET", "POST"])
 def login(request):
-    if request.user:
+    if request.user.is_authenticated:
         return redirect('main')
     else:
         if request.method == "POST":
