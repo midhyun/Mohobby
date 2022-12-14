@@ -231,6 +231,19 @@ aside {
     min-height: 200px;
     padding: 20px
 }
+.follow_profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.follow_profile img{
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 100%;
+    padding: 10px;
+}
 
 .profile img {
     height: 150px;
@@ -239,6 +252,7 @@ aside {
     border-radius: 100%;
     padding: 10px;
 }
+
 
 .mute_text {
     font-size: 14px;
