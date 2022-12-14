@@ -65,21 +65,24 @@ def nickname_check(request):
 
 @require_http_methods(["GET", "POST"])
 def login(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
-            return redirect((request.GET.get("next") or request.POST.get("next")) or "main")
-        else:
-            # 에러 발생
-            messages.warning(request, '아이디 또는 비밀번호를 잘못 입력했습니다.')
+    if request.user:
+        return redirect('main')
     else:
-        form = AuthenticationForm()
+        if request.method == "POST":
+            form = AuthenticationForm(request, data=request.POST)
+            if form.is_valid():
+                auth_login(request, form.get_user())
+                return redirect((request.GET.get("next") or request.POST.get("next")) or "main")
+            else:
+                # 에러 발생
+                messages.warning(request, '아이디 또는 비밀번호를 잘못 입력했습니다.')
+        else:
+            form = AuthenticationForm()
 
-    context = {
-        "form": form,
-    }
-    return render(request, "accounts/login.html", context)
+        context = {
+            "form": form,
+        }
+        return render(request, "accounts/login.html", context)
 
 
 def logout(request):
