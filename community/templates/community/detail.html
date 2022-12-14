@@ -51,8 +51,10 @@
         </ul> 
         <p class="controller">
           <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
+          {% if post.photo_set.count >= 2 %}
           <span class="prev carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="next carousel-control-next-icon" aria-hidden="true"></span>
+          {% endif %}
         </p>
       </div>
       <div class="post_text_wrap">
