@@ -183,7 +183,7 @@ def received_note_delete(request, received_note_pk):
         return redirect("notes:received_box")
 
     received_note.delete()
-    return redirect("notes:received_box")
+    return redirect("notes:trash_box")
 
 
 @require_POST
