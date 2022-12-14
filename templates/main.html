@@ -3,7 +3,28 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% load humanize %}
-{% block css %}{% endblock css %}
+{% block css %}
+<style>
+.plus-btn {
+  position: fixed;
+  bottom: 150px;
+  right: 23px;
+}
+
+.plus-btn div {
+  color: #E84545;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 4px 4px 25px 0px #0714271f;
+}
+</style>
+{% endblock css %}
 
 {% block content %}
 <div>
@@ -254,7 +275,11 @@
     </div>
   </div>
 </div>
-
+<a href="{% url 'hobby:create' %}" class='plus-btn'>
+  <div>
+    <i class="bi bi-plus"></i>
+  </div>
+</a>
 <!-- JQuery CDN !-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- WayPoints CDN !-->
