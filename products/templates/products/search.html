@@ -18,7 +18,7 @@
         {% for product in page_list %}
           <div class="col">
             <a href="{% url 'products:product_detail' product.pk %}" class="text-decoration-none">
-              <div class="card" style="min-width: 150px; min-height: 250px;">
+              <div class="card" style="min-width: 150px; min-height: 100%;">
                 {% if product.thumbnail %}
                   <img src="{{ product.thumbnail.url }}" class="card-img-top img-fluid" alt="thumbnail">
                 {% else %}
