@@ -182,6 +182,11 @@ def received_note_delete(request, received_note_pk):
     if request.user != received_note.received_user:
         return redirect("notes:received_box")
 
+    if received_note.received_at_string == "읽지 않음":
+        user = request.user
+        user.received_mail = int(user.received_mail) - 1
+        user.save()
+
     received_note.delete()
     return redirect("notes:trash_box")
 
