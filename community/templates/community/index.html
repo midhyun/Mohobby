@@ -103,7 +103,7 @@
                   <a href="{% url 'accounts:detail' post.user.pk %}"><img src="{% static 'image/default_profile_img.jpg' %}" alt="기본 이미지"></a>
                 {% endif %}
                 <div>
-                  <a class="mute_text" href="{% url 'accounts:detail' user.pk %}">{{post.user.nickname}}</a>
+                  <a class="mute_text" href="{% url 'accounts:detail' post.user.pk %}">{{post.user.nickname}}</a>
                   <p class="create_text">{{post.created_at}}</p>
                 </div>
               </div>
@@ -126,7 +126,7 @@
                   </div>
                 </div>
                 <div class="post_text_wrap">
-                  <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk%}">
+                  <a class='text-decoration-none main_title' href="{% url 'community:detail' post.pk %}">
                     <p class="over">{{post.title}}</p>
                   </a>
                   <p class="post_text">{{ post.content }}</p>
