@@ -239,21 +239,18 @@
       <div class="community_wrap">
         {% for community in my_community %}
           <div class="community_item">
-            {% for photo in community.photo_set.all %}
-            <!-- 사진이 2개 이상일 때 고장날 수도 있음 -->
-              {% if photo.image %}
+            {% if community.photo_set.first.image %}
               <a href="{% url 'community:detail' community.pk %}">
-                <img src="{{ photo.image.url }}" alt="community">
+                <img src="{{ community.photo_set.first.image.url }}" alt="community">
               </a>
-              {% endif %}
-            {% empty %}
+            {% else %}
               <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
               <a href="{% url 'community:detail' community.pk %}">
                 <div class="community_text">
                   <p>{{ community.content }}</p>
                 </div>
               </a>
-            {% endfor %}
+            {% endif %}
           </div>
         {% empty %}
           <!-- 피드가 없을 시 발생하는 이벤트 -->
@@ -272,21 +269,18 @@
       <div class="community_wrap">
         {% for community in like_community %}
           <div class="community_item">
-            {% for photo in community.photo_set.all %}
-            <!-- 사진이 2개 이상일 때 고장날 수도 있음 문제시 바로 수정해야함.-->
-              {% if photo.image %}
+            {% if community.photo_set.first.image %}
               <a href="{% url 'community:detail' community.pk %}">
-                <img src="{{ photo.image.url }}" alt="community">
+                <img src="{{ community.photo_set.first.image.url }}" alt="community">
               </a>
-              {% endif %}
-            {% empty %}
+            {% else %}
               <!-- 사진이 없으면 콘텐츠를 보여 준다 -->
               <a href="{% url 'community:detail' community.pk %}">
                 <div class="community_text">
                   <p>{{ community.content }}</p>
                 </div>
               </a>
-            {% endfor %}
+            {% endif %}
           </div>
         {% empty %}
         <!-- 피드가 없을 시 발생하는 이벤트 -->
