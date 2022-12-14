@@ -174,14 +174,15 @@ def call(request, hobby_pk):
 @login_required
 def approve(request, hobby_pk, user_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
+    accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
+    accepted_len = Accepted.objects.filter(hobby=hobby, joined=True)
     if request.user == hobby.host:
-        accepted = get_object_or_404(Accepted, hobby=hobby, user_id=user_pk)
-        accepted.joined = True
-        accepted.save()
-        print(f'{request.user}님의 가입을 승인했습니다.')
-    else:
-        print("권한이 없습니다.")
-    return redirect("hobby:detail", hobby_pk)
+        if int(hobby.limit) > len(accepted_len):
+            accepted.joined = True
+            accepted.save()
+        else:
+            return redirect('hobby:detail', hobby_pk)
+    return JsonResponse({'res': True})
 
 @login_required
 def reject(request, hobby_pk, user_pk):
