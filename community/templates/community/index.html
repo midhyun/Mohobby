@@ -98,9 +98,9 @@
             <div class="mobile feeds">
               <div class="profile">
                 {% if post.user.image %}
-                  <a href="{% url 'accounts:detail' user.pk %}"><img src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}"></a>
+                  <a href="{% url 'accounts:detail' post.user.pk %}"><img src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}"></a>
                 {% else %}
-                  <a href="{% url 'accounts:detail' user.pk %}"><img src="{% static 'image/default_profile_img.jpg' %}" alt="기본 이미지"></a>
+                  <a href="{% url 'accounts:detail' post.user.pk %}"><img src="{% static 'image/default_profile_img.jpg' %}" alt="기본 이미지"></a>
                 {% endif %}
                 <div>
                   <a class="mute_text" href="{% url 'accounts:detail' user.pk %}">{{post.user.nickname}}</a>
