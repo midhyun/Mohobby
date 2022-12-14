@@ -5,90 +5,92 @@
   <link rel="stylesheet" href="{% static 'css/community.css' %}">
 {% endblock %}
 {% block content %}
-  <div class='shadow container d-flex' style="margin-top: 5%; width:1000px; background-color:white; justify-content: space-evenly;">
-    <div style="width:800px; margin: 20px; ">
-      <div class='d-flex justify-content-between'>
-        <div class='d-flex'>
-          <h1 class='main_title align-self-center'>
-            {{post.title}}
-          </h1>
-          <div class='d-flex '>
-            {% if request.user == post.user %}
-              <div class='d-flex align-items-center'>
-                <div>
-                  <a href="{% url 'community:update' post.pk %}">
-                    <button class="btn feed_btn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                  </a>
-                </div>
-                <div>
-                  <form action="{%url 'community:delete' post.pk%}" method='POST'>
-                    {% csrf_token %}
-                    <button class="btn feed_btn" type="submit">
-                      <i class="bi bi-x-lg"></i>
-                    </button>
-                  </form>
-                </div>
-              </div>
+  <div class='peed_wrap shadow container'>
+    <div>
+      <div class='profile_wrap'>
+        <div class="detail_profile">
+            {% if post.user.image %}
+              <a href="{% url 'accounts:detail' post.user.pk %}"><img src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}"></a>
+            {% else %}
+              <a href="{% url 'accounts:detail' post.user.pk %}"><img src="{% static 'image/default_profile_img.jpg' %}" alt="기본 이미지"></a>
             {% endif %}
-          </div>
+            <div>
+              <a class="mute_text" href="{% url 'accounts:detail' post.user.pk %}">{{post.user.nickname}}</a>
+              <p class="create_text">{{post.created_at}}</p>
+            </div>
         </div>
-        <div>
-          <img class='mb-2 user_img' id="profile_img" style="width:60px; height:60px;" src="{{ post.user.image.url }}" alt="{{ post.user.profile.image }}">
-          <span style='font-size:20px'>
-            <a class='text-decoration-none fw-bold' style='color:black' href="{%url 'accounts:detail' post.user.pk%}">{{post.user.nickname}}</a></span></div>
-      </div>
+        {% if request.user == post.user %}
+        <div class='d-flex'>
+            <div class='d-flex align-items-center'>
+                <div class="post_user_menu">
+                    <a href="{% url 'community:update' post.pk %}">
+                    <button class="btn">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    </a>
+                </div>
+                <div>
+                    <form action="{%url 'community:delete' post.pk%}" method='POST'>
+                    {% csrf_token %}
+                    <button class="btn" type="submit">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 
       <div class='slideShow'>
-        <ul class='slides list-unstyled'>
+        <ul class="slides list-unstyled">
           {% for photo in post.photo_set.all %}
             <!-- 이미지 설정 -->
-            <li><img src="{{ photo.image.url }}" alt="{{ photo.image.image }}" style="width: 800px; height: 500px;
-        "></li>
+            <li><img class="peed_image" src="{{ photo.image.url }}" alt="{{ photo.image.image }}"></li>
           {% endfor %}
-        </ul>
+        </ul> 
         <p class="controller">
           <!-- &lang: 왼쪽 방향 화살표 &rang: 오른쪽 방향 화살표 -->
-          <span class="prev">&lang;</span>
-          <span class="next">&rang;</span>
+          <span class="prev carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="next carousel-control-next-icon" aria-hidden="true"></span>
         </p>
       </div>
-      <div style="margin-top:10px">
-        {{post.content}}
+      <div class="post_text_wrap">
+        <h4 class="detail_main_title">{{post.title}}</h4>
+        <p class="detail_post_text">{{ post.content }}</p>
       </div>
-      <div class='d-flex justify-content-between'>
-        <div class='my-3'>{{post.created_at}}</div>
-
-      </div>
-      <i class="bi bi-eye" style='margin-right:10px;'></i>
-      {{post.hits}}
-      <!-- 좋아요 -->
-      {% if user.is_authenticated %}
-        {% if request.user in post.like.all %}
-          <button type="button" style="color:red;" data-post-id='{{ post.pk }}' id='fav-btn' class="btn bi bi-heart-fill"></button>
-        {% else %}
-          <button type="button" id='fav-btn' data-post-id='{{ post.pk }}' style="color:red;" class="btn bi bi-heart"></button>
+      <div class="deatil_post_info">
+        <i class="bi bi-eye"></i>
+        {{post.hits}}
+        <!-- 좋아요 -->
+        {% if user.is_authenticated %}
+            {% if request.user in post.like.all %}
+            <button type="button" style="color:red; padding:0px;" data-post-id='{{ post.pk }}' id='fav-btn' class="btn bi bi-heart-fill"></button>
+            {% else %}
+            <button type="button" id='fav-btn' data-post-id='{{ post.pk }}' style="color:red; padding:0px;" class="btn bi bi-heart"></button>
+            {% endif %}
+            <span id='fav-count' class="text-center">{{ post.like.count }}</span>
         {% endif %}
-        <span id='fav-count' class="text-center" style='margin-right:10px;'>{{ post.like.count }}</span>
-      {% endif %}
-      <i class="bi bi-chat" style='margin-right:10px;'></i>
-      {{comment_count}}
+        &nbsp<i class="bi bi-chat"></i>
+        {{comment_count}}
+      </div>
       <!-- 댓글 작성 -->
       <form data-post-id="{{ post.pk }}" action="{% url 'community:comments_create' post.pk %}" method="POST">
         {% csrf_token %}
-        <div class='d-flex justify-content-center'>
-          <div>
+        <div class='comment_wrap'>
+            <div>
             {% if request.user.image %}
-              <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+              <img class='user_img' id="profile_img" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
             {% else %}
-              <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
+              <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
             {% endif %}
-            <input id="content_id" name="content" class='comment_input' type="text" placeholder="댓글 달기...">
-          </div>
-          <div class='d-flex align-items-center'>
-            <input id='comment_write' type="submit" class='comment_sbmit mx-2' value="등록">
-          </div>
+            </div>
+            <div>
+                <input id="content_id" name="content" class='comment_input' type="text" placeholder="댓글 달기...">
+            </div>
+            <div class='d-flex align-items-center'>
+                <input id='comment_write' type="submit" class='comment_sbmit mx-2' value="등록">
+            </div>
         </div>
       </form>
       <hr>
@@ -98,22 +100,20 @@
           {% if comment.parent_comment == NULL %}
             <div class='d-flex' style='justify-content: space-between'>
               <div class='d-flex'>
-
-                <a class='text-decoration-none' href="{%url 'accounts:detail' comment.user.pk%}">
+                <a class='text-decoration-none' href="{% url 'accounts:detail' comment.user.pk %}" style="padding: 5px;">
                   <div style="margin-right:5px">
                     {% if comment.user.image %}
-                      <img class='user_img' id="profile_img" style="width:50px; height:50px;" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
+                      <img class='user_img' id="profile_img" src="{{ comment.user.image.url }}" alt="{{ request.user.profile.image }}">
                     {% else %}
-                      <img class='user_img' style="width:50px; height:50px;" src="{% static 'image/default_profile_img.jpg' %}">
+                      <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
                     {% endif %}
                   </div>
                 </a>
                 <div>
-                  <div class='d-flex'>
-                    <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' comment.user.pk%}">
-                      <strong>{{comment.user.nickname}}</strong>
+                  <div class='comment_profile'>
+                    <a class='text-decoration-none user_nickname' style='color:#212529; margin-right:5px;' href="{%url 'accounts:detail' comment.user.pk%}">
+                      <strong>{{ comment.user.nickname }}</strong>
                     </a>
-
                     {% if request.user == comment.user %}
                       <div class='d-flex'>
                         <!-- 댓글 수정 -->
@@ -162,9 +162,9 @@
                 <form action="{% url 'community:comments_update' post.pk comment.pk %}" method="POST" class="align-self-center">
                   {% csrf_token %}
                   {% if comment.user.image %}
-                    <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ comment.user.image.url }}" alt="">
+                    <img class='user_img' id="profile_img" src="{{ comment.user.image.url }}" alt="">
                   {% else %}
-                    <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                    <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
                   {% endif %}
                   <input name="content" class='comment_input' type="text" value='{{comment.content}}'>
                   <input type="submit" class='comment_sbmit mx-2' value="수정">
@@ -174,21 +174,21 @@
             <!-- 답글 목록 -->
             <div class='recomment_list'>
               {% for recom in comment.recomment.all %}
-                <div class='d-flex' style='justify-content: space-between'>
+                <div class='d-flex' style='justify-content: space-between' style="padding:5px;">
                   <div class='d-flex'>
                     <a class='text-decoration-none' href="{%url 'accounts:detail' recom.user.pk%}">
                       <div style="margin-right:5px">
                         {% if recom.user.image %}
-                          <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ recom.user.image.url }}" alt="">
+                          <img class='user_img' id="profile_img" src="{{ recom.user.image.url }}" alt="">
                         {% else %}
-                          <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                          <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
                         {% endif %}
                       </div>
                     </a>
 
                     <div>
                       <div class='d-flex'>
-                        <a class='text-decoration-none' style='color:black' href="{%url 'accounts:detail' recom.user.pk%}">
+                        <a class='text-decoration-none user_nickname' style='color:#212529; margin-right:5px;' href="{%url 'accounts:detail' recom.user.pk%}">
                           <strong>{{recom.user.nickname}}</strong>
                         </a>
 
@@ -207,7 +207,7 @@
                         {% endif %}
                       </div>
 
-                      <div>{{ recom.content}}</div>
+                      <div class="comment_content">{{ recom.content }}</div>
                       <div class='comment_small_text d-flex'>
                         <div class='mx-1'>좋아요
                           <span id='fav-count-{{recom.pk}}' class="text-center">{{ recom.like.count }}</span>
@@ -236,9 +236,9 @@
                     <form action="{% url 'community:recomments_update' post.pk comment.pk recom.pk%}" method="POST">
                       {% csrf_token %}
                       {% if request.user.image %}
-                        <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+                        <img class='user_img' id="profile_img" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
                       {% else %}
-                        <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
+                        <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
                       {% endif %}
                       <input name="content" class='comment_input' type="text" placeholder="답글 달기...">
                       <input type="submit" class='comment_sbmit mx-2' value="수정">
@@ -251,13 +251,15 @@
             <div class="collapse recomment_list" id="collapse{{comment.pk}}">
               <form action="{% url 'community:recomments_create' post.pk comment.pk %}" method="POST">
                 {% csrf_token %}
-                {% if request.user.image %}
-                  <img class='user_img' id="profile_img" style="width:40px; height:40px;" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
-                {% else %}
-                  <img class='user_img' style="width:40px; height:40px;" src="{% static 'image/default_profile_img.jpg' %}">
-                {% endif %}
-                <input name="content" class='comment_input' type="text" placeholder="답글 달기...">
-                <input type="submit" class='comment_sbmit mx-2' value="등록">
+                <div class="comment_wrap">
+                    {% if request.user.image %}
+                    <img class='user_img' id="profile_img" src="{{ request.user.image.url }}" alt="{{ request.user.profile.image }}">
+                    {% else %}
+                    <img class='user_img' src="{% static 'image/default_profile_img.jpg' %}">
+                    {% endif %}
+                    <input name="content" class='comment_input' type="text" placeholder="답글 달기...">
+                    <input type="submit" class='comment_sbmit mx-2' value="등록">
+                </div>
               </form>
             </div>
           {% endif %}
@@ -275,17 +277,15 @@
     const slideCount = slideImg.length; // 슬라이드 개수
     const prev = document.querySelector('.prev'); //이전 버튼
     const next = document.querySelector('.next'); //다음 버튼
-    const slideWidth = 800; //한개의 슬라이드 넓이
+    const slideWidth = document.querySelector('.peed_image')
     const slideMargin = 0; //슬라이드간의 margin 값
     //전체 슬라이드 컨테이너 넓이 설정
-    slides.style.width = (slideWidth + slideMargin) * slideCount + 'px';
-
-    console.log(slides)
-    console.log(slideImg)
-
+    slides.style.width = (slideWidth.offsetWidth + slideMargin) * slideCount + 'px';
+    
     function moveSlide(num) {
-      slides.style.left = -num * 800 + 'px';
-      currentIdx = num;
+        slides.style.width = (slideWidth.offsetWidth + slideMargin) * slideCount + 'px';
+        slides.style.left = -num * slideWidth.offsetWidth + 'px';
+        currentIdx = num;
     }
     prev.addEventListener('click', function () {
       if (currentIdx !== 0) 
