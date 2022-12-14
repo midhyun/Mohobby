@@ -108,6 +108,7 @@ def detail(request, pk):
     blockers = request.user.blocking.all()
     accepted = Accepted.objects.filter(user=user, joined=True).order_by('-id')
     waiting = Accepted.objects.filter(user=user, joined=False).order_by('-id')
+    print(waiting)
 
     context = {
         "user": user,
