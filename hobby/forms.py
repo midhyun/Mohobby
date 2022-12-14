@@ -33,6 +33,14 @@ class HobbyUpdateForm(forms.ModelForm):
             'content',
             'image',
         ]
+        labels = {
+            'title': '소셜링 제목',
+            'meeting_day': '소셜링 일시',
+            'address': '소셜링 장소',
+            'entry_fee': '활동비',
+            'content': '소셜링 상세',
+            'image': '이미지',
+        }
 
 class AcceptedForm(forms.ModelForm):
     class Meta:

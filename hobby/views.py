@@ -52,24 +52,7 @@ def update(request, hobby_pk):
         context = {
             "form": form,
         }
-        return render(request, "hobby/test.html", context)
-
-def test(request):
-    if request.method == 'POST':
-        secret = os.getenv('RECAPTCHA_SECRET_KEY')
-        response = request.POST['captchatoken']
-        url = 'https://www.google.com/recaptcha/api/siteverify'
-        data = {
-            'secret': secret, # 시크릿 키
-            'response': response, # 토큰
-        }
-        res = requests.post(url, data=data)
-        print(res.json()['success'])
-        context = {
-            'result': res.json()['success']
-        }
-        return JsonResponse(context)
-    return render(request, "hobby/test.html")
+        return render(request, "hobby/update.html", context)
 
 @login_required
 def detail(request, hobby_pk):
@@ -329,6 +312,7 @@ def comment_delete(request, comment_pk):
     }
     return JsonResponse(context)
 
+@login_required
 def comment_like(request, comment_pk):
     comment = get_object_or_404(HobbyComment, pk=comment_pk)
     if request.user not in comment.like_user.all():
@@ -487,6 +471,7 @@ def like_comment(request, comment_pk):
     }
     return JsonResponse(data)
 
+@login_required
 def delete_hobby(request, hobby_pk):
     hobby = get_object_or_404(Hobby, pk=hobby_pk)
     if request.user == hobby.host:
