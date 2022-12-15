@@ -91,7 +91,7 @@ aside {
         grid-template-columns: repeat(3, 1fr);
         grid-auto-rows: minmax(800px);
         grid-gap: 5px;
-        padding: 20px;
+        padding: 10px;
         overflow-y: auto;
         max-height: 660px;
     }
@@ -112,6 +112,18 @@ aside {
         white-space: wrap;
         transition: all 0.3s linear;
         border-radius: 5px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .community_wrap {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: minmax(800px);
+        grid-gap: 5px;
+        padding: 10px;
+        overflow-y: auto;
+        max-height: 660px;
     }
 }
 
