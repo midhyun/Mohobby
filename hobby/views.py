@@ -126,6 +126,8 @@ def tag(request, tag_name):
         my_tags.append(i)
     print(my_tags)
     # 내가 저장한 태그별 허비 보여주기
+    tags = []
+    category_name = ''
     if tag_name == "likes":
         tag_posts = Hobby.objects.filter(tags__in=my_tags).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
         print(tag_posts)
@@ -136,17 +138,15 @@ def tag(request, tag_name):
     elif tag_name == "news":
         tag_posts = Hobby.objects.all().order_by("-pk").annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
         print(tag_posts)
-
     else:
         tag_posts = Hobby.objects.filter(tags=tag_name).annotate(joinmembers=Count("accepted", filter=Q(accepted__joined=True)))
-        page = request.GET.get("page", "1")
-        paginator = Paginator(tag_posts, 4)
-        page_obj = paginator.get_page(page)
-        category_name = Tag.objects.get(tag=tag_name)
-        
-    
+        category_name = Tag.objects.filter(tag=tag_name)[0].category
+        tags = Tag.objects.filter(category=category_name)
+    page = request.GET.get("page", "1")
+    paginator = Paginator(tag_posts, 4)
+    page_obj = paginator.get_page(page)
     context = {
-      
+        "tags": tags,
         "category_name": category_name,
         "tag_posts": tag_posts,
         "tag_name": tag_name,
