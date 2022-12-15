@@ -42,10 +42,10 @@
       <p class="text-center mt-3" style="font-size:16px;">
         <i class="bi bi-eye"></i>&nbsp;<span>{{ hobby.hits }}</span>
         ⏰
-        {% if hobby.recruit_type %}
-        오프라인
-        {% else %}
+        {% if hobby.address == '온라인' %}
         온라인
+        {% else %}
+        오프라인 {{ hobby.address }}
         {% endif %}
         📅 {{ hobby.meeting_day|date:"m.d(l) A h:i" }}
         
