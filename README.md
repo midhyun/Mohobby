@@ -169,6 +169,8 @@
 
 <br />
 
+</details>
+
 ## **🎮 주요 기능**
 
 <br/>
@@ -186,17 +188,360 @@
 
 ![image-20221225000227455](README.assets/image-20221225000227455.png)
 
-</details>
-
 ---
 
 ## **🚀 View 설계**
 
+<details>
+<summary>접기/펼치기</summary>
+
+### Hobby
+
+```python
+class Categories(models.Model):
+    category = models.CharField(max_length=20)
+
+class Hobby(models.Model):
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Hobby')
+    title = models.CharField(max_length=80)
+    category = models.CharField(max_length=20)
+    tags = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+    meeting_day = models.DateTimeField()
+    address_type = models.BooleanField(default=False) # False=오프라인, True=온라인
+    address = models.CharField(max_length=100, default='온라인') # 온라인 or 오프라인 주소
+    X = models.CharField(max_length=30, null=True, blank=True)
+    Y = models.CharField(max_length=30, null=True, blank=True)
+    entry_fee = models.CharField(max_length=20, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    hits = models.PositiveBigIntegerField(default=0)
+    recruit_type = models.BooleanField(default=False) # 자유가입(False), 승인제(True)
+    limit = models.IntegerField(default=3, validators=[MinValueValidator(3), MaxValueValidator(15)])
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Accepted')
+    image = models.ImageField(
+        upload_to="images/",
+        blank=True,
+    )
+    image_thumbnail = ImageSpecField(
+        source="image",
+        processors=[ResizeToFill(300, 300)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_hobby')
+
+class Accepted(models.Model):
+    joindate = models.DateTimeField(auto_now=True)
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE, related_name='accepted')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    joined = models.BooleanField(default=False) # 승인여부
+
+class Tag(models.Model):
+    tag = models.CharField(max_length=20, unique=True)
+    category = models.CharField(max_length=20, null=True) 
+
+class HobbyComment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    hobby = models.ForeignKey(Hobby, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    like_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_comment')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='recomment')
+```
+
+### Accounts
+
+```python
+class User(AbstractUser):
+    GENDER_CHOICES = (
+        ("M", "남자"),
+        ("F", "여자"),
+    )
+    gender = models.CharField(  # 성별
+        max_length=2,
+        choices=GENDER_CHOICES,
+    )
+    address = models.CharField(max_length=50)  # 주소
+    address_detail = models.CharField(max_length=40, null=True, blank=True)  # 상세주소
+    birth = models.DateTimeField(default=timezone.now)  # 나이
+    nickname = models.CharField(null=True, unique=True, max_length=20)
+    kakao_id = models.CharField(null=True, unique=True, max_length=100)
+    followings = models.ManyToManyField("self", symmetrical=False, related_name="followers")
+    blocking = models.ManyToManyField(
+        "self", symmetrical=False, related_name="blockers"
+    )
+
+    image = ProcessedImageField(
+        upload_to="image/",
+        format="JPEG",
+        processors = [
+            Transpose(),
+        ],
+        options={"quality": 30},
+        blank=True,
+        null=True,
+    )
+    received_mail = models.IntegerField(default=0, null=True)
+
+    STORTS_CHOICES = (
+        ("축구", "축구"),
+        ("농구", "농구"),
+        ("야구", "야구"),
+        ("클라이밍", "클라이밍"),
+        ("등산", "등산"),
+        ("테니스", "테니스"),
+        ("트래킹", "트래킹"),
+        ("볼링", "볼링"),
+        ("러닝", "러닝"),
+        ("스키", "스키"),
+        ("보드", "보드"),
+        ("헬스", "헬스"),
+        ("산책", "산책"),
+        ("플로깅", "플로깅"),
+        ("자전거", "자전거"),
+        ("서핑", "서핑"),
+        ("배드민턴", "배드민턴"),
+        ("탁구", "탁구"),
+        ("골프", "골프"),
+        ("스포츠경기", "스포츠경기"),
+    )
+
+    sports = MultiSelectField(  # 관심 운동 선택
+        max_length=100,
+        choices=STORTS_CHOICES,
+        blank=True,
+    )
+
+    Travel_CHOICES = (
+        ("복합문화공간", "복합문화공간"),
+        ("테마파크", "테마파크"),
+        ("피크닉", "피크닉"),
+        ("드라이브", "드라이브"),
+        ("캠핑", "캠핑"),
+        ("국내여행", "국내여행"),
+        ("해외여행", "해외여행"),
+    )
+
+    travel = MultiSelectField(  # 관심 여행 나들이 선택
+        max_length=100,
+        choices=Travel_CHOICES,
+        blank=True,
+    )
+
+    ART_CHOICES = (
+        ("전시", "전시"),
+        ("영화", "영화"),
+        ("뮤지컬", "뮤지컬"),
+        ("공연", "공연"),
+        ("디자인", "디자인"),
+        ("박물관", "박물관"),
+        ("연극", "연극"),
+        ("콘서트", "콘서트"),
+        ("연주회", "연주회"),
+        ("페스티벌", "페스티벌"),
+    )
+
+    art = MultiSelectField(  # 관심 문화*예술 선택
+        max_length=100,
+        choices=ART_CHOICES,
+        blank=True,
+    )
+
+    FOOD_CHOICES = (
+        ("맛집투어", "맛집투어"),
+        ("카페", "카페"),
+        ("와인", "와인"),
+        ("커피", "커피"),
+        ("디저트", "디저트"),
+        ("맥주", "맥주"),
+        ("티룸", "티룸"),
+        ("비건", "비건"),
+        ("파인다이닝", "파인다이닝"),
+        ("요리", "요리"),
+        ("페어링", "페어링"),
+        ("칵테일", "칵테일"),
+        ("위스키", "위스키"),
+        ("전통주", "전통주"),
+    )
+
+    food = MultiSelectField(  # 관심 음식 선택
+        max_length=100,
+        choices=FOOD_CHOICES,
+        blank=True,
+    )
+
+    DEVELOP_CHOICES = (
+        ("습관만들기", "습관만들기"),
+        ("챌린지", "챌린지"),
+        ("독서", "독서"),
+        ("스터디", "스터디"),
+        ("외국어", "외국어"),
+        ("재테크", "재테크"),
+        ("브랜딩", "브랜딩"),
+        ("커리어", "커리어"),
+        ("사이드프로젝트", "사이드프로젝트"),
+    )
+
+    develop = MultiSelectField(max_length=100, choices=DEVELOP_CHOICES, blank=True)  # 관심 음식 선택
+
+    @property
+    def get_photo_url(self):
+
+        if self.profile_pic:
+            return self.profile_pic.url
+        return None
+```
+
+### Community
+
+```python
+class Community(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
+    title = models.CharField(max_length=50)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_community")
+    hits = models.PositiveBigIntegerField(default=1, verbose_name="조회수")
+    def summary(self):
+        return self.content[:80]
 
 
----
+# 댓글 부분
+class Comment(models.Model):
+    content = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+    posting = models.ForeignKey(Community, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_community_comment")
+    # 대댓글
+    parent_comment = models.ForeignKey("self", on_delete=models.CASCADE, related_name="recomment", null=True)
 
-## **📖 서비스 소개**
 
-<br />
+class Photo(models.Model):
+    post = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
 
+```
+
+### Products
+
+```python
+class Product(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=80)
+    price = models.BigIntegerField()
+    product_category = (
+        ("사용감 있음", "사용감 있음"),
+        ("거의 새 것", "거의 새 것"),
+        ("미개봉", "미개봉"),
+    )
+    productType = models.CharField(max_length=20, choices=product_category, null=True)
+    trade_category = (
+        ("직거래", "직거래"),
+        ("택배거래", "택배거래"),
+    )
+    tradeType = MultiSelectField(max_length=10, choices=trade_category, min_choices=1, max_choices=2)
+    location = models.CharField(max_length=80, blank=True)
+    image = ProcessedImageField(
+        upload_to="images/product",
+        blank=False,
+        processors=[ResizeToFill(1200, 1200)],
+        format="JPEG",
+        options={"quality": 95},
+        default="default.jpg",
+    )
+    thumbnail = ImageSpecField(
+        source="image",
+        processors=[Thumbnail(200, 200)],
+        format="JPEG",
+    )
+    content = models.TextField()
+    contentStripTag = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_updated = models.BooleanField(default=False)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_product")
+    hits = models.PositiveBigIntegerField(default=0, verbose_name="조회수")
+
+    @property
+    def created_at_string(self):
+        time = datetime.now(tz=timezone.utc) - self.created_at
+
+        if time < timedelta(minutes=1):
+            return "방금 전"
+        elif time < timedelta(hours=1):
+            return str(int(time.seconds / 60)) + "분 전"
+        elif time < timedelta(days=1):
+            return str(int(time.seconds / 3600)) + "시간 전"
+        elif time < timedelta(days=7):
+            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
+            return str(time.days) + "일 전"
+        else:
+            return self.created_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+
+    @property
+    def updated_at_string(self):
+        time = datetime.now(tz=timezone.utc) - self.updated_at
+
+        if time < timedelta(minutes=1):
+            return "방금 전"
+        elif time < timedelta(hours=1):
+            return str(int(time.seconds / 60)) + "분 전"
+        elif time < timedelta(days=1):
+            return str(int(time.seconds / 3600)) + "시간 전"
+        elif time < timedelta(days=7):
+            time = datetime.now(tz=timezone.utc).date() - self.updated_at.date()
+            return str(time.days) + "일 전"
+        else:
+            return self.updated_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+
+
+class Product_Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    content = models.CharField(max_length=80)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    parent = models.ForeignKey(
+        "self",
+        related_name="reply_set",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_product_comment")
+
+    @property
+    def created_at_string(self):
+        time = datetime.now(tz=timezone.utc) - self.created_at
+
+        if time < timedelta(minutes=1):
+            return "방금 전"
+        elif time < timedelta(hours=1):
+            return str(int(time.seconds / 60)) + "분 전"
+        elif time < timedelta(days=1):
+            return str(int(time.seconds / 3600)) + "시간 전"
+        elif time < timedelta(days=7):
+            time = datetime.now(tz=timezone.utc).date() - self.created_at.date()
+            return str(time.days) + "일 전"
+        else:
+            return self.created_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+
+    @property
+    def updated_at_string(self):
+        time = datetime.now(tz=timezone.utc) - self.updated_at
+
+        if time < timedelta(minutes=1):
+            return "방금 전"
+        elif time < timedelta(hours=1):
+            return str(int(time.seconds / 60)) + "분 전"
+        elif time < timedelta(days=1):
+            return str(int(time.seconds / 3600)) + "시간 전"
+        elif time < timedelta(days=7):
+            time = datetime.now(tz=timezone.utc).date() - self.updated_at.date()
+            return str(time.days) + "일 전"
+        else:
+            return self.updated_at.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+```
+
+</details>
